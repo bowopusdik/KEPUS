@@ -5,15 +5,20 @@ function uploadFile(kode, index) {
 
 
     if (!file) {
+
         alert("Silakan pilih file terlebih dahulu");
         return;
+
     }
 
 
     if (file.size > 5 * 1024 * 1024) {
+
         alert("Ukuran file maksimal 5 MB");
         return;
+
     }
+
 
 
     let reader = new FileReader();
@@ -23,9 +28,10 @@ function uploadFile(kode, index) {
     reader.onload = function(e) {
 
 
-        // =====================
-        // SIMPAN DOKUMEN
-        // =====================
+        // ======================
+        // SIMPAN DOKUMEN SCAN
+        // ======================
+
 
         let dokumen =
         JSON.parse(localStorage.getItem("dokumenSPJ")) || [];
@@ -34,23 +40,23 @@ function uploadFile(kode, index) {
 
         dokumen =
         dokumen.filter(
-            x => x.kode !== kode
+            d => d.kode !== kode
         );
 
 
 
         dokumen.push({
 
-            kode:kode,
+            kode: kode,
 
-            nama:file.name,
+            nama: file.name,
 
-            tipe:file.type,
+            tipe: file.type,
 
             tanggal:
             new Date().toLocaleString("id-ID"),
 
-            url:e.target.result
+            url: e.target.result
 
         });
 
@@ -66,9 +72,10 @@ function uploadFile(kode, index) {
 
 
 
-        // =====================
-        // UPDATE STATUS SPJ
-        // =====================
+
+        // ======================
+        // UPDATE DATA SPJ
+        // ======================
 
 
         let spj =
@@ -77,10 +84,11 @@ function uploadFile(kode, index) {
 
 
         spj =
-        spj.map(item=>{
+        spj.map(item => {
 
 
-            if(item.kode === kode){
+
+            if(item.kode === kode) {
 
 
                 return {
@@ -92,18 +100,20 @@ function uploadFile(kode, index) {
                     dokumen:true,
 
                     verifikasi:
-                    new Date().toLocaleString("id-ID")
+                    new Date()
+                    .toLocaleString("id-ID")
 
                 };
 
+
             }
+
 
 
             return item;
 
 
         });
-
 
 
 
@@ -117,12 +127,16 @@ function uploadFile(kode, index) {
 
 
 
+
         alert(
         "Dokumen berhasil diverifikasi"
         );
 
 
-        location.reload();
+
+        // refresh data
+
+        window.location.reload();
 
 
     };
@@ -130,5 +144,6 @@ function uploadFile(kode, index) {
 
 
     reader.readAsDataURL(file);
+
 
 }
