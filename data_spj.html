@@ -17,9 +17,11 @@ box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
 }
 
+
 body{
 background:#f4f6f9;
 }
+
 
 .container{
 display:flex;
@@ -27,145 +29,134 @@ min-height:100vh;
 }
 
 
-/* SIDEBAR */
 
 .sidebar{
+
 width:250px;
 background:#1f2937;
 color:white;
 padding:20px;
+
 }
 
+
 .logo{
+
 font-size:22px;
 font-weight:bold;
 margin-bottom:30px;
+
 }
 
+
+
 .sidebar a{
+
 display:block;
 color:white;
 text-decoration:none;
 padding:12px;
 margin-bottom:8px;
 border-radius:8px;
+
 }
+
+
 
 .sidebar a:hover{
+
 background:#374151;
+
 }
 
 
-
-/* MAIN */
 
 .main{
+
 flex:1;
 padding:20px;
+
 }
 
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
 
 
 .box{
+
 background:white;
 padding:20px;
 border-radius:15px;
 box-shadow:0 3px 10px #ddd;
+
 }
 
 
 
 .top{
+
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:20px;
+
 }
 
 
 
 button{
+
 background:#2563eb;
 color:white;
 border:none;
-padding:10px 15px;
+padding:8px 12px;
 border-radius:8px;
 cursor:pointer;
+
 }
 
 
-input,select{
+
+input{
+
 padding:10px;
+width:300px;
 border:1px solid #ddd;
 border-radius:8px;
+
 }
+
 
 
 table{
+
 width:100%;
 border-collapse:collapse;
+margin-top:20px;
+
 }
 
 
 th,td{
+
 padding:12px;
 border-bottom:1px solid #ddd;
-}
-
-
-.status{
-padding:5px 10px;
-border-radius:20px;
-font-size:12px;
-}
-
-
-.ok{
-background:#d1fae5;
-color:#065f46;
-}
-
-
-.wait{
-background:#fff3cd;
-color:#856404;
-}
-
-
-.rev{
-background:#fee2e2;
-color:#991b1b;
-}
-
-
-
-@media(max-width:768px){
-
-.sidebar{
-display:none;
-}
 
 }
+
+
 
 </style>
 
+
 </head>
+
 
 
 <body>
 
 
+
 <div class="container">
 
 
-<!-- SIDEBAR -->
 
 <div class="sidebar">
 
@@ -200,42 +191,33 @@ KEPUS
 </a>
 
 
+
 </div>
 
 
 
 
-<!-- MAIN -->
 
 <div class="main">
-
-
-<div class="header">
-
-<h2>
-Data SPJ
-</h2>
-
-<div>
-Admin
-</div>
-
-</div>
 
 
 
 <div class="box">
 
 
+
 <div class="top">
 
-<h3>
-Daftar SPJ Keuangan
-</h3>
+
+<h2>
+Data SPJ
+</h2>
 
 
-<button onclick="tambahSPJ()">
-+ Tambah SPJ
+<button onclick="tambah()">
+
+➕ Tambah SPJ
+
 </button>
 
 
@@ -243,123 +225,67 @@ Daftar SPJ Keuangan
 
 
 
+<br>
+
+
 <input 
-type="text"
 id="cari"
-placeholder="Cari nomor SPJ..."
-onkeyup="cariSPJ()"
->
-
-
-<select>
-
-<option>
-Semua Status
-</option>
-
-<option>
-Menunggu
-</option>
-
-<option>
-Selesai
-</option>
-
-<option>
-Revisi
-</option>
-
-</select>
-
-
-
-<br><br>
+onkeyup="cariData()"
+placeholder="Cari Nomor Surat Tugas">
 
 
 
 
-<table id="tabelSPJ">
 
+<table>
+
+
+<thead>
 
 <tr>
 
 <th>No</th>
-<th>No SPJ</th>
+
+<th>No Surat Tugas</th>
+
+<th>Tanggal</th>
+
+<th>Pokja</th>
+
 <th>Nilai</th>
+
 <th>Status</th>
+
 <th>Aksi</th>
 
 </tr>
 
 
-
-<tr>
-
-
-<td>
-1
-</td>
+</thead>
 
 
-<td>
-SPJ-001
-</td>
+
+<tbody id="tabelSPJ">
 
 
-<td>
-Rp 5.000.000
-</td>
-
-
-<td>
-
-<span class="status ok">
-Selesai
-</span>
-
-</td>
-
-
-<td>
-
-
-<button onclick="detail()">
-👁 Lihat
-</button>
-
-
-<button onclick="edit()">
-✏ Edit
-</button>
-
-
-<button onclick="hapus(this)">
-🗑 Hapus
-</button>
-
-
-<button onclick="downloadFile()">
-⬇ Download
-</button>
-
-
-</td>
-
-
-</tr>
+</tbody>
 
 
 
 </table>
 
 
-</div>
-
 
 </div>
 
 
+
 </div>
+
+
+
+</div>
+
 
 
 
@@ -368,88 +294,168 @@ Selesai
 <script>
 
 
-function tambahSPJ(){
 
-window.location.href="tambah_spj.html";
-
-}
-
-
-
-function detail(){
-
-window.location.href="detail_spj.html";
-
-}
-
-
-
-function edit(){
-
-window.location.href="tambah_spj.html";
-
-}
-
-
-
-function hapus(btn){
-
-let yakin =
-confirm("Hapus data SPJ ini?");
-
-
-if(yakin){
-
-btn.parentElement.parentElement.remove();
-
-}
-
-}
-
-
-
-function downloadFile(){
-
-alert("Download file SPJ");
-
-}
-
-
-
-function cariSPJ(){
-
-
-let input =
-document.getElementById("cari")
-.value
-.toLowerCase();
-
-
-
-let rows =
-document.querySelectorAll("#tabelSPJ tr");
-
-
-
-rows.forEach(function(row,index){
-
-
-if(index===0) return;
+function tampil(){
 
 
 
 let data =
-row.innerText.toLowerCase();
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
 
+
+
+let html="";
+
+
+
+data.forEach((spj,index)=>{
+
+
+html += `
+
+
+<tr>
+
+
+<td>${index+1}</td>
+
+
+<td>${spj.nomorSuratTugas}</td>
+
+
+<td>${spj.tanggalSuratTugas}</td>
+
+
+<td>${spj.pokja}</td>
+
+
+<td>Rp ${spj.nilaiSPJ}</td>
+
+
+<td>${spj.status}</td>
+
+
+
+<td>
+
+
+<button onclick="detail(${index})">
+👁
+</button>
+
+
+<button onclick="hapus(${index})">
+🗑
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+});
+
+
+
+document.getElementById("tabelSPJ")
+.innerHTML=html;
+
+
+
+}
+
+
+
+
+
+function hapus(index){
+
+
+let data =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
+
+
+
+if(confirm("Hapus data SPJ ini?")){
+
+
+data.splice(index,1);
+
+
+localStorage.setItem(
+"dataSPJ",
+JSON.stringify(data)
+);
+
+
+
+tampil();
+
+
+}
+
+
+}
+
+
+
+
+
+function detail(index){
+
+
+let data =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
+
+
+
+let spj=data[index];
+
+
+
+alert(
+
+"Surat Tugas : "+spj.nomorSuratTugas+
+"\nPokja : "+spj.pokja+
+"\nNilai : "+spj.nilaiSPJ+
+"\nStatus : "+spj.status
+
+);
+
+
+}
+
+
+
+
+
+function cariData(){
+
+
+
+let kata =
+document.getElementById("cari").value
+.toLowerCase();
+
+
+
+let baris =
+document.querySelectorAll("#tabelSPJ tr");
+
+
+
+baris.forEach(row=>{
 
 
 row.style.display =
-data.includes(input)
-?
-""
-:
-"none";
-
+row.innerText.toLowerCase()
+.includes(kata)
+?"":"none";
 
 });
 
@@ -458,7 +464,26 @@ data.includes(input)
 
 
 
+
+
+function tambah(){
+
+
+window.location.href="tambah_spj.html";
+
+
+}
+
+
+
+
+
+tampil();
+
+
+
 </script>
+
 
 
 </body>
