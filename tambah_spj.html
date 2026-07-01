@@ -30,7 +30,6 @@ min-height:100vh;
 }
 
 
-
 /* SIDEBAR */
 
 .sidebar{
@@ -73,8 +72,6 @@ background:#374151;
 
 
 
-/* MAIN */
-
 .main{
 
 flex:1;
@@ -94,15 +91,6 @@ margin-bottom:20px;
 }
 
 
-.menu{
-
-display:none;
-font-size:25px;
-
-}
-
-
-
 
 .box{
 
@@ -116,29 +104,12 @@ box-shadow:0 3px 10px #ddd;
 
 
 
-
-.form-group{
-
-margin-bottom:15px;
-
-}
-
-
-label{
-
-display:block;
-margin-bottom:5px;
-font-weight:bold;
-
-}
-
-
-input,
-textarea,
-select{
+input,select{
 
 width:100%;
 padding:12px;
+margin-top:8px;
+margin-bottom:15px;
 border:1px solid #ddd;
 border-radius:8px;
 
@@ -146,20 +117,12 @@ border-radius:8px;
 
 
 
-textarea{
-
-height:100px;
-
-}
-
-
-
 button{
 
+padding:12px 20px;
 background:#2563eb;
 color:white;
 border:none;
-padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
 
@@ -173,51 +136,12 @@ background:#1d4ed8;
 }
 
 
+.status-box{
 
-
-.row{
-
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
+margin-top:10px;
 
 }
 
-
-
-
-@media(max-width:768px){
-
-
-.container{
-
-display:block;
-
-}
-
-
-.sidebar{
-
-display:none;
-
-}
-
-
-.menu{
-
-display:block;
-
-}
-
-
-.row{
-
-grid-template-columns:1fr;
-
-}
-
-
-}
 
 
 </style>
@@ -228,11 +152,13 @@ grid-template-columns:1fr;
 <body>
 
 
+
 <div class="container">
 
 
 
 <!-- SIDEBAR -->
+
 
 <div class="sidebar">
 
@@ -252,19 +178,20 @@ KEPUS
 </a>
 
 
-<a href="#">
-✅ Verifikasi
+<a href="tambah_spj.html">
+➕ Tambah SPJ
 </a>
 
 
-<a href="#">
+<a href="verifikasi.html">
+✅ Verifikasi SPJ
+</a>
+
+
+<a href="laporan.html">
 📑 Laporan
 </a>
 
-
-<a href="#">
-⚙ Pengaturan
-</a>
 
 
 </div>
@@ -276,6 +203,7 @@ KEPUS
 
 <!-- MAIN -->
 
+
 <div class="main">
 
 
@@ -283,13 +211,8 @@ KEPUS
 <div class="header">
 
 
-<div class="menu">
-☰
-</div>
-
-
 <h2>
-Tambah SPJ
+Tambah Data SPJ
 </h2>
 
 
@@ -304,131 +227,72 @@ Admin
 
 
 
+
 <div class="box">
 
 
-<form>
+
+<h3>
+Form Surat Tugas SPJ
+</h3>
+
+
+<br>
 
 
 
-<div class="row">
-
-
-<div class="form-group">
 
 <label>
-Nomor SPJ
-</label>
-
-<input 
-type="text"
-placeholder="Contoh: SPJ-001"
->
-
-</div>
-
-
-
-<div class="form-group">
-
-<label>
-Tanggal SPJ
-</label>
-
-<input 
-type="date"
->
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="row">
-
-
-<div class="form-group">
-
-<label>
-Unit Kerja
-</label>
-
-
-<select>
-
-<option>
-Pilih Unit
-</option>
-
-<option>
-Keuangan
-</option>
-
-<option>
-Operasional
-</option>
-
-<option>
-Umum
-</option>
-
-
-</select>
-
-
-</div>
-
-
-
-
-
-<div class="form-group">
-
-<label>
-Pemohon
+Nomor Surat Tugas
 </label>
 
 
 <input 
 type="text"
-placeholder="Nama pemohon"
->
-
-
-</div>
-
-
-</div>
+placeholder="Contoh : ST-001/KEPUS/2026">
 
 
 
-
-
-
-<div class="form-group">
 
 
 <label>
-Uraian Kegiatan
+Tanggal Surat Tugas
 </label>
 
 
-<textarea
-placeholder="Keterangan SPJ">
-</textarea>
-
-
-</div>
+<input 
+type="date">
 
 
 
 
 
-<div class="form-group">
+<label>
+Pokja
+</label>
+
+
+<input 
+type="text"
+placeholder="Contoh : Pokja Pengadaan">
+
+
+
+
+
+
+<label>
+Nama Pemohon
+</label>
+
+
+<input 
+type="text"
+placeholder="Nama Pemohon">
+
+
+
+
 
 
 <label>
@@ -436,60 +300,103 @@ Nilai SPJ
 </label>
 
 
-<input
+<input 
 type="number"
-placeholder="Rp"
->
-
-
-</div>
+placeholder="Jumlah Anggaran">
 
 
 
-
-
-
-<div class="form-group">
 
 
 <label>
-Upload Dokumen SPJ (PDF)
+Status Verifikasi
 </label>
 
 
-<input
-type="file"
-accept=".pdf"
->
+<select>
 
 
-</div>
+<option>
+Belum Ada SPJ
+</option>
+
+
+<option>
+Belum Lengkap
+</option>
+
+
+<option>
+Terverifikasi
+</option>
+
+
+</select>
 
 
 
 
 
-<br>
+<label>
+Keterangan
+</label>
 
 
-<button type="submit">
+<input 
+type="text"
+placeholder="Catatan Verifikasi">
 
-Simpan SPJ
+
+
+
+
+
+<button onclick="simpan()">
+
+💾 Simpan Data
 
 </button>
 
 
 
-</form>
+
+</div>
+
+
+
 
 
 </div>
 
 
+
 </div>
 
 
-</div>
+
+
+
+
+<script>
+
+
+function simpan(){
+
+
+alert(
+"Data berhasil disimpan menuju Verifikasi SPJ"
+);
+
+
+window.location.href="verifikasi.html";
+
+
+}
+
+
+
+</script>
+
 
 
 </body>
