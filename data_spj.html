@@ -392,7 +392,93 @@ Revisi
 
 
 <table>
-<br><br>
+<table>
+
+<tr>
+<th>No</th>
+<th>No SPJ</th>
+<th>Nilai</th>
+<th>Status</th>
+<th>Aksi</th>
+</tr>
+
+
+<tr>
+
+<td>1</td>
+
+<td>SPJ-001</td>
+
+<td>Rp 5.000.000</td>
+
+<td>
+<span class="status ok">
+Selesai
+</span>
+</td>
+
+<td>
+
+<button onclick="lihatSPJ()">
+👁 Lihat
+</button>
+
+<button onclick="editSPJ()">
+✏ Edit
+</button>
+
+<button onclick="hapusSPJ()">
+🗑 Hapus
+</button>
+
+<button onclick="downloadSPJ()">
+⬇ Download
+</button>
+
+</td>
+
+</tr>
+
+</table>
+
+
+<script>
+
+function lihatSPJ(){
+
+window.location.href="detail_spj.html";
+
+}
+
+
+function editSPJ(){
+
+window.location.href="tambah_spj.html";
+
+}
+
+
+function hapusSPJ(){
+
+let yakin = confirm("Hapus data SPJ ini?");
+
+if(yakin){
+
+alert("Data SPJ berhasil dihapus");
+
+}
+
+}
+
+
+function downloadSPJ(){
+
+alert("File SPJ sedang didownload");
+
+}
+
+</script>
+  <br><br>
 
 <div style="text-align:center;">
 
