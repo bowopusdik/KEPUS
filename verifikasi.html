@@ -1,118 +1,139 @@
-function uploadFile(kode,index){
+function uploadFile(kode, index) {
 
-let input =
-document.getElementById("file"+index);
+    let input = document.getElementById("file" + index);
 
+    let file = input.files[0];
 
-let file =
-input.files[0];
 
+    if (!file) {
+        alert("Silakan pilih file terlebih dahulu");
+        return;
+    }
 
-if(!file){
 
-alert("Pilih file dulu");
-return;
+    // batas ukuran file 5 MB
+    if (file.size > 5 * 1024 * 1024) {
 
-}
+        alert("Ukuran file maksimal 5 MB");
+        return;
 
+    }
 
 
-let reader =
-new FileReader();
+    let reader = new FileReader();
 
 
 
-reader.onload=function(e){
+    reader.onload = function(e) {
 
 
+        // =====================
+        // SIMPAN DOKUMEN
+        // =====================
 
-// SIMPAN DOKUMEN
 
-let dokumen =
-JSON.parse(localStorage.getItem("dokumenSPJ")) || [];
+        let dokumen =
+        JSON.parse(localStorage.getItem("dokumenSPJ")) || [];
 
 
-dokumen =
-dokumen.filter(x=>x.kode!=kode);
 
+        // hapus dokumen lama jika ada
 
+        dokumen =
+        dokumen.filter(x => x.kode !== kode);
 
-dokumen.push({
 
-kode:kode,
 
-nama:file.name,
+        dokumen.push({
 
-url:e.target.result
+            kode: kode,
 
-});
+            nama: file.name,
 
+            tipe: file.type,
 
+            tanggal: new Date().toLocaleString("id-ID"),
 
-localStorage.setItem(
-"dokumenSPJ",
-JSON.stringify(dokumen)
-);
+            url: e.target.result
 
+        });
 
 
 
+        localStorage.setItem(
+            "dokumenSPJ",
+            JSON.stringify(dokumen)
+        );
 
 
-// UPDATE STATUS SPJ
 
 
-let spj =
-JSON.parse(localStorage.getItem("spj")) || [];
 
+        // =====================
+        // UPDATE DATA SPJ
+        // =====================
 
 
-spj = spj.map(x=>{
+        let spj =
+        JSON.parse(localStorage.getItem("spj")) || [];
 
 
-if(x.kode==kode){
 
-return {
+        spj = spj.map(item => {
 
-...x,
 
-status:"Selesai",
+            if(item.kode === kode) {
 
-dokumen:true
 
-};
+                return {
 
+                    ...item,
 
-}
+                    status:"Selesai",
 
+                    dokumen:true,
 
-return x;
+                    verifikasi:
+                    new Date().toLocaleString("id-ID")
 
+                };
 
-});
 
+            }
 
 
+            return item;
 
-localStorage.setItem(
-"spj",
-JSON.stringify(spj)
-);
 
+        });
 
 
 
-alert("SPJ berhasil diverifikasi");
 
 
-location.reload();
+        localStorage.setItem(
+            "spj",
+            JSON.stringify(spj)
+        );
 
 
-}
 
 
 
-reader.readAsDataURL(file);
+        alert(
+        "Dokumen berhasil diverifikasi"
+        );
 
+
+        // kembali refresh
+
+        location.reload();
+
+
+    };
+
+
+
+    reader.readAsDataURL(file);
 
 }
