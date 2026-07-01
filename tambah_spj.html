@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>KEPUS - Tambah SPJ</title>
@@ -24,10 +25,12 @@ background:#f4f6f9;
 }
 
 
+
 .container{
 display:flex;
 min-height:100vh;
 }
+
 
 
 /* SIDEBAR */
@@ -42,6 +45,7 @@ padding:20px;
 }
 
 
+
 .logo{
 
 font-size:22px;
@@ -49,6 +53,7 @@ font-weight:bold;
 margin-bottom:30px;
 
 }
+
 
 
 .sidebar a{
@@ -63,11 +68,13 @@ border-radius:8px;
 }
 
 
+
 .sidebar a:hover{
 
 background:#374151;
 
 }
+
 
 
 
@@ -86,9 +93,11 @@ padding:20px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+
 margin-bottom:20px;
 
 }
+
 
 
 
@@ -104,12 +113,21 @@ box-shadow:0 3px 10px #ddd;
 
 
 
+label{
+
+font-weight:bold;
+
+}
+
+
+
 input,select{
 
 width:100%;
 padding:12px;
 margin-top:8px;
 margin-bottom:15px;
+
 border:1px solid #ddd;
 border-radius:8px;
 
@@ -119,14 +137,18 @@ border-radius:8px;
 
 button{
 
-padding:12px 20px;
 background:#2563eb;
 color:white;
 border:none;
+
+padding:12px 20px;
+
 border-radius:8px;
+
 cursor:pointer;
 
 }
+
 
 
 button:hover{
@@ -136,17 +158,12 @@ background:#1d4ed8;
 }
 
 
-.status-box{
-
-margin-top:10px;
-
-}
-
-
 
 </style>
 
+
 </head>
+
 
 
 <body>
@@ -154,6 +171,8 @@ margin-top:10px;
 
 
 <div class="container">
+
+
 
 
 
@@ -173,9 +192,11 @@ KEPUS
 </a>
 
 
+
 <a href="data_spj.html">
 📄 Data SPJ
 </a>
+
 
 
 <a href="tambah_spj.html">
@@ -183,9 +204,11 @@ KEPUS
 </a>
 
 
+
 <a href="verifikasi.html">
 ✅ Verifikasi SPJ
 </a>
+
 
 
 <a href="laporan.html">
@@ -193,8 +216,8 @@ KEPUS
 </a>
 
 
-
 </div>
+
 
 
 
@@ -212,7 +235,7 @@ KEPUS
 
 
 <h2>
-Tambah Data SPJ
+Tambah SPJ
 </h2>
 
 
@@ -228,17 +251,17 @@ Admin
 
 
 
+
 <div class="box">
 
 
 
 <h3>
-Form Surat Tugas SPJ
+Input Surat Tugas SPJ
 </h3>
 
 
 <br>
-
 
 
 
@@ -267,15 +290,17 @@ type="date">
 
 
 
+
 <label>
 Pokja
 </label>
 
 
-<input 
-type="text"
-placeholder="Contoh : Pokja Pengadaan">
+<input
 
+type="text"
+
+placeholder="Contoh : Pokja Pengadaan">
 
 
 
@@ -286,10 +311,11 @@ Nama Pemohon
 </label>
 
 
-<input 
-type="text"
-placeholder="Nama Pemohon">
+<input
 
+type="text"
+
+placeholder="Nama Pemohon">
 
 
 
@@ -300,9 +326,12 @@ Nilai SPJ
 </label>
 
 
-<input 
+<input
+
 type="number"
+
 placeholder="Jumlah Anggaran">
+
 
 
 
@@ -316,19 +345,28 @@ Status Verifikasi
 <select>
 
 
-<option>
-Belum Ada SPJ
+<option value="Belum Ada SPJ">
+
+❌ Belum Ada SPJ
+
 </option>
 
 
-<option>
-Belum Lengkap
+
+<option value="Belum Lengkap">
+
+⚠️ Belum Lengkap
+
 </option>
 
 
-<option>
-Terverifikasi
+
+<option value="Terverifikasi">
+
+✅ Terverifikasi
+
 </option>
+
 
 
 </select>
@@ -337,40 +375,47 @@ Terverifikasi
 
 
 
+
+
 <label>
-Keterangan
+Keterangan Verifikasi
 </label>
 
 
-<input 
+<input
+
 type="text"
-placeholder="Catatan Verifikasi">
+
+placeholder="Catatan pemeriksa">
 
 
 
 
 
 
-<button onclick="simpan()">
+<button onclick="simpanData()">
 
-💾 Simpan Data
+💾 Simpan SPJ
 
 </button>
 
 
 
 
-</div>
-
-
-
-
 
 </div>
 
 
 
+
+
+
 </div>
+
+
+</div>
+
+
 
 
 
@@ -380,11 +425,11 @@ placeholder="Catatan Verifikasi">
 <script>
 
 
-function simpan(){
+function simpanData(){
 
 
 alert(
-"Data berhasil disimpan menuju Verifikasi SPJ"
+"Data SPJ tersimpan, menuju Verifikasi SPJ"
 );
 
 
@@ -396,6 +441,8 @@ window.location.href="verifikasi.html";
 
 
 </script>
+
+
 
 
 
