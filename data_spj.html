@@ -21,167 +21,127 @@ body{
 background:#f4f6f9;
 }
 
-
 .container{
 display:flex;
 min-height:100vh;
 }
 
 
-.sidebar{
+/* SIDEBAR */
 
+.sidebar{
 width:250px;
 background:#1f2937;
 color:white;
 padding:20px;
-
 }
 
-
 .logo{
-
 font-size:22px;
 font-weight:bold;
 margin-bottom:30px;
-
 }
 
-
 .sidebar a{
-
 display:block;
 color:white;
 text-decoration:none;
 padding:12px;
 margin-bottom:8px;
 border-radius:8px;
-
 }
-
 
 .sidebar a:hover{
-
 background:#374151;
-
 }
 
 
+
+/* MAIN */
 
 .main{
-
 flex:1;
 padding:20px;
-
 }
-
 
 
 .header{
-
 display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:20px;
-
 }
 
 
-
 .box{
-
 background:white;
 padding:20px;
 border-radius:15px;
 box-shadow:0 3px 10px #ddd;
-
 }
 
 
 
 .top{
-
 display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:20px;
-
 }
 
 
 
 button{
-
 background:#2563eb;
 color:white;
 border:none;
 padding:10px 15px;
 border-radius:8px;
 cursor:pointer;
-
 }
-
 
 
 input,select{
-
 padding:10px;
-border-radius:8px;
 border:1px solid #ddd;
-
+border-radius:8px;
 }
-
 
 
 table{
-
 width:100%;
 border-collapse:collapse;
-
 }
-
 
 
 th,td{
-
 padding:12px;
 border-bottom:1px solid #ddd;
-text-align:left;
-
 }
-
 
 
 .status{
-
 padding:5px 10px;
 border-radius:20px;
 font-size:12px;
-
-}
-
-
-
-.wait{
-
-background:#fff3cd;
-color:#856404;
-
 }
 
 
 .ok{
-
 background:#d1fae5;
 color:#065f46;
+}
 
+
+.wait{
+background:#fff3cd;
+color:#856404;
 }
 
 
 .rev{
-
 background:#fee2e2;
 color:#991b1b;
-
 }
 
 
@@ -189,14 +149,10 @@ color:#991b1b;
 @media(max-width:768px){
 
 .sidebar{
-
 display:none;
-
 }
 
 }
-
-
 
 </style>
 
@@ -207,7 +163,6 @@ display:none;
 
 
 <div class="container">
-
 
 
 <!-- SIDEBAR -->
@@ -252,9 +207,7 @@ KEPUS
 
 <!-- MAIN -->
 
-
 <div class="main">
-
 
 
 <div class="header">
@@ -263,23 +216,18 @@ KEPUS
 Data SPJ
 </h2>
 
-
 <div>
 Admin
 </div>
 
-
 </div>
-
 
 
 
 <div class="box">
 
 
-
 <div class="top">
-
 
 <h3>
 Daftar SPJ Keuangan
@@ -287,9 +235,7 @@ Daftar SPJ Keuangan
 
 
 <button onclick="tambahSPJ()">
-
 + Tambah SPJ
-
 </button>
 
 
@@ -305,9 +251,9 @@ onkeyup="cariSPJ()"
 >
 
 
-<select id="filter">
+<select>
 
-<option value="">
+<option>
 Semua Status
 </option>
 
@@ -328,6 +274,7 @@ Revisi
 
 
 <br><br>
+
 
 
 
@@ -391,7 +338,7 @@ Selesai
 </button>
 
 
-<button onclick="download()">
+<button onclick="downloadFile()">
 ⬇ Download
 </button>
 
@@ -406,37 +353,7 @@ Selesai
 </table>
 
 
-
-<br><br>
-
-
-
-<div style="text-align:center;">
-
-
-<button onclick="tambahSPJ()">
-
-➕ Tambah SPJ
-
-</button>
-
-
-<button 
-onclick="detail()"
-style="background:#16a34a">
-
-🔍 Detail SPJ
-
-</button>
-
-
-
 </div>
-
-
-
-</div>
-
 
 
 </div>
@@ -478,7 +395,7 @@ window.location.href="tambah_spj.html";
 function hapus(btn){
 
 let yakin =
-confirm("Hapus data SPJ?");
+confirm("Hapus data SPJ ini?");
 
 
 if(yakin){
@@ -491,16 +408,16 @@ btn.parentElement.parentElement.remove();
 
 
 
-function download(){
+function downloadFile(){
 
-alert("File SPJ berhasil disiapkan");
+alert("Download file SPJ");
 
 }
 
 
 
-
 function cariSPJ(){
+
 
 let input =
 document.getElementById("cari")
@@ -508,22 +425,26 @@ document.getElementById("cari")
 .toLowerCase();
 
 
+
 let rows =
 document.querySelectorAll("#tabelSPJ tr");
 
 
-rows.forEach((row,index)=>{
+
+rows.forEach(function(row,index){
 
 
-if(index==0)return;
+if(index===0) return;
 
 
-let teks =
+
+let data =
 row.innerText.toLowerCase();
 
 
+
 row.style.display =
-teks.includes(input)
+data.includes(input)
 ?
 ""
 :
