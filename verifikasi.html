@@ -1,7 +1,6 @@
 function uploadFile(kode, index) {
 
     let input = document.getElementById("file" + index);
-
     let file = input.files[0];
 
 
@@ -11,12 +10,9 @@ function uploadFile(kode, index) {
     }
 
 
-    // batas ukuran file 5 MB
     if (file.size > 5 * 1024 * 1024) {
-
         alert("Ukuran file maksimal 5 MB");
         return;
-
     }
 
 
@@ -31,30 +27,30 @@ function uploadFile(kode, index) {
         // SIMPAN DOKUMEN
         // =====================
 
-
         let dokumen =
         JSON.parse(localStorage.getItem("dokumenSPJ")) || [];
 
 
 
-        // hapus dokumen lama jika ada
-
         dokumen =
-        dokumen.filter(x => x.kode !== kode);
+        dokumen.filter(
+            x => x.kode !== kode
+        );
 
 
 
         dokumen.push({
 
-            kode: kode,
+            kode:kode,
 
-            nama: file.name,
+            nama:file.name,
 
-            tipe: file.type,
+            tipe:file.type,
 
-            tanggal: new Date().toLocaleString("id-ID"),
+            tanggal:
+            new Date().toLocaleString("id-ID"),
 
-            url: e.target.result
+            url:e.target.result
 
         });
 
@@ -69,8 +65,9 @@ function uploadFile(kode, index) {
 
 
 
+
         // =====================
-        // UPDATE DATA SPJ
+        // UPDATE STATUS SPJ
         // =====================
 
 
@@ -79,10 +76,11 @@ function uploadFile(kode, index) {
 
 
 
-        spj = spj.map(item => {
+        spj =
+        spj.map(item=>{
 
 
-            if(item.kode === kode) {
+            if(item.kode === kode){
 
 
                 return {
@@ -97,7 +95,6 @@ function uploadFile(kode, index) {
                     new Date().toLocaleString("id-ID")
 
                 };
-
 
             }
 
@@ -124,8 +121,6 @@ function uploadFile(kode, index) {
         "Dokumen berhasil diverifikasi"
         );
 
-
-        // kembali refresh
 
         location.reload();
 
