@@ -1,116 +1,586 @@
-<script>
+<!DOCTYPE html>
+<html lang="id">
+<head>
 
-// ambil data SPJ dari input
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-let spj = JSON.parse(localStorage.getItem("spj")) || [];
+<title>KEPUS Dashboard</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<style>
 
-// HITUNG TOTAL NILAI
-
-let totalNilai = spj.reduce(
-    (jumlah,item)=> jumlah + Number(item.nilai),
-    0
-);
-
-
-
-// STATUS
-
-let menunggu = spj.filter(
-x=>x.status=="Menunggu"
-).length;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Arial;
+}
 
 
-let selesai = spj.filter(
-x=>x.status=="Selesai"
-).length;
+body{
+background:#eef3f8;
+color:#1f2937;
+}
 
 
-let revisi = spj.filter(
-x=>x.status=="Revisi"
-).length;
+/* TOP */
+
+.topbar{
+
+background:linear-gradient(135deg,#005baa,#003b73);
+color:white;
+padding:18px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+}
 
 
-
-// tampil dashboard
-
-document.getElementById("total").innerHTML =
-"Rp " + totalNilai.toLocaleString("id-ID");
-
-
-document.getElementById("menunggu").innerHTML =
-menunggu;
+.brand{
+display:flex;
+align-items:center;
+gap:15px;
+}
 
 
-document.getElementById("selesai").innerHTML =
-selesai;
+.logo{
+
+width:55px;
+height:55px;
+background:white;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#005baa;
+font-weight:bold;
+
+}
 
 
-document.getElementById("revisi").innerHTML =
-revisi;
+.brand h1{
+font-size:22px;
+}
 
 
+.market{
 
-// status
+font-size:18px;
+font-weight:bold;
 
-s1.innerHTML=menunggu;
-s2.innerHTML=selesai;
-s3.innerHTML=revisi;
-
-
-
-
-
-
-// TABEL SPJ TERBARU
-
-
-let tabel="";
-
-
-spj.slice(-5).reverse().forEach((item,index)=>{
-
-
-let warna="";
-
-
-if(item.status=="Menunggu")
-warna="wait";
-
-
-if(item.status=="Selesai")
-warna="ok";
-
-
-if(item.status=="Revisi")
-warna="revisi";
+}
 
 
 
-tabel += `
+/* LAYOUT */
+
+
+.container{
+
+display:flex;
+min-height:100vh;
+
+}
+
+
+
+.sidebar{
+
+width:230px;
+background:#0f172a;
+padding:20px;
+
+}
+
+
+.sidebar a{
+
+display:block;
+color:white;
+text-decoration:none;
+padding:14px;
+margin-bottom:10px;
+border-radius:10px;
+
+}
+
+
+.sidebar a:hover{
+
+background:#2563eb;
+
+}
+
+
+
+
+
+.main{
+
+flex:1;
+padding:25px;
+
+}
+
+
+
+
+/* MARKET CARDS */
+
+
+.cards{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+
+}
+
+
+
+.card{
+
+background:white;
+border-radius:18px;
+padding:25px;
+box-shadow:0 10px 25px #d5dbe5;
+
+}
+
+
+.card small{
+
+color:#64748b;
+
+}
+
+
+.card h2{
+
+margin-top:15px;
+font-size:30px;
+
+}
+
+
+
+.green{
+
+color:#16a34a;
+
+}
+
+
+.yellow{
+
+color:#ca8a04;
+
+}
+
+
+.red{
+
+color:#dc2626;
+
+}
+
+
+
+
+
+.content{
+
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
+margin-top:25px;
+
+}
+
+
+
+.box{
+
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px #ddd;
+
+}
+
+
+
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+
+td,th{
+
+padding:12px;
+border-bottom:1px solid #eee;
+
+}
+
+
+
+
+
+.running{
+
+margin-top:25px;
+background:#111827;
+color:white;
+padding:12px;
+border-radius:12px;
+font-weight:bold;
+
+}
+
+
+
+
+
+@media(max-width:900px){
+
+.container{
+
+display:block;
+
+}
+
+
+.sidebar{
+
+width:100%;
+
+}
+
+
+.cards,
+.content{
+
+grid-template-columns:1fr;
+
+}
+
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="topbar">
+
+
+<div class="brand">
+
+<div class="logo">
+K
+</div>
+
+
+<div>
+
+<h1>
+KEPUS
+</h1>
+
+<p>
+Dashboard SPJ Digital
+</p>
+
+</div>
+
+
+</div>
+
+
+
+<div class="market">
+
+📈 Monitoring SPJ Real Time
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="container">
+
+
+<div class="sidebar">
+
+
+<a href="index.html">
+📊 Dashboard
+</a>
+
+
+<a href="data_spj.html">
+📄 Data SPJ
+</a>
+
+
+<a href="tambah_spj.html">
+➕ Tambah SPJ
+</a>
+
+
+<a href="verifikasi.html">
+✅ Verifikasi
+</a>
+
+
+<a href="laporan.html">
+📑 Laporan
+</a>
+
+
+</div>
+
+
+
+
+
+<div class="main">
+
+
+
+
+
+<div class="cards">
+
+
+
+<div class="card">
+
+<small>Total Nilai SPJ</small>
+
+<h2 id="total">
+Rp 0
+</h2>
+
+</div>
+
+
+
+<div class="card">
+
+<small>Menunggu</small>
+
+<h2 class="yellow" id="menunggu">
+0
+</h2>
+
+</div>
+
+
+
+<div class="card">
+
+<small>Selesai</small>
+
+<h2 class="green" id="selesai">
+0
+</h2>
+
+</div>
+
+
+
+<div class="card">
+
+<small>Revisi</small>
+
+<h2 class="red" id="revisi">
+0
+</h2>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="content">
+
+
+
+<div class="box">
+
+<h3>
+📈 Grafik Perkembangan SPJ
+</h3>
+
+
+<br>
+
+
+<canvas id="chart"></canvas>
+
+
+</div>
+
+
+
+
+
+<div class="box">
+
+<h3>
+SPJ Terbaru
+</h3>
+
+
+<br>
+
+
+<table>
+
+
+<thead>
 
 <tr>
 
-<td>${index+1}</td>
+<th>No</th>
+<th>Kode</th>
+<th>Status</th>
 
-<td>${item.kode}</td>
+</tr>
 
-<td>${item.pelaksana}</td>
-
-<td>
-Rp ${Number(item.nilai)
-.toLocaleString("id-ID")}
-</td>
+</thead>
 
 
-<td>
+<tbody id="data">
 
-<span class="badge ${warna}">
-${item.status}
-</span>
+</tbody>
 
-</td>
+
+</table>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="running">
+
+<marquee id="info">
+
+Memuat informasi...
+
+</marquee>
+
+</div>
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<script>
+
+
+let spj =
+JSON.parse(localStorage.getItem("spj")) || [];
+
+
+
+
+
+let total =
+spj.reduce((a,b)=>a+Number(b.nilai||0),0);
+
+
+
+let menunggu =
+spj.filter(x=>x.status=="Menunggu").length;
+
+
+let selesai =
+spj.filter(x=>x.status=="Selesai").length;
+
+
+let revisi =
+spj.filter(x=>x.status=="Revisi").length;
+
+
+
+
+
+document.getElementById("total").innerHTML =
+"Rp "+total.toLocaleString("id-ID");
+
+
+document.getElementById("menunggu").innerHTML=menunggu;
+
+document.getElementById("selesai").innerHTML=selesai;
+
+document.getElementById("revisi").innerHTML=revisi;
+
+
+
+
+
+
+
+let html="";
+
+
+spj.slice(-5).reverse().forEach((x,i)=>{
+
+
+html+=`
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>${x.kode}</td>
+
+<td>${x.status}</td>
 
 
 </tr>
@@ -120,58 +590,80 @@ ${item.status}
 });
 
 
-document.getElementById("data").innerHTML=tabel;
+document.getElementById("data").innerHTML=html;
 
 
 
 
-
-
-
-// RUNNING TEXT
 
 
 let pesan="";
 
 
-let belum =
-spj.filter(x=>x.status=="Menunggu");
+spj.filter(x=>x.status!="Selesai")
+.forEach(x=>{
 
-
-let kembali =
-spj.filter(x=>x.status=="Revisi");
-
-
-
-belum.forEach(x=>{
 
 pesan +=
-`⚠️ ${x.pelaksana} belum menyerahkan berkas ${x.kode} | `;
+` ⚠️ ${x.pelaksana} : ${x.kode} (${x.status}) | `;
+
 
 });
 
 
 
-kembali.forEach(x=>{
-
-pesan +=
-`🔴 ${x.pelaksana} harus melakukan revisi ${x.kode} | `;
-
-});
+if(!pesan)
+pesan="✅ Semua SPJ sudah selesai";
 
 
 
-if(pesan==""){
+document.getElementById("info").innerHTML=pesan;
 
-pesan="✅ Semua SPJ sudah selesai diproses";
+
+
+
+
+
+
+new Chart(
+document.getElementById("chart"),
+{
+
+type:"line",
+
+data:{
+
+
+labels:["Menunggu","Revisi","Selesai"],
+
+
+datasets:[{
+
+label:"Jumlah SPJ",
+
+data:[
+menunggu,
+revisi,
+selesai
+],
+
+
+borderColor:"#005baa",
+
+backgroundColor:"#93c5fd",
+
+tension:.4
+
+}]
 
 }
 
-
-
-document.getElementById("runningText")
-.innerHTML=pesan;
+});
 
 
 
 </script>
+
+
+</body>
+</html>
