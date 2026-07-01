@@ -4,95 +4,34 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>KEPUS - Verifikasi</title>
+<title>Verifikasi SPJ</title>
 
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
-
 body{
+font-family:Arial;
 background:#f4f6f9;
-}
-
-
-.container{
-display:flex;
-min-height:100vh;
-}
-
-
-.sidebar{
-
-width:250px;
-background:#1f2937;
-color:white;
 padding:20px;
-
 }
-
-
-.logo{
-
-font-size:22px;
-font-weight:bold;
-margin-bottom:30px;
-
-}
-
-
-.sidebar a{
-
-display:block;
-color:white;
-text-decoration:none;
-padding:12px;
-border-radius:8px;
-margin-bottom:8px;
-
-}
-
-
-.sidebar a:hover{
-
-background:#374151;
-
-}
-
-
-
-.main{
-
-flex:1;
-padding:20px;
-
-}
-
 
 
 .box{
 
 background:white;
-padding:20px;
+padding:25px;
 border-radius:15px;
-box-shadow:0 3px 10px #ddd;
+box-shadow:0 5px 15px #ddd;
 
 }
-
 
 
 table{
 
 width:100%;
 border-collapse:collapse;
+margin-top:20px;
 
 }
 
@@ -105,92 +44,53 @@ border-bottom:1px solid #ddd;
 }
 
 
-
-select{
-
-padding:8px;
-border-radius:8px;
-
-}
-
-
-
 button{
 
-background:#2563eb;
-color:white;
-border:none;
 padding:8px 12px;
+border:none;
 border-radius:8px;
 cursor:pointer;
 
 }
 
 
-</style>
+.upload{
 
+background:#2563eb;
+color:white;
+
+}
+
+
+.view{
+
+background:#16a34a;
+color:white;
+
+}
+
+
+.download{
+
+background:#f59e0b;
+color:white;
+
+}
+
+
+</style>
 
 </head>
 
 
-
 <body>
-
-
-
-<div class="container">
-
-
-
-<div class="sidebar">
-
-
-<div class="logo">
-KEPUS
-</div>
-
-
-<a href="index.html">
-📊 Dashboard
-</a>
-
-
-<a href="data_spj.html">
-📄 Data SPJ
-</a>
-
-
-<a href="tambah_spj.html">
-➕ Tambah SPJ
-</a>
-
-
-<a href="verifikasi.html">
-✅ Verifikasi
-</a>
-
-
-<a href="laporan.html">
-📑 Laporan
-</a>
-
-
-
-</div>
-
-
-
-
-
-<div class="main">
-
 
 
 <div class="box">
 
 
 <h2>
-Verifikasi SPJ
+✅ Verifikasi Dokumen SPJ
 </h2>
 
 
@@ -202,45 +102,27 @@ Verifikasi SPJ
 
 <thead>
 
-
 <tr>
 
 <th>No</th>
-
-<th>Surat Tugas</th>
-
-<th>Pokja</th>
-
-<th>Nilai</th>
-
-<th>Status</th>
-
-<th>Aksi</th>
-
+<th>Kode SPJ</th>
+<th>Pelaksana</th>
+<th>Upload</th>
+<th>Dokumen</th>
 
 </tr>
-
 
 </thead>
 
 
 
-<tbody id="tabelVerifikasi">
-
+<tbody id="data">
 
 </tbody>
 
 
-
 </table>
 
-
-
-</div>
-
-
-
-</div>
 
 
 </div>
@@ -252,81 +134,99 @@ Verifikasi SPJ
 <script>
 
 
-function tampilData(){
+let spj =
+JSON.parse(localStorage.getItem("spj")) || [];
 
 
 
-let data =
-JSON.parse(localStorage.getItem("dataSPJ")) || [];
+let dokumen =
+JSON.parse(localStorage.getItem("dokumenSPJ")) || [];
 
 
 
-let tabel="";
+
+
+let html="";
 
 
 
-data.forEach(function(spj,index){
+spj.forEach((x,i)=>{
+
+
+let file =
+dokumen.find(d=>d.kode==x.kode);
 
 
 
-tabel += `
-
+html+=`
 
 <tr>
 
+<td>${i+1}</td>
 
-<td>${index+1}</td>
+<td>${x.kode}</td>
 
-
-<td>${spj.nomorSuratTugas}</td>
-
-
-<td>${spj.pokja}</td>
-
-
-<td>Rp ${spj.nilaiSPJ}</td>
-
+<td>${x.pelaksana}</td>
 
 
 <td>
 
 
-<select id="status${index}">
+<input 
+type="file"
+id="file${i}"
+accept=".pdf,.jpg,.png">
 
 
-<option 
-${spj.status=="Belum Ada SPJ"?"selected":""}>
-Belum Ada SPJ
-</option>
+<br><br>
 
 
-<option
-${spj.status=="Belum Lengkap"?"selected":""}>
-Belum Lengkap
-</option>
+<button 
+class="upload"
+onclick="uploadFile('${x.kode}',${i})">
 
+Upload
 
-<option
-${spj.status=="Terverifikasi"?"selected":""}>
-Terverifikasi
-</option>
-
-
-</select>
+</button>
 
 
 </td>
 
 
-
 <td>
 
 
-<button onclick="simpanStatus(${index})">
+${
+file ?
 
-Simpan
+`
 
-</button>
+<a 
+class="view"
+target="_blank"
+href="${file.url}">
+
+Lihat
+
+</a>
+
+
+<a 
+class="download"
+download="${file.nama}"
+href="${file.url}">
+
+Download
+
+</a>
+
+`
+
+:
+
+"Belum ada"
+
+}
 
 
 </td>
@@ -337,66 +237,98 @@ Simpan
 
 `;
 
-
-
 });
 
 
 
-document.getElementById("tabelVerifikasi")
-.innerHTML=tabel;
+document.getElementById("data").innerHTML=html;
 
 
+
+
+
+
+
+function uploadFile(kode,index){
+
+
+let input =
+document.getElementById("file"+index);
+
+
+
+let file =
+input.files[0];
+
+
+if(!file){
+
+alert("Pilih file dulu");
+
+return;
 
 }
 
 
 
-
-
-function simpanStatus(index){
-
-
-
-let data =
-JSON.parse(localStorage.getItem("dataSPJ")) || [];
+let reader =
+new FileReader();
 
 
 
-let status =
-document.getElementById("status"+index).value;
+reader.onload=function(e){
+
+
+let data = {
+
+
+kode:kode,
+
+nama:file.name,
+
+url:e.target.result
+
+
+};
 
 
 
-data[index].status=status;
+dokumen =
+dokumen.filter(
+x=>x.kode!=kode
+);
+
+
+dokumen.push(data);
 
 
 
 localStorage.setItem(
-"dataSPJ",
-JSON.stringify(data)
+"dokumenSPJ",
+JSON.stringify(dokumen)
 );
 
 
 
-alert("Status berhasil diperbarui");
+alert("Dokumen berhasil diupload");
 
 
-
-tampilData();
+location.reload();
 
 
 }
 
 
 
+reader.readAsDataURL(file);
 
-tampilData();
+
+
+}
 
 
 
 </script>
-
 
 
 </body>
