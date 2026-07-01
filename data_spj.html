@@ -8,7 +8,6 @@
 
 <title>KEPUS - Data SPJ</title>
 
-
 <style>
 
 *{
@@ -17,7 +16,6 @@ padding:0;
 box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
 }
-
 
 body{
 background:#f4f6f9;
@@ -30,16 +28,12 @@ min-height:100vh;
 }
 
 
-
-/* SIDEBAR */
-
 .sidebar{
 
 width:250px;
 background:#1f2937;
 color:white;
 padding:20px;
-transition:.3s;
 
 }
 
@@ -65,8 +59,7 @@ border-radius:8px;
 }
 
 
-.sidebar a:hover,
-.active-menu{
+.sidebar a:hover{
 
 background:#374151;
 
@@ -74,15 +67,13 @@ background:#374151;
 
 
 
-
-/* MAIN */
-
 .main{
 
 flex:1;
 padding:20px;
 
 }
+
 
 
 .header{
@@ -95,19 +86,6 @@ margin-bottom:20px;
 }
 
 
-.menu{
-
-display:none;
-font-size:25px;
-cursor:pointer;
-
-}
-
-
-
-
-
-/* CONTENT */
 
 .box{
 
@@ -130,6 +108,7 @@ margin-bottom:20px;
 }
 
 
+
 button{
 
 background:#2563eb;
@@ -143,16 +122,13 @@ cursor:pointer;
 
 
 
-
 input,select{
 
 padding:10px;
-border:1px solid #ddd;
 border-radius:8px;
+border:1px solid #ddd;
 
 }
-
-
 
 
 
@@ -162,6 +138,7 @@ width:100%;
 border-collapse:collapse;
 
 }
+
 
 
 th,td{
@@ -181,6 +158,7 @@ border-radius:20px;
 font-size:12px;
 
 }
+
 
 
 .wait{
@@ -208,53 +186,17 @@ color:#991b1b;
 
 
 
-
-
-/* MOBILE */
-
 @media(max-width:768px){
-
 
 .sidebar{
 
-position:fixed;
-left:-260px;
-height:100%;
-z-index:10;
+display:none;
+
+}
 
 }
 
 
-.sidebar.open{
-
-left:0;
-
-}
-
-
-.menu{
-
-display:block;
-
-}
-
-
-.top{
-
-flex-direction:column;
-gap:10px;
-
-}
-
-
-table{
-
-font-size:12px;
-
-}
-
-
-}
 
 </style>
 
@@ -264,37 +206,44 @@ font-size:12px;
 <body>
 
 
-
 <div class="container">
 
 
 
 <!-- SIDEBAR -->
 
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
+
 
 <div class="logo">
 KEPUS
 </div>
 
+
 <a href="index.html">
 📊 Dashboard
 </a>
-<a href="https://bowopusdik.github.io/KEPUS/data_spj.html">
+
+
+<a href="data_spj.html">
 📄 Data SPJ
 </a>
+
 
 <a href="tambah_spj.html">
 ➕ Tambah SPJ
 </a>
 
+
 <a href="verifikasi.html">
 ✅ Verifikasi
 </a>
 
+
 <a href="laporan.html">
 📑 Laporan
 </a>
+
 
 </div>
 
@@ -303,17 +252,12 @@ KEPUS
 
 <!-- MAIN -->
 
+
 <div class="main">
 
 
 
 <div class="header">
-
-
-<div class="menu" onclick="menu()">
-☰
-</div>
-
 
 <h2>
 Data SPJ
@@ -330,7 +274,6 @@ Admin
 
 
 
-
 <div class="box">
 
 
@@ -343,8 +286,10 @@ Daftar SPJ Keuangan
 </h3>
 
 
-<button>
+<button onclick="tambahSPJ()">
+
 + Tambah SPJ
+
 </button>
 
 
@@ -352,17 +297,17 @@ Daftar SPJ Keuangan
 
 
 
-<div>
-
 <input 
 type="text"
+id="cari"
 placeholder="Cari nomor SPJ..."
+onkeyup="cariSPJ()"
 >
 
 
-<select>
+<select id="filter">
 
-<option>
+<option value="">
 Semua Status
 </option>
 
@@ -378,266 +323,112 @@ Selesai
 Revisi
 </option>
 
-
 </select>
 
 
-</div>
+
+<br><br>
 
 
 
+<table id="tabelSPJ">
 
-<br>
-
-
-
-<table>
-<table>
 
 <tr>
+
 <th>No</th>
 <th>No SPJ</th>
 <th>Nilai</th>
 <th>Status</th>
 <th>Aksi</th>
+
 </tr>
+
 
 
 <tr>
 
-<td>1</td>
-
-<td>SPJ-001</td>
-
-<td>Rp 5.000.000</td>
 
 <td>
+1
+</td>
+
+
+<td>
+SPJ-001
+</td>
+
+
+<td>
+Rp 5.000.000
+</td>
+
+
+<td>
+
 <span class="status ok">
 Selesai
 </span>
+
 </td>
+
 
 <td>
 
-<button onclick="lihatSPJ()">
+
+<button onclick="detail()">
 👁 Lihat
 </button>
 
-<button onclick="editSPJ()">
+
+<button onclick="edit()">
 ✏ Edit
 </button>
 
-<button onclick="hapusSPJ()">
+
+<button onclick="hapus(this)">
 🗑 Hapus
 </button>
 
-<button onclick="downloadSPJ()">
+
+<button onclick="download()">
 ⬇ Download
 </button>
 
+
 </td>
 
+
 </tr>
+
+
 
 </table>
 
 
-<script>
 
-function lihatSPJ(){
-
-window.location.href="detail_spj.html";
-
-}
+<br><br>
 
 
-function editSPJ(){
-
-window.location.href="tambah_spj.html";
-
-}
-
-
-function hapusSPJ(){
-
-let yakin = confirm("Hapus data SPJ ini?");
-
-if(yakin){
-
-alert("Data SPJ berhasil dihapus");
-
-}
-
-}
-
-
-function downloadSPJ(){
-
-alert("File SPJ sedang didownload");
-
-}
-
-</script>
-  <br><br>
 
 <div style="text-align:center;">
 
-<button onclick="window.location.href='tambah_spj.html'"
-style="
-padding:12px 25px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-">
+
+<button onclick="tambahSPJ()">
 
 ➕ Tambah SPJ
 
 </button>
 
 
-<button onclick="alert('Pilih data SPJ untuk melihat detail')"
-style="
-padding:12px 25px;
-background:#16a34a;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin-left:10px;
-">
+<button 
+onclick="detail()"
+style="background:#16a34a">
 
 🔍 Detail SPJ
 
 </button>
 
-</div>
-
-<tr>
-
-<th>No</th>
-<th>Nomor SPJ</th>
-<th>Unit</th>
-<th>Pemohon</th>
-<th>Nilai</th>
-<th>Status</th>
-<th>Aksi</th>
-
-</tr>
-
-
-
-<tr>
-
-<td>1</td>
-
-<td>SPJ-001</td>
-
-<td>Keuangan</td>
-
-<td>Andi</td>
-
-<td>5.000.000</td>
-
-
-<td>
-
-<span class="status wait">
-Menunggu
-</span>
-
-</td>
-
-
-<td>
-
-<button>
-Detail
-</button>
-
-</td>
-
-
-</tr>
-
-
-
-
-
-<tr>
-
-<td>2</td>
-
-<td>SPJ-002</td>
-
-<td>Operasional</td>
-
-<td>Budi</td>
-
-<td>8.500.000</td>
-
-
-<td>
-
-<span class="status ok">
-Selesai
-</span>
-
-</td>
-
-
-<td>
-
-<button>
-Detail
-</button>
-
-</td>
-
-
-</tr>
-
-
-
-
-
-<tr>
-
-<td>3</td>
-
-<td>SPJ-003</td>
-
-<td>Umum</td>
-
-<td>Sinta</td>
-
-<td>3.200.000</td>
-
-
-<td>
-
-<span class="status rev">
-Revisi
-</span>
-
-</td>
-
-
-<td>
-
-<button>
-Detail
-</button>
-
-</td>
-
-
-</tr>
-
-
-
-</table>
 
 
 </div>
@@ -648,25 +439,105 @@ Detail
 
 
 
+</div>
+
 
 </div>
+
+
 
 
 
 <script>
 
 
-function menu(){
+function tambahSPJ(){
 
-document
-.getElementById("sidebar")
-.classList.toggle("open");
+window.location.href="tambah_spj.html";
 
 }
 
 
-</script>
 
+function detail(){
+
+window.location.href="detail_spj.html";
+
+}
+
+
+
+function edit(){
+
+window.location.href="tambah_spj.html";
+
+}
+
+
+
+function hapus(btn){
+
+let yakin =
+confirm("Hapus data SPJ?");
+
+
+if(yakin){
+
+btn.parentElement.parentElement.remove();
+
+}
+
+}
+
+
+
+function download(){
+
+alert("File SPJ berhasil disiapkan");
+
+}
+
+
+
+
+function cariSPJ(){
+
+let input =
+document.getElementById("cari")
+.value
+.toLowerCase();
+
+
+let rows =
+document.querySelectorAll("#tabelSPJ tr");
+
+
+rows.forEach((row,index)=>{
+
+
+if(index==0)return;
+
+
+let teks =
+row.innerText.toLowerCase();
+
+
+row.style.display =
+teks.includes(input)
+?
+""
+:
+"none";
+
+
+});
+
+
+}
+
+
+
+</script>
 
 
 </body>
