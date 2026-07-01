@@ -1,20 +1,22 @@
-if(username=="admin" && password=="12345"){
+function login() {
 
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
 
-localStorage.setItem(
-"userLogin",
-JSON.stringify({
+    if (username === "admin" && password === "12345") {
 
-nama:"Admin KEPUS",
-username:"admin",
-level:"admin"
+        localStorage.setItem(
+            "userLogin",
+            JSON.stringify({
+                nama: "Admin KEPUS",
+                username: "admin",
+                level: "admin"
+            })
+        );
 
-})
-);
+        window.location.href = "index.html";
 
-
-
-window.location.href="index.html";
-
-
+    } else {
+        alert("Username atau password salah!");
+    }
 }
