@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>KEPUS - Tambah SPJ</title>
@@ -25,15 +24,11 @@ background:#f4f6f9;
 }
 
 
-
 .container{
 display:flex;
 min-height:100vh;
 }
 
-
-
-/* SIDEBAR */
 
 .sidebar{
 
@@ -45,7 +40,6 @@ padding:20px;
 }
 
 
-
 .logo{
 
 font-size:22px;
@@ -55,18 +49,16 @@ margin-bottom:30px;
 }
 
 
-
 .sidebar a{
 
 display:block;
 color:white;
 text-decoration:none;
 padding:12px;
-margin-bottom:8px;
 border-radius:8px;
+margin-bottom:8px;
 
 }
-
 
 
 .sidebar a:hover{
@@ -77,27 +69,12 @@ background:#374151;
 
 
 
-
-
 .main{
 
 flex:1;
 padding:20px;
 
 }
-
-
-
-.header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-margin-bottom:20px;
-
-}
-
 
 
 
@@ -112,22 +89,12 @@ box-shadow:0 3px 10px #ddd;
 
 
 
-
-label{
-
-font-weight:bold;
-
-}
-
-
-
-input,select{
+input,select,textarea{
 
 width:100%;
 padding:12px;
 margin-top:8px;
 margin-bottom:15px;
-
 border:1px solid #ddd;
 border-radius:8px;
 
@@ -140,11 +107,8 @@ button{
 background:#2563eb;
 color:white;
 border:none;
-
 padding:12px 20px;
-
 border-radius:8px;
-
 cursor:pointer;
 
 }
@@ -156,7 +120,6 @@ button:hover{
 background:#1d4ed8;
 
 }
-
 
 
 </style>
@@ -174,11 +137,6 @@ background:#1d4ed8;
 
 
 
-
-
-<!-- SIDEBAR -->
-
-
 <div class="sidebar">
 
 
@@ -192,11 +150,9 @@ KEPUS
 </a>
 
 
-
 <a href="data_spj.html">
 📄 Data SPJ
 </a>
-
 
 
 <a href="tambah_spj.html">
@@ -204,11 +160,9 @@ KEPUS
 </a>
 
 
-
 <a href="verifikasi.html">
-✅ Verifikasi SPJ
+✅ Verifikasi
 </a>
-
 
 
 <a href="laporan.html">
@@ -222,43 +176,15 @@ KEPUS
 
 
 
-
-
-<!-- MAIN -->
-
-
 <div class="main">
-
-
-
-<div class="header">
-
-
-<h2>
-Tambah SPJ
-</h2>
-
-
-<div>
-Admin
-</div>
-
-
-</div>
-
-
-
-
-
 
 
 <div class="box">
 
 
-
-<h3>
-Input Surat Tugas SPJ
-</h3>
+<h2>
+Tambah SPJ
+</h2>
 
 
 <br>
@@ -271,8 +197,8 @@ Nomor Surat Tugas
 
 
 <input 
-type="text"
-placeholder="Contoh : ST-001/KEPUS/2026">
+id="nomorSuratTugas"
+placeholder="Contoh : ST-001">
 
 
 
@@ -284,8 +210,8 @@ Tanggal Surat Tugas
 
 
 <input 
-type="date">
-
+type="date"
+id="tanggalSuratTugas">
 
 
 
@@ -297,10 +223,8 @@ Pokja
 
 
 <input
-
-type="text"
-
-placeholder="Contoh : Pokja Pengadaan">
+id="pokja"
+placeholder="Nama Pokja">
 
 
 
@@ -312,10 +236,8 @@ Nama Pemohon
 
 
 <input
-
-type="text"
-
-placeholder="Nama Pemohon">
+id="pemohon"
+placeholder="Nama Pelaksana">
 
 
 
@@ -327,73 +249,26 @@ Nilai SPJ
 
 
 <input
-
-type="number"
-
-placeholder="Jumlah Anggaran">
-
-
-
-
-
-
-<label>
-Status Verifikasi
-</label>
-
-
-<select>
-
-
-<option value="Belum Ada SPJ">
-
-❌ Belum Ada SPJ
-
-</option>
-
-
-
-<option value="Belum Lengkap">
-
-⚠️ Belum Lengkap
-
-</option>
-
-
-
-<option value="Terverifikasi">
-
-✅ Terverifikasi
-
-</option>
-
-
-
-</select>
-
-
+id="nilai"
+placeholder="5000000">
 
 
 
 
 
 <label>
-Keterangan Verifikasi
+Keterangan
 </label>
 
 
-<input
-
-type="text"
-
-placeholder="Catatan pemeriksa">
+<textarea
+id="keterangan">
+</textarea>
 
 
 
 
-
-
-<button onclick="simpanData()">
+<button onclick="simpanSPJ()">
 
 💾 Simpan SPJ
 
@@ -401,22 +276,13 @@ placeholder="Catatan pemeriksa">
 
 
 
-
-
-</div>
-
-
-
-
-
-
 </div>
 
 
 </div>
 
 
-
+</div>
 
 
 
@@ -425,24 +291,92 @@ placeholder="Catatan pemeriksa">
 <script>
 
 
-function simpanData(){
+
+function simpanSPJ(){
 
 
-alert(
-"Data SPJ tersimpan, menuju Verifikasi SPJ"
+
+let data =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
+
+
+
+
+let spj={
+
+
+
+id:Date.now(),
+
+
+nomorSuratTugas:
+document.getElementById("nomorSuratTugas").value,
+
+
+tanggalSuratTugas:
+document.getElementById("tanggalSuratTugas").value,
+
+
+pokja:
+document.getElementById("pokja").value,
+
+
+
+namaPemohon:
+document.getElementById("pemohon").value,
+
+
+
+nilaiSPJ:
+document.getElementById("nilai").value,
+
+
+
+keterangan:
+document.getElementById("keterangan").value,
+
+
+
+status:
+"Belum Ada SPJ",
+
+
+
+tanggalInput:
+new Date().toLocaleDateString()
+
+
+
+
+};
+
+
+
+data.push(spj);
+
+
+
+localStorage.setItem(
+"dataSPJ",
+JSON.stringify(data)
 );
 
 
-window.location.href="verifikasi.html";
+
+alert("SPJ berhasil disimpan");
+
+
+
+window.location.href="data_spj.html";
+
 
 
 }
 
 
 
+
 </script>
-
-
 
 
 
