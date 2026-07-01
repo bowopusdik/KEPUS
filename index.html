@@ -600,66 +600,74 @@ document.getElementById("data").innerHTML=html;
 let pesan="";
 
 
-spj.filter(x=>x.status!="Selesai")
+let pesan="";
+
+
+let spj =
+JSON.parse(localStorage.getItem("spj")) || [];
+
+
+
+// belum setor
+
+spj
+.filter(x=>x.status=="Menunggu")
 .forEach(x=>{
 
 
 pesan +=
-` ⚠️ ${x.pelaksana} : ${x.kode} (${x.status}) | `;
+`⚠️ ${x.pelaksana} belum menyerahkan dokumen ${x.kode} | `;
 
 
 });
 
 
 
-if(!pesan)
-pesan="✅ Semua SPJ sudah selesai";
+
+// revisi
+
+
+spj
+.filter(x=>x.status=="Revisi")
+.forEach(x=>{
+
+
+pesan +=
+`🔴 ${x.pelaksana} harus memperbaiki ${x.kode} | `;
+
+
+});
 
 
 
-document.getElementById("info").innerHTML=pesan;
+
+// selesai
+
+
+spj
+.filter(x=>x.status=="Selesai")
+.forEach(x=>{
+
+
+pesan +=
+`✅ ${x.kode} sudah terverifikasi | `;
+
+
+});
 
 
 
+if(pesan==""){
 
-
-
-
-new Chart(
-document.getElementById("chart"),
-{
-
-type:"line",
-
-data:{
-
-
-labels:["Menunggu","Revisi","Selesai"],
-
-
-datasets:[{
-
-label:"Jumlah SPJ",
-
-data:[
-menunggu,
-revisi,
-selesai
-],
-
-
-borderColor:"#005baa",
-
-backgroundColor:"#93c5fd",
-
-tension:.4
-
-}]
+pesan =
+"🎉 Semua SPJ telah diproses";
 
 }
 
-});
 
+
+document.getElementById("runningText")
+.innerHTML=pesan;
 
 
 </script>
