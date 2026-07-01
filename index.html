@@ -272,7 +272,7 @@ Admin
 
 <div class="card">
 <h3>Total SPJ</h3>
-<p>120</p>
+<p id="totalSPJ">0</p>
 </div>
 
 
@@ -290,8 +290,8 @@ Admin
 
 
 <div class="card">
-<h3>Revisi</h3>
-<p>5</p>
+<h3>Belum Lengkap</h3>
+<p id="revisi">0</p>
 </div>
 
 
@@ -364,48 +364,34 @@ Belum ada data SPJ
 
 <table>
 
+<thead>
+
 <tr>
-<th>No</th>
-<th>SPJ</th>
+<th>No Surat Tugas</th>
+<th>Pokja</th>
 <th>Nilai</th>
 <th>Status</th>
 </tr>
 
+</thead>
+
+
+<tbody id="tabelDashboard">
 
 <tr>
-<td>1</td>
-<td>SPJ-001</td>
-<td>5.000.000</td>
-<td>
-<span class="status wait">
-Menunggu
-</span>
+
+<td colspan="4" style="text-align:center">
+
+Belum ada data SPJ
+
 </td>
+
 </tr>
 
-
-<tr>
-<td>2</td>
-<td>SPJ-002</td>
-<td>8.500.000</td>
-<td>
-<span class="status ok">
-Selesai
-</span>
-</td>
-</tr>
+</tbody>
 
 
-<tr>
-<td>3</td>
-<td>SPJ-003</td>
-<td>3.200.000</td>
-<td>
-<span class="status revisi">
-Revisi
-</span>
-</td>
-</tr>
+</table>
 
 
 </table>
@@ -424,7 +410,189 @@ Revisi
 
 <script>
 
+<script>
+
+
 function toggleMenu(){
+
+document
+.getElementById("sidebar")
+.classList.toggle("active");
+
+}
+
+
+
+
+function loadDashboard(){
+
+
+let dataSPJ =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
+
+
+
+let total = dataSPJ.length;
+
+let belum = 0;
+
+let selesai = 0;
+
+let revisi = 0;
+
+
+
+let tabel = "";
+
+let notif = "";
+
+
+
+
+dataSPJ.forEach(function(spj,index){
+
+
+
+if(spj.status=="Belum Ada SPJ"){
+
+belum++;
+
+notif +=
+"🔔 "+spj.pokja+
+" belum menyerahkan SPJ | ";
+
+}
+
+
+
+if(spj.status=="Terverifikasi"){
+
+selesai++;
+
+}
+
+
+
+if(spj.status=="Belum Lengkap"){
+
+revisi++;
+
+notif +=
+"⚠️ "+spj.pokja+
+" masih revisi | ";
+
+}
+
+
+
+
+tabel += `
+
+<tr>
+
+<td>${spj.nomorSuratTugas}</td>
+
+<td>${spj.pokja}</td>
+
+<td>Rp ${spj.nilaiSPJ}</td>
+
+<td>${spj.status}</td>
+
+</tr>
+
+`;
+
+
+
+});
+
+
+
+
+
+document.getElementById("totalSPJ")
+.innerHTML=total;
+
+
+
+document.getElementById("belumSPJ")
+.innerHTML=belum;
+
+
+
+document.getElementById("terverifikasi")
+.innerHTML=selesai;
+
+
+
+document.getElementById("revisi")
+.innerHTML=revisi;
+
+
+
+
+document.getElementById("statusBelum")
+.innerHTML=belum;
+
+
+
+document.getElementById("statusVerifikasi")
+.innerHTML=selesai;
+
+
+
+document.getElementById("statusRevisi")
+.innerHTML=revisi;
+
+
+
+
+
+if(tabel==""){
+
+tabel =
+`
+<tr>
+<td colspan="4">
+Belum ada data SPJ
+</td>
+</tr>
+`;
+
+}
+
+
+
+document.getElementById("tabelDashboard")
+.innerHTML=tabel;
+
+
+
+
+if(notif==""){
+
+notif="Tidak ada notifikasi SPJ";
+
+}
+
+
+
+document.querySelector("marquee")
+.innerHTML=notif;
+
+
+
+}
+
+
+
+
+
+loadDashboard();
+
+
+
+</script>
 
 document
 .getElementById("sidebar")
