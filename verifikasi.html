@@ -6,7 +6,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>KEPUS - Verifikasi SPJ</title>
+<title>KEPUS - Verifikasi</title>
+
 
 <style>
 
@@ -14,8 +15,9 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial;
+font-family:Arial, Helvetica, sans-serif;
 }
+
 
 body{
 background:#f4f6f9;
@@ -51,8 +53,8 @@ margin-bottom:30px;
 
 display:block;
 color:white;
-padding:12px;
 text-decoration:none;
+padding:12px;
 border-radius:8px;
 margin-bottom:8px;
 
@@ -73,17 +75,6 @@ flex:1;
 padding:20px;
 
 }
-
-
-
-.header{
-
-display:flex;
-justify-content:space-between;
-margin-bottom:20px;
-
-}
-
 
 
 
@@ -114,89 +105,37 @@ border-bottom:1px solid #ddd;
 }
 
 
+
+select{
+
+padding:8px;
+border-radius:8px;
+
+}
+
+
+
 button{
 
+background:#2563eb;
+color:white;
 border:none;
 padding:8px 12px;
 border-radius:8px;
 cursor:pointer;
-color:white;
-
-}
-
-
-.detail{
-
-background:#2563eb;
-
-}
-
-
-.setuju{
-
-background:#16a34a;
-
-}
-
-
-.revisi{
-
-background:#dc2626;
-
-}
-
-
-
-.status{
-
-padding:5px 10px;
-border-radius:20px;
-font-size:12px;
-
-}
-
-
-.wait{
-
-background:#fff3cd;
-color:#856404;
-
-}
-
-
-
-
-@media(max-width:768px){
-
-.container{
-
-display:block;
-
-}
-
-
-.sidebar{
-
-width:100%;
-
-}
-
-
-table{
-
-font-size:12px;
-
-}
 
 }
 
 
 </style>
 
+
 </head>
 
 
+
 <body>
+
 
 
 <div class="container">
@@ -221,17 +160,24 @@ KEPUS
 </a>
 
 
-<a>
+<a href="tambah_spj.html">
+➕ Tambah SPJ
+</a>
+
+
+<a href="verifikasi.html">
 ✅ Verifikasi
 </a>
 
 
-<a>
+<a href="laporan.html">
 📑 Laporan
 </a>
 
 
+
 </div>
+
 
 
 
@@ -240,28 +186,12 @@ KEPUS
 
 
 
-<div class="header">
+<div class="box">
+
 
 <h2>
 Verifikasi SPJ
 </h2>
-
-<div>
-Verifikator
-</div>
-
-</div>
-
-
-
-
-
-<div class="box">
-
-
-<h3>
-Daftar SPJ Menunggu Pemeriksaan
-</h3>
 
 
 <br>
@@ -270,58 +200,35 @@ Daftar SPJ Menunggu Pemeriksaan
 <table>
 
 
+<thead>
+
+
 <tr>
 
 <th>No</th>
-<th>No SPJ</th>
-<th>Pemohon</th>
+
+<th>Surat Tugas</th>
+
+<th>Pokja</th>
+
 <th>Nilai</th>
+
 <th>Status</th>
+
 <th>Aksi</th>
 
-</tr>
-
-
-
-
-<tr>
-
-<td>1</td>
-
-<td>SPJ-001</td>
-
-<td>Andi</td>
-
-<td>5.000.000</td>
-
-
-<td>
-
-<span class="status wait">
-Menunggu
-</span>
-
-</td>
-
-
-<td>
-
-<button class="detail">
-Detail
-</button>
-
-<button class="setuju">
-Setujui
-</button>
-
-<button class="revisi">
-Revisi
-</button>
-
-
-</td>
 
 </tr>
+
+
+</thead>
+
+
+
+<tbody id="tabelVerifikasi">
+
+
+</tbody>
 
 
 
@@ -337,6 +244,159 @@ Revisi
 
 
 </div>
+
+
+
+
+
+<script>
+
+
+function tampilData(){
+
+
+
+let data =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
+
+
+
+let tabel="";
+
+
+
+data.forEach(function(spj,index){
+
+
+
+tabel += `
+
+
+<tr>
+
+
+<td>${index+1}</td>
+
+
+<td>${spj.nomorSuratTugas}</td>
+
+
+<td>${spj.pokja}</td>
+
+
+<td>Rp ${spj.nilaiSPJ}</td>
+
+
+
+<td>
+
+
+<select id="status${index}">
+
+
+<option 
+${spj.status=="Belum Ada SPJ"?"selected":""}>
+Belum Ada SPJ
+</option>
+
+
+<option
+${spj.status=="Belum Lengkap"?"selected":""}>
+Belum Lengkap
+</option>
+
+
+<option
+${spj.status=="Terverifikasi"?"selected":""}>
+Terverifikasi
+</option>
+
+
+</select>
+
+
+</td>
+
+
+
+<td>
+
+
+<button onclick="simpanStatus(${index})">
+
+Simpan
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+
+});
+
+
+
+document.getElementById("tabelVerifikasi")
+.innerHTML=tabel;
+
+
+
+}
+
+
+
+
+
+function simpanStatus(index){
+
+
+
+let data =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
+
+
+
+let status =
+document.getElementById("status"+index).value;
+
+
+
+data[index].status=status;
+
+
+
+localStorage.setItem(
+"dataSPJ",
+JSON.stringify(data)
+);
+
+
+
+alert("Status berhasil diperbarui");
+
+
+
+tampilData();
+
+
+}
+
+
+
+
+tampilData();
+
+
+
+</script>
+
 
 
 </body>
