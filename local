@@ -709,24 +709,4 @@ loadDashboard();
 
 </script>
 
-<script>
 
-
-// cek login
-
-let userLogin =
-localStorage.getItem("userLogin");
-
-
-if(!userLogin){
-
-window.location.href="login.html";
-
-}
-
-
-</script>
-
-</body>
-
-</html>
