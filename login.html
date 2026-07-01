@@ -1,262 +1,35 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>KEPUS - Login</title>
-
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
-
-body{
-
-height:100vh;
-background:#f4f6f9;
-display:flex;
-align-items:center;
-justify-content:center;
-
-}
-
-
-
-.login{
-
-width:350px;
-background:white;
-padding:30px;
-border-radius:15px;
-box-shadow:0 5px 20px #ccc;
-
-}
-
-
-
-h2{
-
-text-align:center;
-margin-bottom:20px;
-
-}
-
-
-
-input{
-
-width:100%;
-padding:12px;
-margin-top:10px;
-margin-bottom:15px;
-border:1px solid #ddd;
-border-radius:8px;
-
-}
-
-
-
-button{
-
-width:100%;
-padding:12px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-
-}
-
-
-
-button:hover{
-
-background:#1d4ed8;
-
-}
-
-
-
-#pesan{
-
-color:red;
-text-align:center;
-margin-top:10px;
-
-}
-
-
-</style>
-
-
-</head>
-
-
-
-<body>
-
-
-
-<div class="login">
-
-
-<h2>
-🔐 LOGIN KEPUS
-</h2>
-
-
-<input 
-id="username"
-placeholder="Username">
-
-
-<input 
-id="password"
-type="password"
-placeholder="Password">
-
-
-
-<button onclick="login()">
-
-Masuk
-
-</button>
-
-
-
-<div id="pesan"></div>
-
-
-
-</div>
-
-
-
-
-
-<script>
-
-
-// USER SEMENTARA
-
-let users=[
-
-
-{
-username:"admin",
-password:"12345",
-nama:"Admin KEPUS",
-level:"admin"
-},
-
-
-{
-username:"operator",
-password:"123",
-nama:"Operator",
-level:"operator"
-}
-
-
-];
-
-
-
-
-
 function login(){
-
-
 
 let user =
 document.getElementById("username").value;
-
 
 let pass =
 document.getElementById("password").value;
 
 
-
-let berhasil=false;
-
-
-
-
-users.forEach(function(data){
-
-
-
-if(
-user==data.username &&
-pass==data.password
-){
+if(user=="admin" && pass=="12345"){
 
 
 localStorage.setItem(
 "userLogin",
-JSON.stringify(data)
+JSON.stringify({
+nama:"Admin KEPUS",
+level:"admin"
+})
 );
 
 
-
-berhasil=true;
-
-
-
 window.location.href="index.html";
+
 
 }
 else{
 
 
-window.location.href="data_spj.html";
-
-
-}
-
-
-}
-
-
-
-});
-
-
-
-
-
-if(!berhasil){
-
-
-document.getElementById("pesan")
-.innerHTML=
+document.getElementById("pesan").innerHTML =
 "Username atau password salah";
 
 
 }
 
-
-
 }
-
-
-
-
-</script>
-
-
-
-</body>
-
-</html>
