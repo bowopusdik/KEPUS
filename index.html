@@ -1,392 +1,509 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>KEPUS - Dashboard</title>
 
 <style>
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
 }
+
 
 body{
-    background:#f4f6f9;
+background:#f4f6f9;
 }
 
-/* Layout */
+
 .container{
-    display:flex;
-    min-height:100vh;
+display:flex;
+min-height:100vh;
 }
 
-/* Sidebar */
+
+/* SIDEBAR */
+
 .sidebar{
-    width:250px;
-    background:#1f2937;
-    color:white;
-    padding:20px;
-    transition:.3s;
+
+width:250px;
+background:#1f2937;
+color:white;
+padding:20px;
+transition:.3s;
+
 }
+
 
 .logo{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:30px;
+
+font-size:22px;
+font-weight:bold;
+margin-bottom:30px;
+
 }
+
 
 .sidebar a{
-    display:block;
-    color:white;
-    text-decoration:none;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:8px;
+
+display:block;
+color:white;
+text-decoration:none;
+padding:12px;
+margin-bottom:8px;
+border-radius:8px;
+
 }
+
 
 .sidebar a:hover{
-    background:#374151;
+
+background:#374151;
+
 }
 
 
-/* Main */
+
+/* MAIN */
+
 .main{
-    flex:1;
-    padding:20px;
+
+flex:1;
+padding:20px;
+
 }
 
 
-/* Header */
+
 .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+
 }
+
+
 
 .menu{
-    display:none;
-    font-size:25px;
-    cursor:pointer;
+
+display:none;
+font-size:25px;
+cursor:pointer;
+
 }
 
 
-/* Cards */
+
+/* NOTIF */
+
+.notif{
+
+background:#fff8db;
+border-left:6px solid orange;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+
+}
+
+
+
+/* CARD */
+
+
 .cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+
 }
+
 
 
 .card{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 3px 10px #ddd;
+
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ddd;
+
 }
+
 
 .card h3{
-    color:#555;
-    font-size:14px;
+
+font-size:14px;
+color:#555;
+
 }
+
 
 .card p{
-    font-size:28px;
-    margin-top:10px;
-    font-weight:bold;
+
+font-size:30px;
+font-weight:bold;
+margin-top:10px;
+
 }
 
 
-/* Content */
+
+/* CONTENT */
+
+
 .content{
-    margin-top:20px;
-    display:grid;
-    grid-template-columns:1fr 2fr;
-    gap:20px;
+
+display:grid;
+grid-template-columns:1fr 2fr;
+gap:20px;
+margin-top:20px;
+
 }
 
 
 .box{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 3px 10px #ddd;
+
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ddd;
+
 }
 
 
-/* Table */
+
 table{
-    width:100%;
-    border-collapse:collapse;
+
+width:100%;
+border-collapse:collapse;
+
 }
+
 
 th,td{
-    padding:12px;
-    border-bottom:1px solid #ddd;
-    text-align:left;
+
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:left;
+
 }
 
 
-.status{
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:12px;
-}
 
-.wait{
-    background:#fff3cd;
-    color:#856404;
-}
-
-.ok{
-    background:#d1fae5;
-    color:#065f46;
-}
-
-.revisi{
-    background:#fee2e2;
-    color:#991b1b;
-}
+/* MOBILE */
 
 
-/* Mobile */
 @media(max-width:768px){
 
-.container{
-    position:relative;
-}
 
 .sidebar{
-    position:fixed;
-    left:-260px;
-    height:100%;
-    z-index:10;
+
+position:fixed;
+left:-260px;
+height:100%;
+z-index:10;
+
 }
 
+
 .sidebar.active{
-    left:0;
+
+left:0;
+
 }
+
 
 
 .menu{
-    display:block;
+
+display:block;
+
 }
+
 
 
 .cards{
-    grid-template-columns:1fr 1fr;
+
+grid-template-columns:1fr 1fr;
+
 }
+
 
 
 .content{
-    grid-template-columns:1fr;
+
+grid-template-columns:1fr;
+
 }
 
 
-table{
-    font-size:12px;
 }
 
-}
 
 </style>
 
 </head>
 
+
+
 <body>
+
 
 
 <div class="sidebar" id="sidebar">
 
+
 <div class="logo">
-    KEPUS
+KEPUS
 </div>
+
 
 <a href="index.html">
-    📊 Dashboard
+📊 Dashboard
 </a>
+
 
 <a href="data_spj.html">
-    📄 Data SPJ
+📄 Data SPJ
 </a>
+
 
 <a href="tambah_spj.html">
-    ➕ Tambah SPJ
+➕ Tambah SPJ
 </a>
+
 
 <a href="verifikasi.html">
-    ✅ Verifikasi
+✅ Verifikasi
 </a>
+
 
 <a href="laporan.html">
-    📑 Laporan
+📑 Laporan
 </a>
 
-<a href="#">
-    ⚙ Pengaturan
-</a>
 
 </div>
 
 
-<!-- MAIN -->
+
+
+
 <div class="main">
 
 
-<div class="header"> <div class="box" style="background:#fff8db;border-left:6px solid orange;margin-bottom:20px;overflow:hidden;">
 
-<marquee behavior="scroll" direction="left" scrollamount="5">
+<div class="header">
 
-🔔 NOTIFIKASI :
-Belum ada data SPJ yang perlu ditindaklanjuti.
-
-</marquee>
-
-</div>
 
 <div class="menu" onclick="toggleMenu()">
+
 ☰
+
 </div>
+
 
 <h2>
 Dashboard SPJ
 </h2>
 
+
 <div>
 Admin
 </div>
 
+
 </div>
 
 
 
-<!-- CARDS -->
+
+<div class="notif">
+
+
+<marquee>
+
+Memuat notifikasi...
+
+</marquee>
+
+
+</div>
+
+
+
+
 
 <div class="cards">
 
 
+
 <div class="card">
+
 <h3>Total SPJ</h3>
-<p id="totalSPJ">0</p>
+
+<p id="totalSPJ">
+0
+</p>
+
 </div>
 
 
+
+
+
 <div class="card">
+
 <h3>Belum Ada SPJ</h3>
-<p id="belumSPJ">0</p>
-<p>35</p>
+
+<p id="belumSPJ">
+0
+</p>
+
 </div>
 
 
+
+
+
 <div class="card">
+
 <h3>Terverifikasi</h3>
-<p id="terverifikasi">0</p>
+
+<p id="selesai">
+0
+</p>
+
 </div>
+
+
+
 
 
 <div class="card">
+
 <h3>Belum Lengkap</h3>
-<p id="revisi">0</p>
+
+<p id="revisi">
+0
+</p>
+
 </div>
 
 
+
 </div>
+
+
 
 
 
 <div class="content">
 
 
+
 <div class="box">
+
 
 <h3>Status SPJ</h3>
 
 <br>
 
+
 <p>
 🟡 Belum Ada SPJ :
-<span id="statusBelum">0</span>
+<span id="statusBelum">
+0
+</span>
 </p>
 
+
 <br>
+
 
 <p>
 🟢 Terverifikasi :
-<span id="statusVerifikasi">0</span>
+<span id="statusSelesai">
+0
+</span>
 </p>
+
 
 <br>
 
+
 <p>
 🔴 Belum Lengkap :
-<span id="statusRevisi">0</span>
+<span id="statusRevisi">
+0
+</span>
 </p>
 
+
 </div>
+
 
 
 
 
 <div class="box">
 
+
 <h3>
-<tr>
-
-<th>No Surat Tugas</th>
-
-<th>Pokja</th>
-
-<th>Nilai SPJ</th>
-
-<th>Status</th>
-<tbody id="tabelDashboard">
-
-<tr>
-
-<td colspan="4" style="text-align:center;">
-
-Belum ada data SPJ
-
-</td>
-
-</tr>
-
-</tbody>
-</tr>
+SPJ Terbaru
 </h3>
+
 
 <br>
 
+
+
 <table>
+
 
 <thead>
 
 <tr>
+
 <th>No Surat Tugas</th>
+
 <th>Pokja</th>
+
 <th>Nilai</th>
+
 <th>Status</th>
+
+
 </tr>
+
 
 </thead>
 
 
+
 <tbody id="tabelDashboard">
+
 
 <tr>
 
-<td colspan="4" style="text-align:center">
+<td colspan="4" align="center">
 
-Belum ada data SPJ
+Belum ada data
 
 </td>
 
 </tr>
+
 
 </tbody>
 
@@ -394,23 +511,25 @@ Belum ada data SPJ
 </table>
 
 
-</table>
+
+</div>
+
 
 
 </div>
 
 
-</div>
 
 
 </div>
 
-</div>
+
+
+
 
 
 <script>
 
-<script>
 
 
 function toggleMenu(){
@@ -427,45 +546,47 @@ document
 function loadDashboard(){
 
 
-let dataSPJ =
+
+let data =
 JSON.parse(localStorage.getItem("dataSPJ")) || [];
 
 
 
-let total = dataSPJ.length;
+let total=data.length;
 
-let belum = 0;
+let belum=0;
 
-let selesai = 0;
+let selesai=0;
 
-let revisi = 0;
+let revisi=0;
 
 
+let tabel="";
 
-let tabel = "";
-
-let notif = "";
-
+let notif="";
 
 
 
-dataSPJ.forEach(function(spj,index){
+
+
+data.forEach(function(item){
 
 
 
-if(spj.status=="Belum Ada SPJ"){
+if(item.status=="Belum Ada SPJ"){
 
 belum++;
 
 notif +=
-"🔔 "+spj.pokja+
+"🔔 "+item.pokja+
 " belum menyerahkan SPJ | ";
 
 }
 
 
 
-if(spj.status=="Terverifikasi"){
+
+if(item.status=="Terverifikasi"){
 
 selesai++;
 
@@ -473,12 +594,13 @@ selesai++;
 
 
 
-if(spj.status=="Belum Lengkap"){
+
+if(item.status=="Belum Lengkap"){
 
 revisi++;
 
 notif +=
-"⚠️ "+spj.pokja+
+"⚠️ "+item.pokja+
 " masih revisi | ";
 
 }
@@ -486,17 +608,18 @@ notif +=
 
 
 
-tabel += `
+
+tabel +=`
 
 <tr>
 
-<td>${spj.nomorSuratTugas}</td>
+<td>${item.nomorSuratTugas}</td>
 
-<td>${spj.pokja}</td>
+<td>${item.pokja}</td>
 
-<td>Rp ${spj.nilaiSPJ}</td>
+<td>Rp ${item.nilaiSPJ}</td>
 
-<td>${spj.status}</td>
+<td>${item.status}</td>
 
 </tr>
 
@@ -510,39 +633,27 @@ tabel += `
 
 
 
-document.getElementById("totalSPJ")
-.innerHTML=total;
+
+document.getElementById("totalSPJ").innerHTML=total;
+
+
+document.getElementById("belumSPJ").innerHTML=belum;
+
+
+document.getElementById("selesai").innerHTML=selesai;
+
+
+document.getElementById("revisi").innerHTML=revisi;
 
 
 
-document.getElementById("belumSPJ")
-.innerHTML=belum;
+document.getElementById("statusBelum").innerHTML=belum;
 
 
-
-document.getElementById("terverifikasi")
-.innerHTML=selesai;
+document.getElementById("statusSelesai").innerHTML=selesai;
 
 
-
-document.getElementById("revisi")
-.innerHTML=revisi;
-
-
-
-
-document.getElementById("statusBelum")
-.innerHTML=belum;
-
-
-
-document.getElementById("statusVerifikasi")
-.innerHTML=selesai;
-
-
-
-document.getElementById("statusRevisi")
-.innerHTML=revisi;
+document.getElementById("statusRevisi").innerHTML=revisi;
 
 
 
@@ -550,14 +661,19 @@ document.getElementById("statusRevisi")
 
 if(tabel==""){
 
-tabel =
-`
+
+tabel=`
+
 <tr>
-<td colspan="4">
-Belum ada data SPJ
+
+<td colspan="4" align="center">
+
+Belum ada data
+
 </td>
-</tr>
-`;
+
+</tr>`;
+
 
 }
 
@@ -587,21 +703,14 @@ document.querySelector("marquee")
 
 
 
-
 loadDashboard();
 
 
 
 </script>
 
-document
-.getElementById("sidebar")
-.classList.toggle("active");
-
-}
-
-</script>
 
 
 </body>
+
 </html>
