@@ -1,28 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KEPUS Dashboard</title>
+
+
+<style>
+
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#eef2f7;
+
+}
+
+
+
+.container{
+
+display:flex;
+min-height:100vh;
+
+}
+
+
+
+.sidebar{
+
+width:240px;
+background:#1f2937;
+color:white;
+padding:20px;
+
+}
+
+
+
+.sidebar a{
+
+display:block;
+color:white;
+text-decoration:none;
+padding:12px;
+border-radius:8px;
+margin:5px;
+
+}
+
+
+
+.sidebar a:hover{
+
+background:#374151;
+
+}
+
+
+
+
+.main{
+
+flex:1;
+padding:25px;
+
+}
+
+
+
+
+.cards{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+
+}
+
+
+
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 15px #ddd;
+
+}
+
+
+
+
+.card h2{
+
+font-size:30px;
+
+}
+
+
+
+.total{
+
+color:#2563eb;
+
+}
+
+
+.menunggu{
+
+color:#eab308;
+
+}
+
+
+.revisi{
+
+color:#dc2626;
+
+}
+
+
+.selesai{
+
+color:#16a34a;
+
+}
+
+
+
+
+.running{
+
+margin-top:20px;
+background:#111827;
+padding:15px;
+border-radius:10px;
+overflow:hidden;
+white-space:nowrap;
+
+}
+
+
+
+table{
+
+width:100%;
+background:white;
+margin-top:20px;
+border-collapse:collapse;
+
+}
+
+
+
+th{
+
+background:#005baa;
+color:white;
+
+}
+
+
+
+td,th{
+
+padding:12px;
+border-bottom:1px solid #ddd;
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+
+<div class="container">
+
+
+
+<div class="sidebar">
+
+
+<h2>KEPUS</h2>
+
+
+<a href="index.html">
+📊 Dashboard
+</a>
+
+
+<a href="data_spj.html">
+📄 Data SPJ
+</a>
+
+
+<a href="tambah_spj.html">
+➕ Tambah SPJ
+</a>
+
+
+<a href="verifikasi.html">
+✅ Verifikasi
+</a>
+
+
+<a href="laporan.html">
+📑 Laporan
+</a>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="main">
+
+
+<h2>
+Dashboard SPJ
+</h2>
+
+
+
+
+<div class="cards">
+
+
+
+<div class="card">
+
+<h3>Total Nilai SPJ</h3>
+
+<h2 
+id="total"
+class="total">
+
+Rp 0
+
+</h2>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>Menunggu</h3>
+
+<h2
+id="menunggu"
+class="menunggu">
+
+0
+
+</h2>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>Revisi</h3>
+
+<h2
+id="revisi"
+class="revisi">
+
+0
+
+</h2>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>Selesai</h3>
+
+<h2
+id="selesai"
+class="selesai">
+
+0
+
+</h2>
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+<div 
+id="runningText"
+class="running">
+
+Memuat informasi...
+
+</div>
+
+
+
+
+
+
+
+<table>
+
+
+<thead>
+
+
+<tr>
+
+<th>No</th>
+<th>No Surat</th>
+<th>Pokja</th>
+<th>Nilai</th>
+<th>Status</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="tabelDashboard">
+
+
+</tbody>
+
+
+</table>
+
+
+
+
+
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
 <script>
 
 
-// ===============================
-// UPDATE DASHBOARD DARI DATA SPJ
-// ===============================
-
-
-function updateDashboard(){
-
-
-let dataSPJ =
-JSON.parse(localStorage.getItem("dataSPJ")) || [];
 
 
 
+function loadDashboard(){
 
-// TOTAL NILAI SPJ
+
+
+let data =
+JSON.parse(
+localStorage.getItem("dataSPJ")
+) || [];
+
+
+
+
+
+// ===================
+// HITUNG NILAI
+// ===================
+
 
 let total =
-dataSPJ.reduce(
-(sum,item)=>
-sum + Number(
-item.nilaiSPJ || 0
-),
+
+data.reduce(
+(a,b)=>
+a+Number(b.nilaiSPJ || 0),
 0
 );
 
@@ -30,24 +415,34 @@ item.nilaiSPJ || 0
 
 
 
-// STATUS
 
 let menunggu =
-dataSPJ.filter(
-x=>(x.status || "Menunggu")=="Menunggu"
+
+data.filter(
+x=>(x.status||"Menunggu")
+=="Menunggu"
 ).length;
 
 
 
+
+
+
 let revisi =
-dataSPJ.filter(
+
+data.filter(
 x=>x.status=="Revisi"
 ).length;
 
 
 
+
+
+
+
 let selesai =
-dataSPJ.filter(
+
+data.filter(
 x=>x.status=="Selesai"
 ).length;
 
@@ -56,64 +451,42 @@ x=>x.status=="Selesai"
 
 
 
-// ===============================
-// CARD DASHBOARD
-// ===============================
 
 
-let totalEl =
-document.getElementById("total");
+document
+.getElementById("total")
+.innerHTML =
 
-
-if(totalEl){
-
-totalEl.innerHTML =
-"Rp " +
+"Rp "+
 total.toLocaleString("id-ID");
 
-}
 
 
 
-let menungguEl =
-document.getElementById("menunggu");
 
-
-if(menungguEl){
-
-menungguEl.innerHTML =
+document
+.getElementById("menunggu")
+.innerHTML =
 menunggu;
 
-}
 
 
 
 
-let revisiEl =
-document.getElementById("revisi");
-
-
-if(revisiEl){
-
-revisiEl.innerHTML =
+document
+.getElementById("revisi")
+.innerHTML =
 revisi;
 
-}
 
 
 
 
-
-let selesaiEl =
-document.getElementById("selesai");
-
-
-if(selesaiEl){
-
-selesaiEl.innerHTML =
+document
+.getElementById("selesai")
+.innerHTML =
 selesai;
 
-}
 
 
 
@@ -121,9 +494,9 @@ selesai;
 
 
 
-// ===============================
+// ===================
 // RUNNING TEXT
-// ===============================
+// ===================
 
 
 let pesan="";
@@ -131,21 +504,22 @@ let pesan="";
 
 
 
-// MENUNGGU = KUNING
 
-dataSPJ
+data
 .filter(
-x=>(x.status || "Menunggu")=="Menunggu"
+x=>(x.status||"Menunggu")
+=="Menunggu"
 )
 .forEach(x=>{
 
 
-pesan += `
+pesan +=
+
+`
 
 <span style="
 color:#facc15;
-font-weight:bold;
-">
+font-weight:bold">
 
 ⚠️ ${x.pokja}
 belum menyerahkan SPJ
@@ -153,7 +527,7 @@ ${x.nomorSuratTugas}
 
 </span>
 
-&nbsp;&nbsp; | &nbsp;&nbsp;
+&nbsp; | &nbsp;
 
 `;
 
@@ -164,38 +538,33 @@ ${x.nomorSuratTugas}
 
 
 
-// REVISI = MERAH
-
-
-dataSPJ
+data
 .filter(
 x=>x.status=="Revisi"
 )
 .forEach(x=>{
 
 
-pesan += `
+pesan +=
 
+
+`
 
 <span style="
 color:#ef4444;
-font-weight:bold;
-">
+font-weight:bold">
 
 🔴 ${x.pokja}
-harus memperbaiki SPJ
+revisi SPJ
 ${x.nomorSuratTugas}
 
 </span>
 
-
-&nbsp;&nbsp; | &nbsp;&nbsp;
-
+&nbsp; | &nbsp;
 
 `;
 
 });
-
 
 
 
@@ -205,14 +574,13 @@ ${x.nomorSuratTugas}
 if(pesan==""){
 
 
-pesan=`
+pesan=
 
-<span style="
-color:#22c55e;
-font-weight:bold;
-">
+`
 
-✅ Semua SPJ telah selesai diverifikasi
+<span style="color:#22c55e">
+
+✅ Semua SPJ selesai
 
 </span>
 
@@ -222,40 +590,110 @@ font-weight:bold;
 
 
 
-let running =
-document.getElementById(
-"runningText"
-);
-
-
-
-if(running){
-
-running.innerHTML =
+document
+.getElementById("runningText")
+.innerHTML =
 pesan;
 
+
+
+
+
+
+
+
+
+// ===================
+// TABEL TERBARU
+// ===================
+
+
+
+let tabel="";
+
+
+
+data
+.slice(-5)
+.reverse()
+.forEach((x,i)=>{
+
+
+tabel +=`
+
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+${x.nomorSuratTugas}
+</td>
+
+
+<td>
+${x.pokja}
+</td>
+
+
+<td>
+Rp ${Number(x.nilaiSPJ)
+.toLocaleString("id-ID")}
+</td>
+
+
+<td>
+
+${x.status||"Menunggu"}
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+});
+
+
+
+
+document
+.getElementById("tabelDashboard")
+.innerHTML =
+tabel;
+
+
+
+
+
+
+
 }
 
 
-}
 
 
 
-
-// jalankan saat halaman dibuka
-
-updateDashboard();
+loadDashboard();
 
 
 
-
-// refresh jika data berubah
+// update jika ada perubahan
 
 window.addEventListener(
 "storage",
-updateDashboard
+loadDashboard
 );
 
 
 
 </script>
+
+
+
+</body>
+
+</html>
