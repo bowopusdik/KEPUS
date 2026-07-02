@@ -1,48 +1,53 @@
-```html
 <script>
 
 
 // ===============================
-// SINKRON DASHBOARD DARI SPJ
+// UPDATE DASHBOARD DARI DATA SPJ
 // ===============================
 
 
 function updateDashboard(){
 
 
-let spj =
-JSON.parse(localStorage.getItem("spj")) || [];
+let dataSPJ =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
 
 
 
 
-// TOTAL NILAI
+// TOTAL NILAI SPJ
 
 let total =
-spj.reduce(
+dataSPJ.reduce(
 (sum,item)=>
-sum + Number(item.nilai),
+sum + Number(
+item.nilaiSPJ || 0
+),
 0
 );
+
+
 
 
 
 // STATUS
 
 let menunggu =
-spj.filter(
-x=>x.status=="Menunggu"
+dataSPJ.filter(
+x=>(x.status || "Menunggu")=="Menunggu"
 ).length;
 
 
+
 let revisi =
-spj.filter(
+dataSPJ.filter(
 x=>x.status=="Revisi"
 ).length;
 
 
+
 let selesai =
-spj.filter(
+dataSPJ.filter(
 x=>x.status=="Selesai"
 ).length;
 
@@ -50,7 +55,11 @@ x=>x.status=="Selesai"
 
 
 
+
+// ===============================
 // CARD DASHBOARD
+// ===============================
+
 
 let totalEl =
 document.getElementById("total");
@@ -59,7 +68,7 @@ document.getElementById("total");
 if(totalEl){
 
 totalEl.innerHTML =
-"Rp "+
+"Rp " +
 total.toLocaleString("id-ID");
 
 }
@@ -79,6 +88,7 @@ menunggu;
 
 
 
+
 let revisiEl =
 document.getElementById("revisi");
 
@@ -89,6 +99,8 @@ revisiEl.innerHTML =
 revisi;
 
 }
+
+
 
 
 
@@ -107,6 +119,8 @@ selesai;
 
 
 
+
+
 // ===============================
 // RUNNING TEXT
 // ===============================
@@ -117,41 +131,72 @@ let pesan="";
 
 
 
-// SPJ BELUM SELESAI
+// MENUNGGU = KUNING
 
-spj
+dataSPJ
 .filter(
-x=>x.status=="Menunggu"
+x=>(x.status || "Menunggu")=="Menunggu"
 )
 .forEach(x=>{
 
 
-pesan +=
+pesan += `
 
-` ⚠️ ${x.pelaksana} belum menyerahkan dokumen ${x.kode} | `;
+<span style="
+color:#facc15;
+font-weight:bold;
+">
 
+⚠️ ${x.pokja}
+belum menyerahkan SPJ
+${x.nomorSuratTugas}
+
+</span>
+
+&nbsp;&nbsp; | &nbsp;&nbsp;
+
+`;
 
 });
 
 
 
 
-// SPJ REVISI
 
 
-spj
+// REVISI = MERAH
+
+
+dataSPJ
 .filter(
 x=>x.status=="Revisi"
 )
 .forEach(x=>{
 
 
-pesan +=
+pesan += `
 
-` 🔴 ${x.pelaksana} harus memperbaiki ${x.kode} | `;
 
+<span style="
+color:#ef4444;
+font-weight:bold;
+">
+
+🔴 ${x.pokja}
+harus memperbaiki SPJ
+${x.nomorSuratTugas}
+
+</span>
+
+
+&nbsp;&nbsp; | &nbsp;&nbsp;
+
+
+`;
 
 });
+
+
 
 
 
@@ -160,12 +205,20 @@ pesan +=
 if(pesan==""){
 
 
-pesan =
-" ✅ Semua SPJ telah selesai diverifikasi ";
+pesan=`
 
+<span style="
+color:#22c55e;
+font-weight:bold;
+">
+
+✅ Semua SPJ telah selesai diverifikasi
+
+</span>
+
+`;
 
 }
-
 
 
 
@@ -184,19 +237,19 @@ pesan;
 }
 
 
-
 }
 
 
 
 
-
-// jalankan
+// jalankan saat halaman dibuka
 
 updateDashboard();
 
 
-// update otomatis setiap kembali ke dashboard
+
+
+// refresh jika data berubah
 
 window.addEventListener(
 "storage",
@@ -206,4 +259,3 @@ updateDashboard
 
 
 </script>
-```
