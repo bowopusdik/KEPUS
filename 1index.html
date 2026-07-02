@@ -1,472 +1,16 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>KEPUS Dashboard</title>
-
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
-
-body{
-
-background:#eef2f7;
-
-}
-
-
-.container{
-
-display:flex;
-min-height:100vh;
-
-}
-
-
-
-.sidebar{
-
-width:240px;
-background:#111827;
-color:white;
-padding:20px;
-
-}
-
-
-
-.logo{
-
-font-size:26px;
-font-weight:bold;
-margin-bottom:30px;
-
-}
-
-
-
-.sidebar a{
-
-display:block;
-color:white;
-text-decoration:none;
-padding:12px;
-border-radius:8px;
-margin-bottom:8px;
-
-}
-
-
-.sidebar a:hover{
-
-background:#374151;
-
-}
-
-
-
-.main{
-
-flex:1;
-padding:25px;
-
-}
-
-
-
-
-.cards{
-
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:20px;
-
-}
-
-
-
-.card{
-
-background:white;
-padding:25px;
-border-radius:18px;
-box-shadow:0 5px 15px #ddd;
-
-}
-
-
-.card h3{
-
-color:#666;
-
-}
-
-
-
-.card h2{
-
-font-size:28px;
-margin-top:15px;
-
-}
-
-
-.blue{
-
-color:#2563eb;
-
-}
-
-
-.yellow{
-
-color:#eab308;
-
-}
-
-
-.red{
-
-color:#dc2626;
-
-}
-
-
-.green{
-
-color:#16a34a;
-
-}
-
-
-
-
-.running{
-
-margin-top:25px;
-background:#1f2937;
-padding:15px;
-border-radius:10px;
-height:45px;
-overflow:hidden;
-
-}
-
-
-
-
-
-
-table{
-
-width:100%;
-margin-top:25px;
-background:white;
-border-collapse:collapse;
-border-radius:15px;
-overflow:hidden;
-
-}
-
-
-
-th{
-
-background:#005baa;
-color:white;
-
-}
-
-
-
-td,th{
-
-padding:14px;
-border-bottom:1px solid #ddd;
-
-}
-
-
-
-</style>
-
-</head>
-
-
-<body>
-
-
-
-<div class="container">
-
-
-
-
-
-<div class="sidebar">
-
-
-<div class="logo">
-
-KEPUS
-
-</div>
-
-
-
-<a href="index.html">
-📊 Dashboard
-</a>
-
-
-<a href="data_spj.html">
-📄 Data SPJ
-</a>
-
-
-<a href="tambah_spj.html">
-➕ Tambah SPJ
-</a>
-
-
-<a href="verifikasi.html">
-✅ Verifikasi
-</a>
-
-
-<a href="laporan.html">
-📑 Laporan
-</a>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div class="main">
-
-
-<h2>
-Dashboard SPJ
-</h2>
-
-
-
-<br>
-
-
-
-
-
-<div class="cards">
-
-
-
-<div class="card">
-
-<h3>
-Total SPJ
-</h3>
-
-
-<h2
-id="total"
-class="blue">
-
-Rp 0
-
-</h2>
-
-</div>
-
-
-
-
-
-<div class="card">
-
-<h3>
-Menunggu
-</h3>
-
-
-<h2
-id="menunggu"
-class="yellow">
-
-0
-
-</h2>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="card">
-
-
-<h3>
-Revisi
-</h3>
-
-
-<h2
-id="revisi"
-class="red">
-
-0
-
-</h2>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="card">
-
-
-<h3>
-Selesai
-</h3>
-
-
-<h2
-id="selesai"
-class="green">
-
-0
-
-</h2>
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-<div 
-id="runningText"
-class="running">
-
-Memuat informasi...
-
-</div>
-
-
-
-
-
-
-
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>No</th>
-
-<th>Nomor Surat</th>
-
-<th>Pokja</th>
-
-<th>Nilai</th>
-
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-
-
-<tbody id="tabelDashboard">
-
-
-</tbody>
-
-
-
-</table>
-
-
-
-
-
-
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-
-
 <script>
-
-
-
 
 
 function loadDashboard(){
 
 
-
 let data =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
 
-JSON.parse(
 
-localStorage.getItem("dataSPJ")
 
-) || [];
-
+// cek data
+console.log("DATA SPJ :",data);
 
 
 
@@ -474,28 +18,22 @@ localStorage.getItem("dataSPJ")
 
 // TOTAL NILAI
 
-
-let total =
-
-data.reduce(
-
-(sum,item)=>{
+let total = 0;
 
 
-return sum +
-
-Number(
-item.nilaiSPJ || 0
-);
+data.forEach(item=>{
 
 
-},
+total += Number(
 
+item.nilaiSPJ ||
+item.nilai ||
 0
 
 );
 
 
+});
 
 
 
@@ -504,82 +42,78 @@ item.nilaiSPJ || 0
 
 // STATUS
 
-
-
 let menunggu =
-
-data.filter(
-
-x=>
-
-(x.status || "Menunggu")
-
-=="Menunggu"
-
-).length;
-
-
-
-
+0;
 
 let revisi =
-
-data.filter(
-
-x=>
-
-x.status=="Revisi"
-
-).length;
-
-
-
-
+0;
 
 let selesai =
-
-data.filter(
-
-x=>
-
-x.status=="Selesai"
-
-).length;
+0;
 
 
 
 
+data.forEach(item=>{
+
+
+let status =
+item.status ||
+"Menunggu";
 
 
 
-document
-.getElementById("total")
+if(status=="Menunggu"){
+
+menunggu++;
+
+}
+
+
+if(status=="Revisi"){
+
+revisi++;
+
+}
+
+
+if(status=="Selesai"){
+
+selesai++;
+
+}
+
+
+});
+
+
+
+
+
+
+// TAMPIL CARD
+
+
+document.getElementById("total")
 .innerHTML =
-
 "Rp "+
 total.toLocaleString("id-ID");
 
 
 
-
-document
-.getElementById("menunggu")
+document.getElementById("menunggu")
 .innerHTML =
 menunggu;
 
 
 
-
-document
-.getElementById("revisi")
+document.getElementById("revisi")
 .innerHTML =
 revisi;
 
 
 
-
-document
-.getElementById("selesai")
+document.getElementById("selesai")
 .innerHTML =
 selesai;
 
@@ -589,89 +123,75 @@ selesai;
 
 
 
-
-
-// =================
 // RUNNING TEXT
-// =================
 
 
 let pesan="";
 
 
 
+data.forEach(item=>{
+
+
+let status =
+item.status ||
+"Menunggu";
 
 
 
-data
+let nomor =
+item.nomorSuratTugas ||
+item.kode ||
+"-";
 
-.filter(
 
-x=>
 
-(x.status||"Menunggu")
+let nama =
+item.pokja ||
+item.pelaksana ||
+"-";
 
-=="Menunggu"
 
-)
 
-.forEach(x=>{
+
+
+
+if(status=="Menunggu"){
 
 
 pesan +=
 
-
 `
-
 <span style="
 color:#facc15;
 font-weight:bold">
 
-🟡 ${x.pokja}
-belum menyerahkan SPJ
-${x.nomorSuratTugas}
+🟡 ${nama}
+belum menyerahkan SPJ ${nomor}
 
 </span>
-
 &nbsp; | &nbsp;
 
 `;
 
-
-});
-
+}
 
 
 
 
-
-
-
-data
-
-.filter(
-
-x=>
-
-x.status=="Revisi"
-
-)
-
-.forEach(x=>{
+if(status=="Revisi"){
 
 
 pesan +=
 
 
 `
-
 <span style="
 color:#ef4444;
 font-weight:bold">
 
-🔴 ${x.pokja}
-SPJ perlu revisi
-${x.nomorSuratTugas}
+🔴 ${nama}
+SPJ ${nomor} perlu revisi
 
 </span>
 
@@ -679,10 +199,12 @@ ${x.nomorSuratTugas}
 
 `;
 
+
+}
+
+
+
 });
-
-
-
 
 
 
@@ -695,17 +217,13 @@ if(pesan==""){
 pesan=
 
 `
-
-<span style="
-color:#22c55e">
-
-🟢 Semua SPJ sudah selesai
-
+<span style="color:#22c55e">
+🟢 Semua SPJ selesai diverifikasi
 </span>
-
 `;
 
 }
+
 
 
 
@@ -720,61 +238,52 @@ pesan;
 
 
 
-
-
-// =================
 // TABEL
-// =================
+
+
+let html="";
 
 
 
-let tabel="";
+data.slice(-5).reverse()
+.forEach((item,index)=>{
 
 
+html += `
 
-data
-
-.slice(-5)
-
-.reverse()
-
-.forEach(
-
-(x,i)=>{
-
-
-tabel +=
-
-
-`
 
 <tr>
 
 
-<td>${i+1}</td>
-
-
 <td>
-${x.nomorSuratTugas}
+${index+1}
 </td>
 
 
 <td>
-${x.pokja}
+${item.nomorSuratTugas || item.kode || "-"}
 </td>
 
 
 <td>
-
-Rp ${Number(x.nilaiSPJ)
-.toLocaleString("id-ID")}
-
+${item.pokja || item.pelaksana || "-"}
 </td>
 
 
 <td>
 
-${x.status || "Menunggu"}
+Rp ${Number(
+item.nilaiSPJ ||
+item.nilai ||
+0
+).toLocaleString("id-ID")}
+
+</td>
+
+
+<td>
+
+${item.status || "Menunggu"}
 
 </td>
 
@@ -789,17 +298,10 @@ ${x.status || "Menunggu"}
 
 
 
-
-
-
 document
 .getElementById("tabelDashboard")
 .innerHTML =
-tabel;
-
-
-
-
+html;
 
 
 
@@ -811,30 +313,19 @@ tabel;
 
 
 
-
-// pertama kali
+// load awal
 
 loadDashboard();
 
 
 
+// tombol refresh otomatis
 
-// update otomatis
-
-window.addEventListener(
-
-"storage",
-
-loadDashboard
-
+setInterval(
+loadDashboard,
+1000
 );
 
 
 
 </script>
-
-
-
-</body>
-
-</html>
