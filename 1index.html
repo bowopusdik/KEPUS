@@ -1,404 +1,209 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>KEPUS - Dashboard</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    background:#f4f6f9;
-}
-
-/* Layout */
-.container{
-    display:flex;
-    min-height:100vh;
-}
-
-/* Sidebar */
-.sidebar{
-    width:250px;
-    background:#1f2937;
-    color:white;
-    padding:20px;
-    transition:.3s;
-}
-
-.logo{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:30px;
-}
-
-.sidebar a{
-    display:block;
-    color:white;
-    text-decoration:none;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:8px;
-}
-
-.sidebar a:hover{
-    background:#374151;
-}
-
-
-/* Main */
-.main{
-    flex:1;
-    padding:20px;
-}
-
-
-/* Header */
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.menu{
-    display:none;
-    font-size:25px;
-    cursor:pointer;
-}
-
-
-/* Cards */
-.cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-}
-
-
-.card{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 3px 10px #ddd;
-}
-
-.card h3{
-    color:#555;
-    font-size:14px;
-}
-
-.card p{
-    font-size:28px;
-    margin-top:10px;
-    font-weight:bold;
-}
-
-
-/* Content */
-.content{
-    margin-top:20px;
-    display:grid;
-    grid-template-columns:1fr 2fr;
-    gap:20px;
-}
-
-
-.box{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 3px 10px #ddd;
-}
-
-
-/* Table */
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th,td{
-    padding:12px;
-    border-bottom:1px solid #ddd;
-    text-align:left;
-}
-
-
-.status{
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:12px;
-}
-
-.wait{
-    background:#fff3cd;
-    color:#856404;
-}
-
-.ok{
-    background:#d1fae5;
-    color:#065f46;
-}
-
-.revisi{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-
-/* Mobile */
-@media(max-width:768px){
-
-.container{
-    position:relative;
-}
-
-.sidebar{
-    position:fixed;
-    left:-260px;
-    height:100%;
-    z-index:10;
-}
-
-.sidebar.active{
-    left:0;
-}
-
-
-.menu{
-    display:block;
-}
-
-
-.cards{
-    grid-template-columns:1fr 1fr;
-}
-
-
-.content{
-    grid-template-columns:1fr;
-}
-
-
-table{
-    font-size:12px;
-}
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-
-<div class="sidebar" id="sidebar">
-
-<div class="logo">
-    KEPUS
-</div>
-
-<a href="index.html">
-    📊 Dashboard
-</a>
-
-<a href="data_spj.html">
-    📄 Data SPJ
-</a>
-
-<a href="tambah_spj.html">
-    ➕ Tambah SPJ
-</a>
-
-<a href="verifikasi.html">
-    ✅ Verifikasi
-</a>
-
-<a href="laporan.html">
-    📑 Laporan
-</a>
-
-<a href="#">
-    ⚙ Pengaturan
-</a>
-
-</div>
-
-
-<!-- MAIN -->
-<div class="main">
-
-
-<div class="header">
-
-<div class="menu" onclick="toggleMenu()">
-☰
-</div>
-
-<h2>
-Dashboard SPJ
-</h2>
-
-<div>
-Admin
-</div>
-
-</div>
-
-
-
-<!-- CARDS -->
-
-<div class="cards">
-
-
-<div class="card">
-<h3>Total SPJ</h3>
-<p>120</p>
-</div>
-
-
-<div class="card">
-<h3>Menunggu</h3>
-<p>35</p>
-</div>
-
-
-<div class="card">
-<h3>Selesai</h3>
-<p>80</p>
-</div>
-
-
-<div class="card">
-<h3>Revisi</h3>
-<p>5</p>
-</div>
-
-
-</div>
-
-
-
-<div class="content">
-
-
-<div class="box">
-
-<h3>Status SPJ</h3>
-
-<br>
-
-<p>
-🟡 Menunggu : 35
-</p>
-
-<br>
-
-<p>
-🟢 Selesai : 80
-</p>
-
-<br>
-
-<p>
-🔴 Revisi : 5
-</p>
-
-</div>
-
-
-
-
-<div class="box">
-
-<h3>
-SPJ Terbaru
-</h3>
-
-<br>
-
-<table>
-
-<tr>
-<th>No</th>
-<th>SPJ</th>
-<th>Nilai</th>
-<th>Status</th>
-</tr>
-
-
-<tr>
-<td>1</td>
-<td>SPJ-001</td>
-<td>5.000.000</td>
-<td>
-<span class="status wait">
-Menunggu
-</span>
-</td>
-</tr>
-
-
-<tr>
-<td>2</td>
-<td>SPJ-002</td>
-<td>8.500.000</td>
-<td>
-<span class="status ok">
-Selesai
-</span>
-</td>
-</tr>
-
-
-<tr>
-<td>3</td>
-<td>SPJ-003</td>
-<td>3.200.000</td>
-<td>
-<span class="status revisi">
-Revisi
-</span>
-</td>
-</tr>
-
-
-</table>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-</div>
-
-
+```html
 <script>
 
-function toggleMenu(){
 
-document
-.getElementById("sidebar")
-.classList.toggle("active");
+// ===============================
+// SINKRON DASHBOARD DARI SPJ
+// ===============================
+
+
+function updateDashboard(){
+
+
+let spj =
+JSON.parse(localStorage.getItem("spj")) || [];
+
+
+
+
+// TOTAL NILAI
+
+let total =
+spj.reduce(
+(sum,item)=>
+sum + Number(item.nilai),
+0
+);
+
+
+
+// STATUS
+
+let menunggu =
+spj.filter(
+x=>x.status=="Menunggu"
+).length;
+
+
+let revisi =
+spj.filter(
+x=>x.status=="Revisi"
+).length;
+
+
+let selesai =
+spj.filter(
+x=>x.status=="Selesai"
+).length;
+
+
+
+
+
+// CARD DASHBOARD
+
+let totalEl =
+document.getElementById("total");
+
+
+if(totalEl){
+
+totalEl.innerHTML =
+"Rp "+
+total.toLocaleString("id-ID");
 
 }
 
+
+
+let menungguEl =
+document.getElementById("menunggu");
+
+
+if(menungguEl){
+
+menungguEl.innerHTML =
+menunggu;
+
+}
+
+
+
+let revisiEl =
+document.getElementById("revisi");
+
+
+if(revisiEl){
+
+revisiEl.innerHTML =
+revisi;
+
+}
+
+
+
+let selesaiEl =
+document.getElementById("selesai");
+
+
+if(selesaiEl){
+
+selesaiEl.innerHTML =
+selesai;
+
+}
+
+
+
+
+
+// ===============================
+// RUNNING TEXT
+// ===============================
+
+
+let pesan="";
+
+
+
+
+// SPJ BELUM SELESAI
+
+spj
+.filter(
+x=>x.status=="Menunggu"
+)
+.forEach(x=>{
+
+
+pesan +=
+
+` ⚠️ ${x.pelaksana} belum menyerahkan dokumen ${x.kode} | `;
+
+
+});
+
+
+
+
+// SPJ REVISI
+
+
+spj
+.filter(
+x=>x.status=="Revisi"
+)
+.forEach(x=>{
+
+
+pesan +=
+
+` 🔴 ${x.pelaksana} harus memperbaiki ${x.kode} | `;
+
+
+});
+
+
+
+
+
+if(pesan==""){
+
+
+pesan =
+" ✅ Semua SPJ telah selesai diverifikasi ";
+
+
+}
+
+
+
+
+let running =
+document.getElementById(
+"runningText"
+);
+
+
+
+if(running){
+
+running.innerHTML =
+pesan;
+
+}
+
+
+
+}
+
+
+
+
+
+// jalankan
+
+updateDashboard();
+
+
+// update otomatis setiap kembali ke dashboard
+
+window.addEventListener(
+"storage",
+updateDashboard
+);
+
+
+
 </script>
-
-
-</body>
-</html>
+```
