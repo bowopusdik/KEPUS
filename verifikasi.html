@@ -1,142 +1,64 @@
-let input = document.getElementById("file" + index);
+function uploadFile(kode, index) {
 
-if (!input) {
-    alert("Input file tidak ditemukan.");
-    return;
-}
+    let input = document.getElementById("file" + index);
 
-let file = input.files[0];
+    if (!input) {
+        alert("Input file tidak ditemukan.");
+        return;
+    }
 
-if (!file) {
-    alert("Silakan pilih file terlebih dahulu.");
-    return;
-}
+    let file = input.files[0];
 
+    if (!file) {
+        alert("Silakan pilih file terlebih dahulu.");
+        return;
+    }
 
+    if (file.size > 5 * 1024 * 1024) {
+        alert("Ukuran file maksimal 5 MB.");
+        return;
+    }
 
     let reader = new FileReader();
 
+    reader.onload = function (e) {
 
+        // Simpan dokumen
+        let dokumen = JSON.parse(localStorage.getItem("dokumenSPJ")) || [];
 
-    reader.onload = function(e) {
-
-
-        // ======================
-        // SIMPAN DOKUMEN SCAN
-        // ======================
-
-
-        let dokumen =
-        JSON.parse(localStorage.getItem("dokumenSPJ")) || [];
-
-
-
-        dokumen =
-        dokumen.filter(
-            d => d.kode !== kode
-        );
-
-
+        dokumen = dokumen.filter(d => d.kode !== kode);
 
         dokumen.push({
-
             kode: kode,
-
             nama: file.name,
-
             tipe: file.type,
-
-            tanggal:
-            new Date().toLocaleString("id-ID"),
-
+            tanggal: new Date().toLocaleString("id-ID"),
             url: e.target.result
-
         });
 
+        localStorage.setItem("dokumenSPJ", JSON.stringify(dokumen));
 
+        // Update data SPJ
+        let spj = JSON.parse(localStorage.getItem("spj")) || [];
 
-        localStorage.setItem(
-            "dokumenSPJ",
-            JSON.stringify(dokumen)
-        );
-
-
-
-
-
-
-
-        // ======================
-        // UPDATE DATA SPJ
-        // ======================
-
-
-        let spj =
-        JSON.parse(localStorage.getItem("spj")) || [];
-
-
-
-        spj =
-        spj.map(item => {
-
-
-
-            if(item.kode === kode) {
-
-
+        spj = spj.map(item => {
+            if (item.kode === kode) {
                 return {
-
                     ...item,
-
-                    status:"Selesai",
-
-                    dokumen:true,
-
-                    verifikasi:
-                    new Date()
-                    .toLocaleString("id-ID")
-
+                    status: "Selesai",
+                    dokumen: true,
+                    verifikasi: new Date().toLocaleString("id-ID")
                 };
-
-
             }
-
-
-
             return item;
-
-
         });
 
+        localStorage.setItem("spj", JSON.stringify(spj));
 
-
-
-        localStorage.setItem(
-            "spj",
-            JSON.stringify(spj)
-        );
-
-
-
-
-
-
-        alert(
-        "Dokumen berhasil diverifikasi"
-        );
-
-
-
-        // refresh data
+        alert("Dokumen berhasil diverifikasi");
 
         window.location.reload();
-
-
     };
 
-
-
     reader.readAsDataURL(file);
-
-
 }
