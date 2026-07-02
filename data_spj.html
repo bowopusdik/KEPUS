@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 
@@ -17,7 +18,6 @@ box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
 }
 
-
 body{
 background:#f4f6f9;
 }
@@ -27,7 +27,6 @@ background:#f4f6f9;
 display:flex;
 min-height:100vh;
 }
-
 
 
 .sidebar{
@@ -42,12 +41,11 @@ padding:20px;
 
 .logo{
 
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 margin-bottom:30px;
 
 }
-
 
 
 .sidebar a{
@@ -56,11 +54,10 @@ display:block;
 color:white;
 text-decoration:none;
 padding:12px;
-margin-bottom:8px;
 border-radius:8px;
+margin-bottom:8px;
 
 }
-
 
 
 .sidebar a:hover{
@@ -70,25 +67,22 @@ background:#374151;
 }
 
 
-
 .main{
 
 flex:1;
-padding:20px;
+padding:25px;
 
 }
-
 
 
 .box{
 
 background:white;
-padding:20px;
+padding:25px;
 border-radius:15px;
-box-shadow:0 3px 10px #ddd;
+box-shadow:0 5px 15px #ddd;
 
 }
-
 
 
 .top{
@@ -98,7 +92,6 @@ justify-content:space-between;
 align-items:center;
 
 }
-
 
 
 button{
@@ -113,13 +106,18 @@ cursor:pointer;
 }
 
 
+input,select{
+
+padding:9px;
+border-radius:8px;
+border:1px solid #ddd;
+
+}
+
 
 input{
 
-padding:10px;
 width:300px;
-border:1px solid #ddd;
-border-radius:8px;
 
 }
 
@@ -134,6 +132,14 @@ margin-top:20px;
 }
 
 
+th{
+
+background:#005baa;
+color:white;
+
+}
+
+
 th,td{
 
 padding:12px;
@@ -143,15 +149,54 @@ border-bottom:1px solid #ddd;
 
 
 
-</style>
+.status{
 
+padding:6px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+
+}
+
+
+
+.menunggu{
+
+background:#fff3cd;
+color:#856404;
+
+}
+
+
+.revisi{
+
+background:#fee2e2;
+color:#991b1b;
+
+}
+
+
+.selesai{
+
+background:#d1fae5;
+color:#065f46;
+
+}
+
+
+.action button{
+
+margin:2px;
+
+}
+
+
+</style>
 
 </head>
 
 
-
 <body>
-
 
 
 <div class="container">
@@ -191,8 +236,8 @@ KEPUS
 </a>
 
 
-
 </div>
+
 
 
 
@@ -205,7 +250,6 @@ KEPUS
 <div class="box">
 
 
-
 <div class="top">
 
 
@@ -215,23 +259,21 @@ Data SPJ
 
 
 <button onclick="tambah()">
-
 ➕ Tambah SPJ
-
 </button>
 
 
 </div>
 
 
-
 <br>
 
 
-<input 
+<input
 id="cari"
 onkeyup="cariData()"
-placeholder="Cari Nomor Surat Tugas">
+placeholder="Cari nomor surat / pokja">
+
 
 
 
@@ -254,9 +296,10 @@ placeholder="Cari Nomor Surat Tugas">
 
 <th>Nilai</th>
 
-<th>Status</th>
+<th>Verifikasi</th>
 
 <th>Aksi</th>
+
 
 </tr>
 
@@ -264,12 +307,10 @@ placeholder="Cari Nomor Surat Tugas">
 </thead>
 
 
-
 <tbody id="tabelSPJ">
 
 
 </tbody>
-
 
 
 </table>
@@ -279,9 +320,7 @@ placeholder="Cari Nomor Surat Tugas">
 </div>
 
 
-
 </div>
-
 
 
 </div>
@@ -295,8 +334,11 @@ placeholder="Cari Nomor Surat Tugas">
 
 
 
-function tampil(){
 
+// LOAD DATA
+
+
+function tampil(){
 
 
 let data =
@@ -309,6 +351,25 @@ let html="";
 
 
 data.forEach((spj,index)=>{
+
+
+let status =
+spj.status || "Menunggu";
+
+
+
+let warna="menunggu";
+
+
+if(status=="Revisi")
+warna="revisi";
+
+
+if(status=="Selesai")
+warna="selesai";
+
+
+
 
 
 html += `
@@ -329,14 +390,66 @@ html += `
 <td>${spj.pokja}</td>
 
 
-<td>Rp ${spj.nilaiSPJ}</td>
+<td>
+Rp ${Number(spj.nilaiSPJ)
+.toLocaleString("id-ID")}
+</td>
 
-
-<td>${spj.status}</td>
 
 
 
 <td>
+
+
+<select onchange="ubahStatus(${index},this.value)">
+
+
+
+<option value="Menunggu"
+${status=="Menunggu"?"selected":""}>
+
+🟡 Menunggu SPJ
+
+</option>
+
+
+
+<option value="Revisi"
+${status=="Revisi"?"selected":""}>
+
+🔴 Revisi
+
+</option>
+
+
+
+<option value="Selesai"
+${status=="Selesai"?"selected":""}>
+
+🟢 Terverifikasi
+
+</option>
+
+
+</select>
+
+
+<br>
+
+
+<span class="status ${warna}">
+${status}
+</span>
+
+
+</td>
+
+
+
+
+
+
+<td class="action">
 
 
 <button onclick="detail(${index})">
@@ -352,17 +465,21 @@ html += `
 </td>
 
 
+
 </tr>
 
 
 `;
 
 
+
 });
 
 
 
-document.getElementById("tabelSPJ")
+
+document
+.getElementById("tabelSPJ")
 .innerHTML=html;
 
 
@@ -373,7 +490,68 @@ document.getElementById("tabelSPJ")
 
 
 
+
+
+
+// UBAH STATUS
+
+
+
+function ubahStatus(index,status){
+
+
+
+let data =
+JSON.parse(localStorage.getItem("dataSPJ")) || [];
+
+
+
+data[index].status=status;
+
+
+
+localStorage.setItem(
+"dataSPJ",
+JSON.stringify(data)
+);
+
+
+
+// sinkron dengan dashboard
+
+let spj =
+JSON.parse(localStorage.getItem("spj")) || [];
+
+
+
+if(spj[index]){
+
+spj[index].status=status;
+
+
+localStorage.setItem(
+"spj",
+JSON.stringify(spj)
+);
+
+
+}
+
+
+
+tampil();
+
+
+}
+
+
+
+
+
+
+
 function hapus(index){
+
 
 
 let data =
@@ -385,6 +563,7 @@ if(confirm("Hapus data SPJ ini?")){
 
 
 data.splice(index,1);
+
 
 
 localStorage.setItem(
@@ -399,7 +578,6 @@ tampil();
 
 }
 
-
 }
 
 
@@ -412,18 +590,15 @@ function detail(index){
 let data =
 JSON.parse(localStorage.getItem("dataSPJ")) || [];
 
-
-
-let spj=data[index];
-
+let x=data[index];
 
 
 alert(
 
-"Surat Tugas : "+spj.nomorSuratTugas+
-"\nPokja : "+spj.pokja+
-"\nNilai : "+spj.nilaiSPJ+
-"\nStatus : "+spj.status
+"Nomor Surat : "+x.nomorSuratTugas+
+"\nPokja : "+x.pokja+
+"\nNilai : Rp "+x.nilaiSPJ+
+"\nStatus : "+x.status
 
 );
 
@@ -434,28 +609,33 @@ alert(
 
 
 
+
+
 function cariData(){
 
 
-
 let kata =
-document.getElementById("cari").value
+document
+.getElementById("cari")
+.value
 .toLowerCase();
 
 
 
-let baris =
-document.querySelectorAll("#tabelSPJ tr");
-
-
-
-baris.forEach(row=>{
+document
+.querySelectorAll("#tabelSPJ tr")
+.forEach(row=>{
 
 
 row.style.display =
-row.innerText.toLowerCase()
+row.innerText
+.toLowerCase()
 .includes(kata)
-?"":"none";
+?
+""
+:
+"none";
+
 
 });
 
@@ -466,14 +646,13 @@ row.innerText.toLowerCase()
 
 
 
+
 function tambah(){
 
-
-window.location.href="tambah_spj.html";
-
+location.href=
+"tambah_spj.html";
 
 }
-
 
 
 
@@ -481,11 +660,10 @@ window.location.href="tambah_spj.html";
 tampil();
 
 
-
 </script>
-
 
 
 </body>
 
 </html>
+```
