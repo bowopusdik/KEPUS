@@ -211,7 +211,7 @@ loadData();
 /*====================================================
 SIMPAN DATA
 ====================================================*/
-updateStatistic();
+
 
 
 async function simpanData(){
@@ -386,6 +386,7 @@ function toggleSPM(index){
 
         row.style.display="none";
 
+    
     }
 
 }
@@ -496,9 +497,7 @@ function renderDRPP(index){
 function toggleDRPP(index,drppIndex){
 
     const row=document.getElementById(
-
         `drpp-${index}-${drppIndex}`
-
     );
 
     if(row.style.display==="none"){
@@ -507,9 +506,14 @@ function toggleDRPP(index,drppIndex){
 
         renderSPBY(index,drppIndex);
 
+    }else{
 
         row.style.display="none";
+}else{
 
+    row.style.display="none";
+
+}
     }
 
 }
@@ -519,7 +523,7 @@ function toggleDRPP(index,drppIndex){
 ====================================================*/
 
 function renderSPBY(index,drppIndex){
-;
+
     const container=document.getElementById(
         `spby-${index}-${drppIndex}`
 
@@ -862,5 +866,10 @@ function downloadFile(index,drppIndex,spbyIndex){
     "Nanti akan mendownload file"
 
     );
+
+}
+function toast(pesan){
+
+    alert(pesan);
 
 }
