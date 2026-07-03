@@ -1,17 +1,21 @@
-
 let currentFiles = [];
 
-// OPEN MODAL DINAMIS (FIXED)
+/* =========================
+   OPEN MODAL (VIEW SPJ)
+========================= */
 function openModal(spm, total, drpp, spby, kwitansi, st) {
 
+  // dummy file (nanti bisa diganti upload real)
   currentFiles = [
     "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     "https://www.orimi.com/pdf-test.pdf"
   ];
 
+  // set judul modal
   document.getElementById("modalTitle").innerText =
     "📊 DETAIL SPJ - " + spm;
 
+  // isi data modal
   document.getElementById("modalBody").innerHTML = `
     <p><b>💰 Total:</b> Rp ${total}</p>
     <p><b>📄 DRPP:</b> ${Array.isArray(drpp) ? drpp.join(", ") : drpp}</p>
@@ -23,39 +27,54 @@ function openModal(spm, total, drpp, spby, kwitansi, st) {
 
     <h4>📎 FILE SPJ</h4>
     <ul>
-      ${currentFiles.map((f, i) => `<li>✔ File ${i+1}</li>`).join("")}
+      ${currentFiles.map((f, i) => `<li>✔ File SPJ ${i + 1}</li>`).join("")}
     </ul>
   `;
 
+  // tampilkan modal
   document.getElementById("spjModal").style.display = "flex";
 }
 
-// CLOSE MODAL
+/* =========================
+   CLOSE MODAL
+========================= */
 function closeModal() {
   document.getElementById("spjModal").style.display = "none";
 }
 
-// CLICK OUTSIDE MODAL
-window.onclick = function(e) {
-  let modal = document.getElementById("spjModal");
+/* =========================
+   CLICK OUTSIDE MODAL
+========================= */
+window.addEventListener("click", function (e) {
+  const modal = document.getElementById("spjModal");
   if (e.target === modal) {
     closeModal();
   }
-}
+});
 
-// PREVIEW FILE
+/* =========================
+   PREVIEW FILE
+========================= */
 function previewFile() {
-  window.open(currentFiles[0], "_blank");
+  if (currentFiles.length > 0) {
+    window.open(currentFiles[0], "_blank");
+  } else {
+    alert("Tidak ada file");
+  }
 }
 
-// DOWNLOAD ZIP (SIMULASI)
+/* =========================
+   DOWNLOAD (SIMULASI ZIP)
+========================= */
 function downloadZIP() {
   alert("📦 Download SPJ dimulai...");
 
   currentFiles.forEach((file, i) => {
-    let a = document.createElement("a");
-    a.href = file;
-    a.download = "SPJ-file-" + (i + 1) + ".pdf";
-    a.click();
+    setTimeout(() => {
+      const a = document.createElement("a");
+      a.href = file;
+      a.download = "SPJ-file-" + (i + 1) + ".pdf";
+      a.click();
+    }, i * 400);
   });
 }
