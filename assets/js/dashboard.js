@@ -133,7 +133,7 @@ function renderDashboard() {
 
     }
 
-    dataSPM.forEach((spm) => {
+  dataSPM.forEach((spm, index) => {
 
         tbody.innerHTML += `
             <tr>
@@ -147,13 +147,31 @@ function renderDashboard() {
                     </span>
                 </td>
                 <td>
-                    <button class="btn btn-success btn-sm">
-                        <i class="fa fa-eye"></i>
-                    </button>
+                 <button
+    class="btn btn-success btn-sm"
+    onclick="toggleSPM(${index})">
+
+    <i class="fa fa-eye"></i>
+
+</button>   
                 </td>
             </tr>
         `;
 
     });
+
+}
+/*====================================================
+TOGGLE DETAIL SPM
+====================================================*/
+
+function toggleSPM(index) {
+
+    const spm = dataSPM[index];
+
+    alert(
+        "Nomor SPM : " + spm.nomor +
+        "\nStatus : " + spm.status
+    );
 
 }
