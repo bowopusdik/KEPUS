@@ -493,11 +493,9 @@ function renderDRPP(index){
 /*====================================================
   TOGGLE DRPP
 ====================================================*/
-function toggleDRPP(index,drppIndex){
+function toggleDRPP(index, drppIndex){
 
-    const row = document.getElementById(
-        `drpp-${index}-${drppIndex}`
-    );
+    const row = document.getElementById(`drpp-${index}-${drppIndex}`);
 
     if(row.style.display === "none"){
 
@@ -511,7 +509,6 @@ function toggleDRPP(index,drppIndex){
     }
 
 }
-
 /*====================================================
   RENDER SPBY
 ====================================================*/
