@@ -316,3 +316,225 @@ body{
 .user-box i{
     color:#0d6efd;
 }
+/* =====================================================
+   ACCORDION SPM
+===================================================== */
+
+.table-primary{
+    background:#dbeafe !important;
+    transition:.3s;
+}
+
+.table-primary:hover{
+    background:#c6defd !important;
+}
+
+.table-primary button{
+    font-weight:600;
+}
+
+.collapse table{
+    animation:fadeDown .3s ease;
+}
+
+@keyframes fadeDown{
+
+    from{
+
+        opacity:0;
+        transform:translateY(-8px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.fa-folder{
+
+    color:#f4b400;
+
+}
+
+.fa-folder-open{
+
+    color:#ff9800;
+
+}
+
+.fa-file{
+
+    color:#2196f3;
+
+}
+
+.fa-upload{
+
+    color:#0d6efd;
+
+}
+
+.fa-download{
+
+    color:#198754;
+
+}
+
+/* =====================================================
+   TABLE INSIDE TABLE
+===================================================== */
+
+.table-bordered{
+
+    background:#fafafa;
+
+    border-radius:10px;
+
+}
+
+.table-striped tbody tr:nth-child(even){
+
+    background:#f7f7f7;
+
+}
+
+.table-striped tbody tr:hover{
+
+    background:#edf5ff;
+
+}
+
+/* =====================================================
+   BUTTON EFFECT
+===================================================== */
+
+.btn{
+
+    transition:.25s;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* =====================================================
+   SCROLL TABLE
+===================================================== */
+
+.table-area{
+
+    overflow:auto;
+
+    max-height:700px;
+
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1200px){
+
+.cards{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:900px){
+
+.sidebar{
+
+width:90px;
+
+}
+
+.logo h3{
+
+display:none;
+
+}
+
+.menu li{
+
+text-align:center;
+
+padding:18px;
+
+}
+
+.menu li i{
+
+font-size:20px;
+
+}
+
+.menu li{
+
+font-size:0;
+
+}
+
+.content{
+
+margin-left:90px;
+
+width:calc(100% - 90px);
+
+}
+
+}
+
+@media(max-width:768px){
+
+.cards{
+
+grid-template-columns:1fr;
+
+}
+
+.topbar{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
+
+.search-box{
+
+width:100%;
+
+}
+
+.search-box input{
+
+width:100%;
+
+}
+
+.toolbar{
+
+flex-direction:column;
+
+align-items:stretch;
+
+}
+
+}
