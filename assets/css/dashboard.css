@@ -1,0 +1,129 @@
+/* =====================================================
+   KEPUS - Dashboard CSS
+   Versi 1.0
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    background:#eef2f7;
+    color:#333;
+}
+
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.wrapper{
+    display:flex;
+    width:100%;
+    min-height:100vh;
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+    width:260px;
+    background:linear-gradient(180deg,#0d6efd,#0a58ca);
+    color:#fff;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    overflow-y:auto;
+    box-shadow:4px 0 10px rgba(0,0,0,.15);
+}
+
+.logo{
+    padding:25px;
+    text-align:center;
+    border-bottom:1px solid rgba(255,255,255,.15);
+}
+
+.logo i{
+    font-size:48px;
+    margin-bottom:10px;
+    color:#FFD43B;
+}
+
+.logo h3{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.menu{
+    list-style:none;
+    padding:20px 0;
+}
+
+.menu li{
+    padding:15px 25px;
+    cursor:pointer;
+    transition:.3s;
+    font-size:15px;
+}
+
+.menu li i{
+    width:25px;
+}
+
+.menu li:hover{
+    background:rgba(255,255,255,.18);
+}
+
+.menu li.active{
+    background:#fff;
+    color:#0d6efd;
+    font-weight:bold;
+}
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.content{
+    margin-left:260px;
+    width:calc(100% - 260px);
+    padding:25px;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.topbar{
+    background:#fff;
+    border-radius:12px;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+.topbar h2{
+    font-size:24px;
+    margin-bottom:5px;
+}
+
+.topbar small{
+    color:#777;
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-box i{
+    color:#0d6efd;
+}
