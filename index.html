@@ -71,8 +71,8 @@ function renderTable(data){
       <td>${item.kwitansi}</td>
       <td>${item.st}</td>
       <td>
-        <button onclick="uploadSPJ(${item.id})">Upload</button>
-        <button onclick="deleteSPJ(${item.id})">Hapus</button>
+        <button onclick="uploadSPJ(${item.id})">📎 Upload</button>
+        <button onclick="deleteSPJ(${item.id})">🗑 Hapus</button>
       </td>
       <td>Detail</td>
     </tr>
@@ -85,12 +85,15 @@ function renderTable(data){
 
 // ================= STATUS =================
 function getStatus(item){
+
   if(item.spj.length === 0){
-    return '🔴 BELUM UPLOAD';
-  } else if(item.status === "REVISI"){
-    return '🟡 REVISI';
-  } else {
-    return '🟢 TERVERIFIKASI';
+    return '<span style="color:red">🔴 BELUM UPLOAD</span>';
+  }
+  else if(item.status === "REVISI"){
+    return '<span style="color:orange">🟡 REVISI</span>';
+  }
+  else {
+    return '<span style="color:green">🟢 TERVERIFIKASI</span>';
   }
 }
 
@@ -102,6 +105,7 @@ function uploadSPJ(id){
 
   if(file){
     let item = spmData.find(d => d.id === id);
+
     item.spj.push(file);
     item.status = "TERVERIFIKASI";
 
@@ -117,6 +121,7 @@ function deleteSPJ(id){
   let item = spmData.find(d => d.id === id);
 
   if(confirm("Hapus SPJ?")){
+
     item.spj = [];
     item.status = "BELUM UPLOAD";
 
@@ -125,7 +130,7 @@ function deleteSPJ(id){
 }
 
 
-// ================= MODAL VIEW =================
+// ================= MODAL =================
 function openModal(id){
 
   let item = spmData.find(d => d.id === id);
