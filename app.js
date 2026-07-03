@@ -1,83 +1,52 @@
 
-// DATA CONTOH FILE SPJ
-const spjData = {
-  spm: "SPM-001/2026",
-  total: "Rp 5.000.000",
-  drpp: ["DRPP-01", "DRPP-02"],
-  spby: "SPBY-01",
-  kwitansi: "KW-01",
-  st: ["ST-01", "ST-02"],
-  files: [
-    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-    "https://www.orimi.com/pdf-test.pdf"
-  ]
-};
+let currentFiles = [];
 
+// OPEN MODAL
+function openModal(spm, total, drpp, spby, kw, st) {
 
-// BUKA MODAL
-function openModal() {
-
-  // isi data ke modal
-  document.querySelector(".modal-content h2").innerText =
-    "📊 DETAIL SPJ - " + spjData.spm;
-
-  document.querySelector(".modal-body").innerHTML = `
-    <p><b>💰 Total SPM:</b> ${spjData.total}</p>
-    <p><b>📄 DRPP:</b> ${spjData.drpp.join(", ")}</p>
-    <p><b>💳 SPBY:</b> ${spjData.spby}</p>
-    <p><b>🧾 KWITANSI:</b> ${spjData.kwitansi}</p>
-    <p><b>📌 SURAT TUGAS:</b> ${spjData.st.join(", ")}</p>
-
-    <hr>
-
-    <h4>📎 FILE SPJ</h4>
-    <ul>
-      ${spjData.files.map((f, i) =>
-        `<li>✔ File ${i+1}</li>`
-      ).join("")}
-    </ul>
-
-    <div class="modal-actions">
-      <button class="btn-blue" onclick="previewFile()">👁 Preview</button>
-      <button class="btn-green" onclick="downloadZIP()">⬇ Download ZIP</button>
-    </div>
-  `;
+  currentFiles = [
+    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+  ];
 
   document.getElementById("spjModal").style.display = "flex";
+
+  document.getElementById("modalTitle").innerText =
+    "📊 DETAIL " + spm;
+
+  document.getElementById("modalBody").innerHTML = `
+    <p><b>💰 Total:</b> Rp ${total}</p>
+    <p><b>📄 DRPP:</b> ${drpp}</p>
+    <p><b>💳 SPBY:</b> ${spby}</p>
+    <p><b>🧾 KWITANSI:</b> ${kw}</p>
+    <p><b>📌 SURAT TUGAS:</b> ${st}</p>
+  `;
 }
 
-
-// TUTUP MODAL
+// CLOSE MODAL
 function closeModal() {
   document.getElementById("spjModal").style.display = "none";
 }
 
-
-// KLIK LUAR MODAL
-window.onclick = function(event) {
-  let modal = document.getElementById("spjModal");
-  if (event.target == modal) {
-    modal.style.display = "none";
+// CLICK OUTSIDE
+window.onclick = function(e) {
+  if (e.target == document.getElementById("spjModal")) {
+    closeModal();
   }
 }
 
-
-// 👁 PREVIEW FILE
+// PREVIEW
 function previewFile() {
-  window.open(spjData.files[0], "_blank");
+  window.open(currentFiles[0], "_blank");
 }
 
-
-// ⬇ DOWNLOAD ZIP (SIMULASI)
+// DOWNLOAD ZIP SIMULASI
 function downloadZIP() {
-  alert("📦 Download ZIP dimulai... (demo)");
-
-  // simulasi download file satu per satu
-  spjData.files.forEach((file, i) => {
+  alert("📦 Download SPJ dimulai...");
+  currentFiles.forEach((f, i) => {
     setTimeout(() => {
-      const a = document.createElement("a");
-      a.href = file;
-      a.download = "spj-file-" + (i+1) + ".pdf";
+      let a = document.createElement("a");
+      a.href = f;
+      a.download = "spj-" + i + ".pdf";
       a.click();
     }, i * 500);
   });
