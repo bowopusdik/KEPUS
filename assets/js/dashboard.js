@@ -5,31 +5,30 @@
 // Ganti dengan URL Web App Google Apps Script Anda
 
 
-  const API_URL ="https://script.google.com/macros/s/AKfycbzNJwLhwF2879uFmj3QoRSNuehUPbzXrEnFMpiiL09vObhPrSgTl7jzvHxXh6twfHA6/exec";
+  const API_URL ="https://script.google.com/macros/s/AKfycbxD2LU3sdIno_YmDGEh5HhTlOs48WpvxQSZUS5RQwdw_1vW5PDn6W9pNiALq7eYg8E3/exec";
+
 /*====================================================
 LOAD DATA
 ====================================================*/
 
-async function loadData(){
+async function loadData() {
 
-    try{
+    try {
 
         const response = await fetch(API_URL);
-
         const result = await response.json();
 
-        dataSPM = result.data || [];
+        console.log(result);
+
+        dataSPM = result.data;
 
         renderDashboard();
-
         updateStatistic();
 
-
-    }catch(err){
+    } catch (err) {
 
         console.error(err);
-
-        alert("Gagal mengambil data.");
+        alert("Gagal mengambil data dari Google Apps Script.");
 
     }
 
@@ -68,138 +67,7 @@ SPM
  │      └── Surat Tugas
 */
 
-dataSPM = [
 
-    
-{
-
-id:1,
-
-nomor:"SPM-001",
-
-status:"Revisi",
-
-drpp:[
-
-{
-
-nomor:"DRPP-001",
-
-status:"Selesai",
-
-spby:[
-
-{
-
-nomor:"SPBY-001",
-
-kwitansi:"KW-001",
-
-surat:"ST-001",
-
-status:"Selesai",
-
-upload:false,
-
-file:null
-
-},
-
-{
-
-nomor:"SPBY-002",
-
-kwitansi:"KW-002",
-
-surat:"ST-002",
-
-status:"Belum",
-
-upload:false,
-
-file:null
-
-}
-
-]
-
-},
-
-{
-
-nomor:"DRPP-002",
-
-status:"Revisi",
-
-spby:[
-
-{
-
-nomor:"SPBY-003",
-
-kwitansi:"KW-003",
-
-surat:"ST-003",
-
-status:"Revisi",
-
-upload:false,
-
-file:null
-
-}
-
-]
-
-}
-
-]
-
-},
-
-{
-
-id:2,
-
-nomor:"SPM-002",
-
-status:"Belum",
-
-drpp:[
-
-{
-
-nomor:"DRPP-003",
-
-status:"Belum",
-
-spby:[
-
-{
-
-nomor:"SPBY-004",
-
-kwitansi:"KW-004",
-
-surat:"ST-004",
-
-status:"Belum",
-
-upload:false,
-
-file:null
-
-}
-
-]
-
-}
-
-]
-
-}
-
-];
 /*====================================================
   LOAD DASHBOARD
 ====================================================*/
@@ -864,3 +732,6 @@ function toast(pesan){
     alert(pesan);
 
 }
+document.addEventListener("DOMContentLoaded", () => {
+    loadData();
+});
