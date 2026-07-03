@@ -3,146 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard SPJ</title>
-  <link rel="stylesheet" href="style.css">
 
-  <!-- Font -->
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 
-<!-- MODAL DETAIL SPJ -->
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="title">📁 SISTEM ARSIP SPJ PERJALANAN DINAS</div>
+
+  <div class="toolbar">
+    <input type="text" placeholder="🔍 Search SPJ..." />
+    <select>
+      <option>Filter Status</option>
+      <option>Terverifikasi</option>
+      <option>Revisi</option>
+      <option>Belum</option>
+    </select>
+    <button class="btn-primary">+ Tambah SPM</button>
+  </div>
+</header>
+
+<!-- STAT -->
+<section class="stats">
+  <div class="card success">🟢 Terverifikasi <h2>120</h2></div>
+  <div class="card warning">🟡 Revisi <h2>35</h2></div>
+  <div class="card danger">🔴 Belum <h2>18</h2></div>
+  <div class="card primary">📊 Total <h2>173</h2></div>
+</section>
+
+<!-- TABLE -->
+<section class="table-container">
+
+<table>
+  <thead>
+    <tr>
+      <th>VIEW</th>
+      <th>STATUS</th>
+      <th>SPM</th>
+      <th>TOTAL</th>
+      <th>DRPP</th>
+      <th>SPBY</th>
+      <th>KW</th>
+      <th>ST</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td onclick="openModal('SPM-001','5.000.000','DRPP-01, DRPP-02','SPBY-01','KW-01','ST-01, ST-02')"
+          style="cursor:pointer;">👁</td>
+      <td>🟢</td>
+      <td>SPM-001</td>
+      <td>5.000.000</td>
+      <td>DRPP-01</td>
+      <td>SPBY-01</td>
+      <td>KW-01</td>
+      <td>ST-01</td>
+    </tr>
+
+    <tr>
+      <td onclick="openModal('SPM-002','3.500.000','DRPP-02','SPBY-02','KW-02','ST-02')"
+          style="cursor:pointer;">👁</td>
+      <td>🟡</td>
+      <td>SPM-002</td>
+      <td>3.500.000</td>
+      <td>DRPP-02</td>
+      <td>SPBY-02</td>
+      <td>KW-02</td>
+      <td>ST-02</td>
+    </tr>
+
+  </tbody>
+</table>
+
+</section>
+
+<!-- MODAL (WAJIB DI DALAM BODY) -->
 <div id="spjModal" class="modal">
 
   <div class="modal-content">
 
     <span class="close" onclick="closeModal()">✖</span>
 
-    <h2>📊 DETAIL SPJ - SPM-001/2026</h2>
+    <h2 id="modalTitle">DETAIL SPJ</h2>
 
-    <div class="modal-body">
+    <div id="modalBody"></div>
 
-      <p><b>💰 Total SPM:</b> Rp 5.000.000</p>
-      <p><b>📄 DRPP:</b> DRPP-01, DRPP-02</p>
-      <p><b>💳 SPBY:</b> SPBY-01</p>
-      <p><b>🧾 KWITANSI:</b> KW-01</p>
-      <p><b>📌 SURAT TUGAS:</b> ST-01, ST-02</p>
-
-      <hr>
-
-      <h4>📎 FILE SPJ</h4>
-      <ul>
-        <li>✔ spj_1.pdf</li>
-        <li>✔ spj_2.pdf</li>
-      </ul>
-
-      <div class="modal-actions">
-        <button class="btn-blue">👁 Preview</button>
-        <button class="btn-green">⬇ Download ZIP</button>
-      </div>
-
+    <div class="modal-actions">
+      <button class="btn-blue" onclick="previewFile()">👁 Preview</button>
+      <button class="btn-green" onclick="downloadZIP()">⬇ Download ZIP</button>
     </div>
 
   </div>
 
 </div>
-  
-<body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="title">
-      📁 SISTEM ARSIP SPJ PERJALANAN DINAS
-    </div>
-
-    <div class="toolbar">
-      <input type="text" placeholder="🔍 Search SPM / DRPP / SPBY / KW..." />
-      <select>
-        <option>Filter Status</option>
-        <option>Terverifikasi</option>
-        <option>Revisi</option>
-        <option>Belum</option>
-      </select>
-      <button class="btn-primary">+ Tambah SPM</button>
-    </div>
-  </header>
-
-  <!-- STAT CARDS -->
-  <section class="stats">
-
-    <div class="card success">
-      🟢 Terverifikasi
-      <h2>120</h2>
-      <small>SPM</small>
-    </div>
-
-    <div class="card warning">
-      🟡 Revisi
-      <h2>35</h2>
-      <small>SPM</small>
-    </div>
-
-    <div class="card danger">
-      🔴 Belum
-      <h2>18</h2>
-      <small>SPM</small>
-    </div>
-
-    <div class="card primary">
-      📊 Total
-      <h2>173</h2>
-      <small>SPM</small>
-    </div>
-
-  </section>
-
-  <!-- TABLE -->
-  <section class="table-container">
-
-    <h3>📊 TABEL ARSIP SPJ</h3>
-
-    <table>
-      <thead>
-        <tr>
-          <th>View</th>
-          <th>Status</th>
-          <th>SPM</th>
-          <th>Total</th>
-          <th>DRPP</th>
-          <th>SPBY</th>
-          <th>KWITANSI</th>
-          <th>ST</th>
-          <th>SPJ</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td>👁</td>
-          <td><span class="status success"></span></td>
-          <td>SPM-001</td>
-          <td>5.000.000</td>
-          <td>DRPP-01</td>
-          <td>SPBY-01</td>
-          <td>KW-01</td>
-          <td>ST-01</td>
-          <td>✔</td>
-        </tr>
-
-        <tr>
-          <td>👁</td>
-          <td><span class="status warning"></span></td>
-          <td>SPM-002</td>
-          <td>3.500.000</td>
-          <td>DRPP-02</td>
-          <td>SPBY-02</td>
-          <td>KW-02</td>
-          <td>ST-02</td>
-          <td>⚠</td>
-        </tr>
-
-      </tbody>
-    </table>
-
-  </section>
+<script src="app.js"></script>
 
 </body>
 </html>
