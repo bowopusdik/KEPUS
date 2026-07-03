@@ -1,4 +1,37 @@
+/*====================================================
+    GOOGLE APPS SCRIPT
+====================================================*/
 
+// Ganti dengan URL Web App Google Apps Script Anda
+const API_URL =
+"https://script.google.com/macros/s/ISI_WEBAPP_URL_ANDA/exec";
+/*====================================================
+LOAD DATA
+====================================================*/
+
+async function loadData(){
+
+    try{
+
+        const response = await fetch(API_URL);
+
+        const result = await response.json();
+
+        dataSPM = result.data;
+
+        renderDashboard();
+simpanData();
+        updateStatistic();
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Gagal mengambil data.");
+
+    }
+
+}
 /*====================================================
   KEPUS Dashboard
   dashboard.js
@@ -167,14 +200,34 @@ file:null
 /*====================================================
   LOAD DASHBOARD
 ====================================================*/
-
 document.addEventListener("DOMContentLoaded",()=>{
 
-renderDashboard();
-
-updateStatistic();
+loadData();
 
 });
+/*====================================================
+SIMPAN DATA
+====================================================*/
+
+async function simpanData(){
+
+    try{
+
+        await fetch(API_URL,{
+
+            method:"POST",
+
+            body:JSON.stringify(dataSPM)
+
+        });
+
+    }catch(err){
+
+        console.log(err);
+
+    }
+
+}
 
 /*====================================================
   STATISTIK
@@ -220,6 +273,7 @@ document.getElementById("totalSelesai").innerText=selesai;
 ====================================================*/
 
 function renderDashboard(){
+  simpanData();
 
 const tbody=document.getElementById("tableSPM");
 
@@ -322,7 +376,7 @@ function toggleSPM(index){
         row.style.display="table-row";
 
         renderDRPP(index);
-
+simpanData();
     }else{
 
         row.style.display="none";
@@ -336,7 +390,7 @@ function toggleSPM(index){
 ====================================================*/
 
 function renderDRPP(index){
-
+simpanData();
     const container=document.getElementById("detail"+index);
 
     const spm=dataSPM[index];
@@ -448,7 +502,7 @@ function toggleDRPP(index,drppIndex){
         row.style.display="table-row";
 
         renderSPBY(index,drppIndex);
-
+simpanData();
     }else{
 
         row.style.display="none";
@@ -462,7 +516,7 @@ function toggleDRPP(index,drppIndex){
 ====================================================*/
 
 function renderSPBY(index,drppIndex){
-
+simpanData();
     const container=document.getElementById(
 
         `spby-${index}-${drppIndex}`
@@ -606,7 +660,7 @@ function tambahSPM(){
 
     renderDashboard();
     updateStatistic();
-
+simpanData();
 }
 
 /*====================================================
@@ -630,7 +684,7 @@ function tambahDRPP(index){
     });
 
     renderDashboard();
-
+simpanData();
 }
 
 /*====================================================
@@ -674,7 +728,7 @@ function tambahSPBY(index,drppIndex){
     renderDRPP(index);
 
     updateStatistic();
-
+simpanData();
 }
 
 /*====================================================
@@ -703,10 +757,10 @@ function cariSPM(){
 
     renderHasil(hasil);
 
-}
+}simpanData();
 
 function renderHasil(list){
-
+simpanData();
     const tbody=document
 
     .getElementById("tableSPM");
