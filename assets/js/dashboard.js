@@ -211,7 +211,9 @@ loadData();
 /*====================================================
 SIMPAN DATA
 ====================================================*/
-
+updateStatistic();
+simpanData();
+toast("Data berhasil disimpan");
 async function simpanData(){
 
     try{
