@@ -1,63 +1,144 @@
-let currentFiles = [];
+// ============================
+// DATA SEMENTARA
+// ============================
 
-/* OPEN MODAL */
-function openModal(spm, total, drpp, spby, kw, st) {
+let currentSPJ = null;
 
-  currentFiles = [
-    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-  ];
+// ============================
+// MODAL
+// ============================
 
-  document.getElementById("spjModal").style.display = "flex";
+function openModal(spm, total, drpp, spby, kwitansi, suratTugas){
 
-  document.getElementById("modalTitle").innerText =
-    "📊 DETAIL " + spm;
+    currentSPJ = {
+        spm,
+        total,
+        drpp,
+        spby,
+        kwitansi,
+        suratTugas
+    };
 
-  document.getElementById("modalBody").innerHTML = `
-    <p><b>💰 Total:</b> Rp ${total}</p>
-    <p><b>📄 DRPP:</b> ${drpp.join(", ")}</p>
-    <p><b>💳 SPBY:</b> ${spby}</p>
-    <p><b>🧾 KW:</b> ${kw}</p>
-    <p><b>📌 ST:</b> ${st.join(", ")}</p>
+    document.getElementById("modalTitle").innerHTML =
+        "Detail " + spm;
 
-    <hr>
+    document.getElementById("modalBody").innerHTML = `
+        <p><strong>Nomor SPM :</strong> ${spm}</p>
+        <p><strong>Total :</strong> Rp ${total}</p>
 
-    <h4>📎 FILE SPJ</h4>
-    <ul>
-      <li>spj_1.pdf</li>
-    </ul>
-  `;
+        <hr><br>
+
+        <p><strong>DRPP</strong></p>
+        <ul>
+            ${drpp.map(item=>`<li>${item}</li>`).join("")}
+        </ul>
+
+        <br>
+
+        <p><strong>SPBY</strong></p>
+        <p>${spby}</p>
+
+        <br>
+
+        <p><strong>Kwitansi</strong></p>
+        <p>${kwitansi}</p>
+
+        <br>
+
+        <p><strong>Surat Tugas</strong></p>
+
+        <ul>
+            ${suratTugas.map(item=>`<li>${item}</li>`).join("")}
+        </ul>
+    `;
+
+    document.getElementById("spjModal").style.display="block";
 }
 
-/* CLOSE MODAL */
-function closeModal() {
-  document.getElementById("spjModal").style.display = "none";
+// ============================
+
+function closeModal(){
+
+    document.getElementById("spjModal").style.display="none";
+
 }
 
-/* CLICK OUTSIDE */
-window.onclick = function(e){
-  let modal = document.getElementById("spjModal");
-  if(e.target == modal){
-    closeModal();
-  }
+// ============================
+
+window.onclick=function(event){
+
+    let modal=document.getElementById("spjModal");
+
+    if(event.target==modal){
+
+        closeModal();
+
+    }
+
 }
 
-/* PREVIEW */
+// ============================
+// SEARCH
+// ============================
+
+function searchTable(){
+
+    let input=document.getElementById("searchInput");
+
+    let filter=input.value.toUpperCase();
+
+    let table=document.querySelector("table");
+
+    let tr=table.getElementsByTagName("tr");
+
+    for(let i=1;i<tr.length;i++){
+
+        let txt=tr[i].textContent||tr[i].innerText;
+
+        if(txt.toUpperCase().indexOf(filter)>-1){
+
+            tr[i].style.display="";
+
+        }else{
+
+            tr[i].style.display="none";
+
+        }
+
+    }
+
+}
+
+// ============================
+// PREVIEW PDF
+// ============================
+
 function previewFile(){
-  window.open(currentFiles[0], "_blank");
+
+    alert(
+        "Fitur Preview PDF akan dihubungkan dengan file PDF asli."
+    );
+
 }
 
-/* DOWNLOAD */
+// ============================
+// DOWNLOAD ZIP
+// ============================
+
 function downloadZIP(){
-  alert("Download dimulai...");
+
+    alert(
+        "Fitur Download ZIP akan dihubungkan dengan file ZIP SPJ."
+    );
+
 }
 
-/* 🔍 REAL TIME SEARCH */
-function searchTable() {
-  let input = document.getElementById("searchInput").value.toLowerCase();
-  let rows = document.querySelectorAll("table tbody tr");
+// ============================
+// LOADING
+// ============================
 
-  rows.forEach(row => {
-    let text = row.innerText.toLowerCase();
-    row.style.display = text.includes(input) ? "" : "none";
-  });
-}
+document.addEventListener("DOMContentLoaded",()=>{
+
+    console.log("Dashboard Monitoring SPJ Siap.");
+
+});
