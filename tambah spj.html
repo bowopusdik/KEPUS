@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tambah SPJ</title>
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="main">
+
+  <h1>Tambah SPJ</h1>
+
+  <form id="formSPJ">
+
+    <label>No Surat</label><br>
+    <input type="text" id="nomorSurat" required><br><br>
+
+    <label>Pokja</label><br>
+    <input type="text" id="pokja" required><br><br>
+
+    <label>Nilai SPJ</label><br>
+    <input type="number" id="nilaiSPJ" required><br><br>
+
+    <label>Status</label><br>
+    <select id="status">
+      <option>Menunggu</option>
+      <option>Revisi</option>
+      <option>Selesai</option>
+    </select><br><br>
+
+    <button type="submit">Simpan</button>
+
+  </form>
+
+</div>
+
+<script src="assets/js/storage.js"></script>
+
+<script>
+document.getElementById("formSPJ").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const data = getDataSPJ();
+
+  const newData = {
+    id: Date.now(),
+    nomorSurat: document.getElementById("nomorSurat").value,
+    pokja: document.getElementById("pokja").value,
+    nilaiSPJ: document.getElementById("nilaiSPJ").value,
+    status: document.getElementById("status").value
+  };
+
+  data.push(newData);
+  saveDataSPJ(data);
+
+  alert("Data berhasil disimpan!");
+
+  window.location.href = "index.html";
+});
+</script>
+
+</body>
+</html>
