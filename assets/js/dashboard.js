@@ -4,8 +4,8 @@
 
 // Ganti dengan URL Web App Google Apps Script Anda
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbwYQZJjHwSsCqnZfbg68bGGkBcbEymMNfpcUVdNA2lUF06-_D4OOPv3MpJkLvBPLnoc/exec";
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbxILXfN-CbbPw6laf3X4dtnSoZZ4hZceOUXQie2NXNMxJhqMRlu-UgnUnk5aJYP4Pdz/exec";
 
 /*====================================================
 LOAD DATA
