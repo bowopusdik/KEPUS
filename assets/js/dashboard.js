@@ -23,7 +23,7 @@ async function loadData(){
         renderDashboard();
 
         updateStatistic();
-simpanData();
+
 
     }catch(err){
 
@@ -212,8 +212,8 @@ loadData();
 SIMPAN DATA
 ====================================================*/
 updateStatistic();
-simpanData();
-toast("Data berhasil disimpan");
+
+
 async function simpanData(){
 
     try{
@@ -395,7 +395,6 @@ function toggleSPM(index){
 ====================================================*/
 
 function renderDRPP(index){
-;
     const container=document.getElementById("detail"+index);
 
     const spm=dataSPM[index];
@@ -507,8 +506,7 @@ function toggleDRPP(index,drppIndex){
         row.style.display="table-row";
 
         renderSPBY(index,drppIndex);
-;
-    }else{
+
 
         row.style.display="none";
 
@@ -523,7 +521,6 @@ function toggleDRPP(index,drppIndex){
 function renderSPBY(index,drppIndex){
 ;
     const container=document.getElementById(
-
         `spby-${index}-${drppIndex}`
 
     );
@@ -688,8 +685,9 @@ function tambahDRPP(index){
 
     });
 
-    renderDashboard();
-;
+renderDashboard();
+updateStatistic();
+simpanData();
 }
 
 /*====================================================
@@ -765,7 +763,7 @@ function cariSPM(){
 };
 
 function renderHasil(list){
-;
+
     const tbody=document
 
     .getElementById("tableSPM");
