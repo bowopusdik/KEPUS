@@ -1,53 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem SPJ</title>
 
-let currentFiles = [];
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
 
-/* OPEN MODAL */
-function openModal(spm, total, drpp, spby, kw, st) {
+<body>
 
-  currentFiles = [
-    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-  ];
+<!-- HEADER -->
+<div class="header">
+  <div class="title">📁 SISTEM ARSIP SPJ PERJALANAN DINAS</div>
 
-  document.getElementById("spjModal").style.display = "flex";
+  <div class="toolbar">
+    <input type="text" placeholder="Search SPJ..." />
+    <select>
+      <option>Filter</option>
+    </select>
+    <button class="btn-primary">+ Tambah SPM</button>
+  </div>
+</div>
 
-  document.getElementById("modalTitle").innerText =
-    "📊 DETAIL " + spm;
+<!-- STATS -->
+<div class="stats">
+  <div class="card success">🟢 Terverifikasi <h2>120</h2></div>
+  <div class="card warning">🟡 Revisi <h2>35</h2></div>
+  <div class="card danger">🔴 Belum <h2>18</h2></div>
+  <div class="card primary">📊 Total <h2>173</h2></div>
+</div>
 
-  document.getElementById("modalBody").innerHTML = `
-    <p><b>💰 Total:</b> Rp ${total}</p>
-    <p><b>📄 DRPP:</b> ${drpp.join(", ")}</p>
-    <p><b>💳 SPBY:</b> ${spby}</p>
-    <p><b>🧾 KW:</b> ${kw}</p>
-    <p><b>📌 ST:</b> ${st.join(", ")}</p>
+<!-- TABLE -->
+<div class="table-container">
 
-    <hr>
+<table>
+  <thead>
+    <tr>
+      <th>VIEW</th>
+      <th>STATUS</th>
+      <th>SPM</th>
+      <th>TOTAL</th>
+      <th>DRPP</th>
+      <th>SPBY</th>
+      <th>KW</th>
+      <th>ST</th>
+    </tr>
+  </thead>
 
-    <h4>📎 FILE SPJ</h4>
-    <ul>
-      <li>spj_1.pdf</li>
-    </ul>
-  `;
-}
+  <tbody>
 
-/* CLOSE MODAL */
-function closeModal() {
-  document.getElementById("spjModal").style.display = "none";
-}
+    <tr>
+      <td onclick="openModal('SPM-001','5.000.000',['DRPP-01','DRPP-02'],'SPBY-01','KW-01',['ST-01','ST-02'])"
+          style="cursor:pointer;">👁</td>
+      <td><span class="status success"></span></td>
+      <td>SPM-001</td>
+      <td>5.000.000</td>
+      <td>DRPP-01</td>
+      <td>SPBY-01</td>
+      <td>KW-01</td>
+      <td>ST-01</td>
+    </tr>
 
-/* CLICK OUTSIDE */
-window.onclick = function(e){
-  let modal = document.getElementById("spjModal");
-  if(e.target == modal){
-    closeModal();
-  }
-}
+    <tr>
+      <td onclick="openModal('SPM-002','3.500.000',['DRPP-02'],'SPBY-02','KW-02',['ST-02'])"
+          style="cursor:pointer;">👁</td>
+      <td><span class="status warning"></span></td>
+      <td>SPM-002</td>
+      <td>3.500.000</td>
+      <td>DRPP-02</td>
+      <td>SPBY-02</td>
+      <td>KW-02</td>
+      <td>ST-02</td>
+    </tr>
 
-/* PREVIEW */
-function previewFile(){
-  window.open(currentFiles[0], "_blank");
-}
+  </tbody>
+</table>
 
-/* DOWNLOAD */
-function downloadZIP(){
-  alert("Download dimulai...");
-}
+</div>
+
+<!-- MODAL -->
+<div id="spjModal" class="modal">
+
+  <div class="modal-content">
+
+    <span class="close" onclick="closeModal()">✖</span>
+
+    <h2 id="modalTitle"></h2>
+
+    <div id="modalBody"></div>
+
+    <div class="modal-actions">
+      <button class="btn-blue" onclick="previewFile()">👁 Preview</button>
+      <button class="btn-green" onclick="downloadZIP()">⬇ Download ZIP</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
