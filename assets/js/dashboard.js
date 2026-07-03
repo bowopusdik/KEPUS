@@ -84,8 +84,145 @@ async function loadData() {
 document.addEventListener("DOMContentLoaded", () => {
 
     loadData();
+/*====================================================
+UPDATE STATISTIK
+====================================================*/
 
+function updateStatistic() {
+
+    const totalSPM = dataSPM.length;
+
+    let totalDRPP = 0;
+    let totalSPBY = 0;
+    let totalSelesai = 0;
+
+    dataSPM.forEach(spm => {
+
+        if (spm.drpp) {
+
+            totalDRPP += spm.drpp.length;
+
+            spm.drpp.forEach(drpp => {
+
+                if (drpp.spby) {
+
+                    totalSPBY += drpp.spby.length;
+
+                    drpp.spby.forEach(spby => {
+
+                        if (spby.status === "Selesai") {
+                            totalSelesai++;
+                        }
+
+                    });
+
+                }
+
+            });
+
+        }
+
+    });
+
+    document.getElementById("totalSPM").innerText = totalSPM;
+    document.getElementById("totalDRPP").innerText = totalDRPP;
+    document.getElementById("totalSPBY").innerText = totalSPBY;
+    document.getElementById("totalSelesai").innerText = totalSelesai;
+
+}
+    /*====================================================
+WARNA STATUS
+====================================================*/
+
+function warnaStatus(status) {
+
+    switch (status) {
+
+        case "Selesai":
+            return "selesai";
+
+        case "Revisi":
+            return "revisi";
+
+        default:
+            return "belum";
+
+    }
+
+}
 });
+/*====================================================
+RENDER DASHBOARD
+====================================================*/
+
+function renderDashboard() {
+
+    const tbody = document.getElementById("tableSPM");
+
+    tbody.innerHTML = "";
+
+    if (dataSPM.length === 0) {
+
+        tbody.innerHTML = `
+        <tr>
+            <td colspan="6" class="text-center">
+                Belum ada data
+            </td>
+        </tr>`;
+
+        return;
+
+    }
+
+    dataSPM.forEach((spm, index) => {
+
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td>
+
+                <button class="btn btn-link">
+
+                    ${spm.nomor}
+
+                </button>
+
+            </td>
+
+            <td>${spm.drpp ? spm.drpp.length : 0}</td>
+
+            <td>-</td>
+
+            <td>-</td>
+
+            <td>
+
+                <span class="status status-${warnaStatus(spm.status)}">
+
+                    ${spm.status}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <button class="btn btn-success btn-sm">
+
+                    <i class="fa fa-eye"></i>
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
 /*====================================================
 UPDATE STATISTIK
 ====================================================*/
