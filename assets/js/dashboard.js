@@ -1,4 +1,9 @@
 /*====================================================
+    MONITORING SPJ SATKER
+    dashboard.js
+====================================================*/
+
+/*====================================================
     GOOGLE APPS SCRIPT
 ====================================================*/
 
@@ -7,10 +12,20 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxD2LU3sdIno_YmDGEh5HhT
 
 
 /*====================================================
+    KONFIGURASI USER
+====================================================*/
+
+let currentUser = {
+    nama: "Administrator",
+    role: "admin"
+};
+
+
+/*====================================================
     DATA
 ====================================================*/
 
-// Menyimpan seluruh data SPM
+// Menyimpan seluruh data SPM dari Google Spreadsheet
 let dataSPM = [];
 
 
@@ -22,25 +37,33 @@ async function loadData() {
 
     try {
 
-        // Mengambil data dari Google Apps Script
         const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            throw new Error("HTTP Error : " + response.status);
+        }
+
         const result = await response.json();
 
         console.log("Response API :", result);
 
-        // Cek status response
         if (!result.success) {
+
             alert("Gagal mengambil data dari server.");
+
             return;
+
         }
 
-        // Simpan data ke variabel global
+        // Simpan data
         dataSPM = result.data || [];
 
-        // Tampilkan ke dashboard
+        console.log("Data SPM :", dataSPM);
+
+        // Render Dashboard
         renderDashboard();
 
-        // Update statistik
+        // Update Statistik
         updateStatistic();
 
     } catch (error) {
@@ -58,7 +81,7 @@ async function loadData() {
     LOAD DASHBOARD
 ====================================================*/
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
     loadData();
 
