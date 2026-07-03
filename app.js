@@ -1,6 +1,7 @@
+
 let currentFiles = [];
 
-// OPEN MODAL DINAMIS
+// OPEN MODAL DINAMIS (FIXED)
 function openModal(spm, total, drpp, spby, kwitansi, st) {
 
   currentFiles = [
@@ -13,23 +14,17 @@ function openModal(spm, total, drpp, spby, kwitansi, st) {
 
   document.getElementById("modalBody").innerHTML = `
     <p><b>💰 Total:</b> Rp ${total}</p>
-    <p><b>📄 DRPP:</b> ${drpp.join(", ")}</p>
+    <p><b>📄 DRPP:</b> ${Array.isArray(drpp) ? drpp.join(", ") : drpp}</p>
     <p><b>💳 SPBY:</b> ${spby}</p>
     <p><b>🧾 KWITANSI:</b> ${kwitansi}</p>
-    <p><b>📌 SURAT TUGAS:</b> ${st.join(", ")}</p>
+    <p><b>📌 SURAT TUGAS:</b> ${Array.isArray(st) ? st.join(", ") : st}</p>
 
     <hr>
 
     <h4>📎 FILE SPJ</h4>
     <ul>
-      <li>✔ spj_1.pdf</li>
-      <li>✔ spj_2.pdf</li>
+      ${currentFiles.map((f, i) => `<li>✔ File ${i+1}</li>`).join("")}
     </ul>
-
-    <div class="modal-actions">
-      <button class="btn-blue" onclick="previewFile()">👁 Preview</button>
-      <button class="btn-green" onclick="downloadZIP()">⬇ Download ZIP</button>
-    </div>
   `;
 
   document.getElementById("spjModal").style.display = "flex";
@@ -40,10 +35,12 @@ function closeModal() {
   document.getElementById("spjModal").style.display = "none";
 }
 
-// CLICK OUTSIDE
+// CLICK OUTSIDE MODAL
 window.onclick = function(e) {
   let modal = document.getElementById("spjModal");
-  if (e.target == modal) modal.style.display = "none";
+  if (e.target === modal) {
+    closeModal();
+  }
 }
 
 // PREVIEW FILE
@@ -51,16 +48,14 @@ function previewFile() {
   window.open(currentFiles[0], "_blank");
 }
 
-// DOWNLOAD SIMULASI ZIP
+// DOWNLOAD ZIP (SIMULASI)
 function downloadZIP() {
-  alert("📦 Download dimulai...");
+  alert("📦 Download SPJ dimulai...");
 
   currentFiles.forEach((file, i) => {
-    setTimeout(() => {
-      let a = document.createElement("a");
-      a.href = file;
-      a.download = "SPJ-file-" + i + ".pdf";
-      a.click();
-    }, i * 500);
+    let a = document.createElement("a");
+    a.href = file;
+    a.download = "SPJ-file-" + (i + 1) + ".pdf";
+    a.click();
   });
 }
