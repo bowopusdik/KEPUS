@@ -18,7 +18,7 @@ async function loadData(){
 
         const result = await response.json();
 
-        dataSPM = result.data;
+        dataSPM = result.data || [];
 
         renderDashboard();
 
@@ -217,14 +217,14 @@ SIMPAN DATA
 async function simpanData(){
 
     try{
-
-        await fetch(API_URL,{
-
-            method:"POST",
-
-            body:JSON.stringify(dataSPM)
-
-        });
+await fetch(API_URL,{
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify(dataSPM)
+});
+    
 
     }catch(err){
 
@@ -659,7 +659,7 @@ updateStatistic();
 simpanData();
 toast("SPM berhasil ditambahkan");
 
-
+}
 /*====================================================
   TAMBAH DRPP
 ====================================================*/
@@ -684,6 +684,7 @@ updateStatistic();
 simpanData();
 toast("DRPP berhasil ditambahkan");
 
+}
 /*====================================================
   TAMBAH SPBY
 ====================================================*/
@@ -727,6 +728,7 @@ updateStatistic();
 simpanData();
 toast("SPBy berhasil ditambahkan");
 
+}
 /*====================================================
   SEARCH SPM
 ====================================================*/
