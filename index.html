@@ -1,1 +1,113 @@
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard SPJ</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="title">
+      📁 SISTEM ARSIP SPJ PERJALANAN DINAS
+    </div>
+
+    <div class="toolbar">
+      <input type="text" placeholder="🔍 Search SPM / DRPP / SPBY / KW..." />
+      <select>
+        <option>Filter Status</option>
+        <option>Terverifikasi</option>
+        <option>Revisi</option>
+        <option>Belum</option>
+      </select>
+      <button class="btn-primary">+ Tambah SPM</button>
+    </div>
+  </header>
+
+  <!-- STAT CARDS -->
+  <section class="stats">
+
+    <div class="card success">
+      🟢 Terverifikasi
+      <h2>120</h2>
+      <small>SPM</small>
+    </div>
+
+    <div class="card warning">
+      🟡 Revisi
+      <h2>35</h2>
+      <small>SPM</small>
+    </div>
+
+    <div class="card danger">
+      🔴 Belum
+      <h2>18</h2>
+      <small>SPM</small>
+    </div>
+
+    <div class="card primary">
+      📊 Total
+      <h2>173</h2>
+      <small>SPM</small>
+    </div>
+
+  </section>
+
+  <!-- TABLE -->
+  <section class="table-container">
+
+    <h3>📊 TABEL ARSIP SPJ</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>View</th>
+          <th>Status</th>
+          <th>SPM</th>
+          <th>Total</th>
+          <th>DRPP</th>
+          <th>SPBY</th>
+          <th>KWITANSI</th>
+          <th>ST</th>
+          <th>SPJ</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>👁</td>
+          <td><span class="status success"></span></td>
+          <td>SPM-001</td>
+          <td>5.000.000</td>
+          <td>DRPP-01</td>
+          <td>SPBY-01</td>
+          <td>KW-01</td>
+          <td>ST-01</td>
+          <td>✔</td>
+        </tr>
+
+        <tr>
+          <td>👁</td>
+          <td><span class="status warning"></span></td>
+          <td>SPM-002</td>
+          <td>3.500.000</td>
+          <td>DRPP-02</td>
+          <td>SPBY-02</td>
+          <td>KW-02</td>
+          <td>ST-02</td>
+          <td>⚠</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </section>
+
+</body>
+</html>
