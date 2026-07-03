@@ -1,177 +1,303 @@
-/*====================================================
-    MONITORING SPJ SATKER
-    dashboard.js
-====================================================*/
+/*=====================================================
+    DASHBOARD MONITORING SPJ SATKER
+======================================================*/
 
-/*====================================================
+/*=====================================================
     GOOGLE APPS SCRIPT
-====================================================*/
+======================================================*/
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxD2LU3sdIno_YmDGEh5HhTlOs48WpvxQSZUS5RQwdw_1vW5PDn6W9pNiALq7eYg8E3/exec";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxD2LU3sdIno_YmDGEh5HhTlOs48WpvxQSZUS5RQwdw_1vW5PDn6W9pNiALq7eYg8E3/exec";
 
-/*====================================================
-    KONFIGURASI USER
-====================================================*/
+/*=====================================================
+    GLOBAL VARIABLE
+======================================================*/
+
+let dataSPM = [];
 
 let currentUser = {
     nama: "Administrator",
     role: "admin"
 };
 
-/*====================================================
-    DATA
-====================================================*/
+let filterStatus = "";
+let filterTahun = "";
+let filterBulan = "";
+let keyword = "";
 
-let dataSPM = [];
+/*=====================================================
+    START
+======================================================*/
 
-/*====================================================
-    LOAD DATA
-====================================================*/
+document.addEventListener("DOMContentLoaded", () => {
 
-async function loadData() {
+    initDashboard();
 
-    try {
+});
+
+/*=====================================================
+    INIT
+======================================================*/
+
+async function initDashboard(){
+
+    await loadData();
+
+    registerEvent();
+
+}
+/*=====================================================
+LOAD DATA
+======================================================*/
+
+async function loadData(){
+
+    try{
 
         const response = await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error("HTTP Error : " + response.status);
-        }
 
         const result = await response.json();
 
         console.log(result);
 
-        if (!result.success) {
-            alert("Gagal mengambil data.");
+        if(!result.success){
+
+            alert("Data gagal dibaca.");
+
             return;
+
         }
 
-        dataSPM = result.data || [];
+        dataSPM = result.data;
 
-        renderDashboard();
         updateStatistic();
 
-    } catch (err) {
+        renderDashboard();
+
+    }catch(err){
 
         console.error(err);
-        alert("Tidak dapat terhubung ke Google Apps Script.");
+
+        alert("Tidak dapat terhubung ke server.");
 
     }
 
 }
+/*=====================================================
+REGISTER EVENT
+======================================================*/
 
-/*====================================================
-    LOAD DASHBOARD
-====================================================*/
+function registerEvent(){
 
-document.addEventListener("DOMContentLoaded", () => {
+    document
+    .getElementById("searchSPM")
+    .addEventListener("keyup",(e)=>{
 
-    loadData();
+        keyword = e.target.value;
 
-});
+        renderDashboard();
 
-/*====================================================
-    UPDATE STATISTIK
-====================================================*/
+    });
+
+}
+/*=====================================================
+UPDATE STATISTIK
+======================================================*/
 
 function updateStatistic() {
 
-    document.getElementById("totalSPM").innerText = dataSPM.length;
+    let totalSPM = dataSPM.length;
 
-    document.getElementById("totalDRPP").innerText = 0;
+    let totalMenunggu = 0;
+    let totalRevisi = 0;
+    let totalSelesai = 0;
 
-    document.getElementById("totalSPBY").innerText = 0;
+    dataSPM.forEach(spm => {
 
-    document.getElementById("totalSelesai").innerText =
-        dataSPM.filter(item => item.status === "Selesai").length;
+        switch ((spm.status || "").toLowerCase()) {
+
+            case "menunggu":
+            case "menunggu verifikasi":
+                totalMenunggu++;
+                break;
+
+            case "revisi":
+                totalRevisi++;
+                break;
+
+            case "selesai":
+                totalSelesai++;
+                break;
+
+        }
+
+    });
+
+    document.getElementById("totalSPM").innerText = totalSPM;
+
+    document.getElementById("totalMenunggu").innerText = totalMenunggu;
+
+    document.getElementById("totalRevisi").innerText = totalRevisi;
+
+    document.getElementById("totalSelesai").innerText = totalSelesai;
 
 }
 
-/*====================================================
-    WARNA STATUS
-====================================================*/
+/*=====================================================
+WARNA STATUS
+======================================================*/
 
-function warnaStatus(status) {
+function badgeStatus(status){
 
-    switch (status) {
+    switch((status || "").toLowerCase()){
 
-        case "Selesai":
-            return "selesai";
+        case "selesai":
+            return "success";
 
-        case "Revisi":
-            return "revisi";
+        case "revisi":
+            return "warning";
+
+        case "menunggu":
+        case "menunggu verifikasi":
+            return "info";
 
         default:
-            return "belum";
+            return "secondary";
 
     }
 
 }
+/*=====================================================
+RENDER DASHBOARD
+======================================================*/
 
-/*====================================================
-    RENDER DASHBOARD
-====================================================*/
-
-function renderDashboard() {
+function renderDashboard(){
 
     const tbody = document.getElementById("tableSPM");
 
     tbody.innerHTML = "";
 
-    if (dataSPM.length === 0) {
+    let no = 1;
 
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="6" class="text-center">
-                    Belum ada data SPM
-                </td>
-            </tr>
-        `;
+    dataSPM.forEach((spm,index)=>{
 
-        return;
+        if(keyword){
 
-    }
+            const cari = keyword.toLowerCase();
 
-  dataSPM.forEach((spm, index) => {
+            if(!spm.nomor.toLowerCase().includes(cari))
+                return;
+
+        }
 
         tbody.innerHTML += `
-            <tr>
-                <td>${spm.nomor}</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>
-                    <span class="status status-${warnaStatus(spm.status)}">
-                        ${spm.status}
-                    </span>
-                </td>
-                <td>
-                 <button
-    class="btn btn-success btn-sm"
-    onclick="toggleSPM(${index})">
 
-    <i class="fa fa-eye"></i>
+        <tr>
 
-</button>   
-                </td>
-            </tr>
+            <td>
+
+                <button
+                class="btn btn-outline-primary btn-sm"
+                onclick="detailSPM(${index})">
+
+                <i class="fa-solid fa-eye"></i>
+
+                </button>
+
+            </td>
+
+            <td>${no++}</td>
+
+            <td>
+
+                <strong>${spm.nomor}</strong>
+
+            </td>
+
+            <td>
+
+                -
+
+            </td>
+
+            <td>
+
+                ${spm.drpp ? spm.drpp.length : 0}
+
+            </td>
+
+            <td>
+
+                0
+
+            </td>
+
+            <td>
+
+                <span class="badge bg-${badgeStatus(spm.status)}">
+
+                    ${spm.status}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <button
+                class="btn btn-primary btn-sm">
+
+                <i class="fa-solid fa-upload"></i>
+
+                </button>
+
+            </td>
+
+            <td>
+
+                <button
+                class="btn btn-info btn-sm">
+
+                <i class="fa-solid fa-file-pdf"></i>
+
+                </button>
+
+            </td>
+
+            <td>
+
+                <button
+                class="btn btn-success btn-sm">
+
+                <i class="fa-solid fa-download"></i>
+
+                </button>
+
+            </td>
+
+        </tr>
+
         `;
 
     });
 
 }
-/*====================================================
-TOGGLE DETAIL SPM
-====================================================*/
+/*=====================================================
+DETAIL SPM
+======================================================*/
 
-function toggleSPM(index) {
+function detailSPM(index){
 
     const spm = dataSPM[index];
 
     alert(
-        "Nomor SPM : " + spm.nomor +
-        "\nStatus : " + spm.status
+
+`Nomor SPM : ${spm.nomor}
+
+Status : ${spm.status}
+
+Jumlah DRPP : ${spm.drpp.length}`
+
     );
 
 }
