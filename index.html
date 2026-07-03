@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard SPJ</title>
+  <title>Sistem SPJ</title>
 
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -11,31 +11,28 @@
 <body>
 
 <!-- HEADER -->
-<header class="header">
+<div class="header">
   <div class="title">📁 SISTEM ARSIP SPJ PERJALANAN DINAS</div>
 
   <div class="toolbar">
-    <input type="text" placeholder="🔍 Search SPJ..." />
+    <input type="text" placeholder="Search SPJ..." />
     <select>
-      <option>Filter Status</option>
-      <option>Terverifikasi</option>
-      <option>Revisi</option>
-      <option>Belum</option>
+      <option>Filter</option>
     </select>
     <button class="btn-primary">+ Tambah SPM</button>
   </div>
-</header>
+</div>
 
-<!-- STAT -->
-<section class="stats">
+<!-- STATS -->
+<div class="stats">
   <div class="card success">🟢 Terverifikasi <h2>120</h2></div>
   <div class="card warning">🟡 Revisi <h2>35</h2></div>
   <div class="card danger">🔴 Belum <h2>18</h2></div>
   <div class="card primary">📊 Total <h2>173</h2></div>
-</section>
+</div>
 
 <!-- TABLE -->
-<section class="table-container">
+<div class="table-container">
 
 <table>
   <thead>
@@ -54,9 +51,9 @@
   <tbody>
 
     <tr>
-      <td onclick="openModal('SPM-001','5.000.000','DRPP-01, DRPP-02','SPBY-01','KW-01','ST-01, ST-02')"
+      <td onclick="openModal('SPM-001','5.000.000',['DRPP-01','DRPP-02'],'SPBY-01','KW-01',['ST-01','ST-02'])"
           style="cursor:pointer;">👁</td>
-      <td>🟢</td>
+      <td><span class="status success"></span></td>
       <td>SPM-001</td>
       <td>5.000.000</td>
       <td>DRPP-01</td>
@@ -66,9 +63,9 @@
     </tr>
 
     <tr>
-      <td onclick="openModal('SPM-002','3.500.000','DRPP-02','SPBY-02','KW-02','ST-02')"
+      <td onclick="openModal('SPM-002','3.500.000',['DRPP-02'],'SPBY-02','KW-02',['ST-02'])"
           style="cursor:pointer;">👁</td>
-      <td>🟡</td>
+      <td><span class="status warning"></span></td>
       <td>SPM-002</td>
       <td>3.500.000</td>
       <td>DRPP-02</td>
@@ -80,16 +77,16 @@
   </tbody>
 </table>
 
-</section>
+</div>
 
-<!-- MODAL (WAJIB DI DALAM BODY) -->
+<!-- MODAL -->
 <div id="spjModal" class="modal">
 
   <div class="modal-content">
 
     <span class="close" onclick="closeModal()">✖</span>
 
-    <h2 id="modalTitle">DETAIL SPJ</h2>
+    <h2 id="modalTitle"></h2>
 
     <div id="modalBody"></div>
 
