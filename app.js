@@ -1,53 +1,98 @@
+let data = JSON.parse(localStorage.getItem("spj")) || [];
 
-let currentFiles = [];
+/* ===== SAVE SPJ ===== */
+function saveSPJ(){
 
-/* OPEN MODAL */
-function openModal(spm, total, drpp, spby, kw, st) {
+  let fileInput = document.getElementById("fileInput");
+  let fileName = fileInput.files[0] ? fileInput.files[0].name : "-";
 
-  currentFiles = [
-    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-  ];
+  let newData = {
+    spm: document.getElementById("spm").value,
+    total: document.getElementById("total").value,
+    drpp: document.getElementById("drpp").value,
+    spby: document.getElementById("spby").value,
+    kw: document.getElementById("kw").value,
+    st: document.getElementById("st").value,
+    file: fileName
+  };
 
-  document.getElementById("spjModal").style.display = "flex";
+  data.push(newData);
+  localStorage.setItem("spj", JSON.stringify(data));
 
-  document.getElementById("modalTitle").innerText =
-    "📊 DETAIL " + spm;
+  render();
+  closeForm();
+}
+
+/* ===== RENDER TABLE ===== */
+function render(){
+
+  let table = document.getElementById("tableBody");
+  table.innerHTML = "";
+
+  data.forEach((d,i)=>{
+
+    table.innerHTML += `
+      <tr>
+        <td onclick="view(${i})">👁</td>
+        <td>${d.spm}</td>
+        <td>${d.total}</td>
+        <td>${d.drpp}</td>
+        <td>${d.spby}</td>
+        <td>${d.kw}</td>
+        <td>${d.file}</td>
+        <td><button onclick="hapus(${i})">🗑</button></td>
+      </tr>
+    `;
+  });
+}
+
+render();
+
+/* ===== VIEW MODAL ===== */
+function view(i){
+  let d = data[i];
+
+  document.getElementById("modalTitle").innerText = d.spm;
 
   document.getElementById("modalBody").innerHTML = `
-    <p><b>💰 Total:</b> Rp ${total}</p>
-    <p><b>📄 DRPP:</b> ${drpp.join(", ")}</p>
-    <p><b>💳 SPBY:</b> ${spby}</p>
-    <p><b>🧾 KW:</b> ${kw}</p>
-    <p><b>📌 ST:</b> ${st.join(", ")}</p>
-
-    <hr>
-
-    <h4>📎 FILE SPJ</h4>
-    <ul>
-      <li>spj_1.pdf</li>
-    </ul>
+    <p>Total: ${d.total}</p>
+    <p>DRPP: ${d.drpp}</p>
+    <p>SPBY: ${d.spby}</p>
+    <p>KW: ${d.kw}</p>
+    <p>File: ${d.file}</p>
   `;
+
+  document.getElementById("modal").style.display="flex";
 }
 
-/* CLOSE MODAL */
-function closeModal() {
-  document.getElementById("spjModal").style.display = "none";
+/* ===== DELETE ===== */
+function hapus(i){
+  data.splice(i,1);
+  localStorage.setItem("spj", JSON.stringify(data));
+  render();
 }
 
-/* CLICK OUTSIDE */
-window.onclick = function(e){
-  let modal = document.getElementById("spjModal");
-  if(e.target == modal){
-    closeModal();
-  }
+/* ===== SEARCH REALTIME ===== */
+function searchTable(){
+
+  let input = document.getElementById("searchInput").value.toLowerCase();
+  let rows = document.querySelectorAll("tbody tr");
+
+  rows.forEach(row=>{
+    row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
+  });
 }
 
-/* PREVIEW */
-function previewFile(){
-  window.open(currentFiles[0], "_blank");
+/* ===== FORM ===== */
+function openForm(){
+  document.getElementById("formBox").style.display="block";
 }
 
-/* DOWNLOAD */
-function downloadZIP(){
-  alert("Download dimulai...");
+function closeForm(){
+  document.getElementById("formBox").style.display="none";
+}
+
+/* ===== MODAL CLOSE ===== */
+function closeModal(){
+  document.getElementById("modal").style.display="none";
 }
