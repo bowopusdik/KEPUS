@@ -1,4 +1,6 @@
-
+function getDataSPJ(){
+  return JSON.parse(localStorage.getItem("dataSPJ")) || [];
+}
 function updateDashboard(){
 
   const data = getDataSPJ();
