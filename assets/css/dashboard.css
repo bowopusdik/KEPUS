@@ -726,3 +726,197 @@ align-items:stretch;
     }
 
 }
+/* =====================================================
+   ACCORDION SPM
+===================================================== */
+
+.table-primary{
+    background:#e8f1ff !important;
+    transition:0.3s;
+}
+
+.table-primary:hover{
+    background:#d8e8ff !important;
+}
+
+.table-primary td{
+    font-weight:600;
+}
+
+.collapse td{
+    background:#fafcff;
+}
+
+.collapse table{
+    margin-top:10px;
+    margin-bottom:10px;
+    animation:slideDown .3s ease;
+}
+
+@keyframes slideDown{
+
+    from{
+        opacity:0;
+        transform:translateY(-10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* =====================================================
+   IKON
+===================================================== */
+
+.fa-folder{
+    color:#ffc107;
+}
+
+.fa-folder-open{
+    color:#fd7e14;
+}
+
+.fa-file-lines{
+    color:#0d6efd;
+}
+
+.fa-eye{
+    color:#198754;
+}
+
+.fa-upload{
+    color:#0d6efd;
+}
+
+.fa-download{
+    color:#198754;
+}
+
+/* =====================================================
+   TOMBOL
+===================================================== */
+
+.btn{
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+/* =====================================================
+   SCROLL
+===================================================== */
+
+.table-area{
+
+    max-height:700px;
+
+    overflow:auto;
+
+}
+
+.table-area::-webkit-scrollbar{
+
+    width:8px;
+    height:8px;
+
+}
+
+.table-area::-webkit-scrollbar-thumb{
+
+    background:#0d6efd;
+    border-radius:20px;
+
+}
+
+.table-area::-webkit-scrollbar-track{
+
+    background:#e9ecef;
+
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:992px){
+
+.cards{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+.sidebar{
+
+width:85px;
+
+}
+
+.logo h3{
+
+display:none;
+
+}
+
+.menu li{
+
+font-size:0;
+text-align:center;
+
+}
+
+.menu li i{
+
+font-size:20px;
+
+}
+
+.content{
+
+margin-left:85px;
+width:calc(100% - 85px);
+
+}
+
+}
+
+@media(max-width:768px){
+
+.cards{
+
+grid-template-columns:1fr;
+
+}
+
+.topbar{
+
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+
+}
+
+.toolbar{
+
+flex-direction:column;
+
+}
+
+.search-box{
+
+width:100%;
+
+}
+
+.search-box input{
+
+width:100%;
+
+}
+
+}
