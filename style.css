@@ -117,3 +117,70 @@ tbody tr:hover {
 .status.success { background: #2ECC71; }
 .status.warning { background: #F1C40F; }
 .status.danger { background: #E74C3C; }
+
+/* MODAL BACKDROP */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* MODAL BOX */
+.modal-content {
+  background: white;
+  width: 500px;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: pop 0.25s ease;
+}
+
+/* ANIMATION */
+@keyframes pop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* CLOSE BUTTON */
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* BUTTONS */
+.modal-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-blue {
+  background: #5DA9E9;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.btn-green {
+  background: #2ECC71;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
