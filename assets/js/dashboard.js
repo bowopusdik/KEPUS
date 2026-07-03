@@ -86,3 +86,63 @@ document.addEventListener("DOMContentLoaded", () => {
     loadData();
 
 });
+/*====================================================
+UPDATE STATISTIK
+====================================================*/
+
+function updateStatistic() {
+
+    document.getElementById("totalSPM").innerText = dataSPM.length;
+
+    document.getElementById("totalDRPP").innerText = 0;
+
+    document.getElementById("totalSPBY").innerText = 0;
+
+    document.getElementById("totalSelesai").innerText =
+        dataSPM.filter(item => item.status === "Selesai").length;
+
+}
+
+/*====================================================
+RENDER DASHBOARD
+====================================================*/
+
+function renderDashboard() {
+
+    const tbody = document.getElementById("tableSPM");
+
+    tbody.innerHTML = "";
+
+    if (dataSPM.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="text-center">
+                    Belum ada data SPM
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    dataSPM.forEach((spm) => {
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${spm.nomor}</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>${spm.status}</td>
+                <td>
+                    <button class="btn btn-success btn-sm">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+
+    });
+
+}
