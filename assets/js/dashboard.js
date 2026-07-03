@@ -509,11 +509,7 @@ function toggleDRPP(index,drppIndex){
     }else{
 
         row.style.display="none";
-}else{
 
-    row.style.display="none";
-
-}
     }
 
 }
@@ -663,11 +659,11 @@ function tambahSPM(){
         drpp:[]
 
     });
-
-    renderDashboard();
-    updateStatistic();
+renderDashboard();
+updateStatistic();
 simpanData();
-}
+toast("SPM berhasil ditambahkan");
+
 
 /*====================================================
   TAMBAH DRPP
@@ -688,11 +684,10 @@ function tambahDRPP(index){
         spby:[]
 
     });
-
 renderDashboard();
 updateStatistic();
 simpanData();
-}
+toast("DRPP berhasil ditambahkan");
 
 /*====================================================
   TAMBAH SPBY
@@ -732,11 +727,10 @@ function tambahSPBY(index,drppIndex){
 
     });
 
-    renderDRPP(index);
-
-    updateStatistic();
+renderDRPP(index);
+updateStatistic();
 simpanData();
-}
+toast("SPBy berhasil ditambahkan");
 
 /*====================================================
   SEARCH SPM
@@ -764,7 +758,7 @@ function cariSPM(){
 
     renderHasil(hasil);
 
-};
+}
 
 function renderHasil(list){
 
