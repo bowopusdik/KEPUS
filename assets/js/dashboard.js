@@ -493,22 +493,20 @@ function renderDRPP(index){
 /*====================================================
   TOGGLE DRPP
 ====================================================*/
-
 function toggleDRPP(index,drppIndex){
 
-    const row=document.getElementById(
+    const row = document.getElementById(
         `drpp-${index}-${drppIndex}`
     );
 
-    if(row.style.display==="none"){
+    if(row.style.display === "none"){
 
-        row.style.display="table-row";
-
-        renderSPBY(index,drppIndex);
+        row.style.display = "table-row";
+        renderSPBY(index, drppIndex);
 
     }else{
 
-        row.style.display="none";
+        row.style.display = "none";
 
     }
 
@@ -755,10 +753,10 @@ function cariSPM(){
         .includes(keyword);
 
     });
-
-    renderHasil(hasil);
+renderHasil(hasil);
 
 }
+ 
 
 function renderHasil(list){
 
