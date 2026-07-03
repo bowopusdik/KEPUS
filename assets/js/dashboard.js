@@ -5,6 +5,7 @@
 // Ganti dengan URL Web App Google Apps Script Anda
 const API_URL =
 "https://script.google.com/macros/s/ISI_WEBAPP_URL_ANDA/exec";
+
 /*====================================================
 LOAD DATA
 ====================================================*/
@@ -20,8 +21,9 @@ async function loadData(){
         dataSPM = result.data;
 
         renderDashboard();
-simpanData();
+
         updateStatistic();
+simpanData();
 
     }catch(err){
 
@@ -42,7 +44,7 @@ simpanData();
 ====================================================*/
 
 // URL Google Apps Script
-const API_URL = "";
+
 
 // Role User
 let currentUser = {
@@ -273,7 +275,7 @@ document.getElementById("totalSelesai").innerText=selesai;
 ====================================================*/
 
 function renderDashboard(){
-  simpanData();
+  
 
 const tbody=document.getElementById("tableSPM");
 
@@ -376,7 +378,7 @@ function toggleSPM(index){
         row.style.display="table-row";
 
         renderDRPP(index);
-simpanData();
+
     }else{
 
         row.style.display="none";
@@ -390,7 +392,7 @@ simpanData();
 ====================================================*/
 
 function renderDRPP(index){
-simpanData();
+;
     const container=document.getElementById("detail"+index);
 
     const spm=dataSPM[index];
@@ -502,7 +504,7 @@ function toggleDRPP(index,drppIndex){
         row.style.display="table-row";
 
         renderSPBY(index,drppIndex);
-simpanData();
+;
     }else{
 
         row.style.display="none";
@@ -516,7 +518,7 @@ simpanData();
 ====================================================*/
 
 function renderSPBY(index,drppIndex){
-simpanData();
+;
     const container=document.getElementById(
 
         `spby-${index}-${drppIndex}`
@@ -684,7 +686,7 @@ function tambahDRPP(index){
     });
 
     renderDashboard();
-simpanData();
+;
 }
 
 /*====================================================
@@ -757,10 +759,10 @@ function cariSPM(){
 
     renderHasil(hasil);
 
-}simpanData();
+};
 
 function renderHasil(list){
-simpanData();
+;
     const tbody=document
 
     .getElementById("tableSPM");
