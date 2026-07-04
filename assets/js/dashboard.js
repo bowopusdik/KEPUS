@@ -1,6 +1,7 @@
 /*====================================================
     MONITORING SPJ SATKER
     dashboard.js
+    BAGIAN 1
 ====================================================*/
 
 /*====================================================
@@ -8,18 +9,15 @@
 ====================================================*/
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxD2LU3sdIno_YmDGEh5HhTlOs48WpvxQSZUS5RQwdw_1vW5PDn6W9pNiALq7eYg8E3/exec";
+    "https://script.google.com/macros/s/AKfycbxD2LU3sdIno_YmDGEh5HhTlOs48WpvxQSZUS5RQwdw_1vW5PDn6W9pNiALq7eYg8E3/exec";
 
 /*====================================================
     USER LOGIN
 ====================================================*/
 
 let currentUser = {
-
     nama: "Administrator",
-
     role: "admin"
-
 };
 
 /*====================================================
@@ -36,17 +34,25 @@ let filterTahun = "";
 
 let filterBulan = "";
 
+let currentUpload = {
+    spm: null,
+    drpp: null,
+    spby: null
+};
+
 /*====================================================
-    START
+    INITIALIZE
 ====================================================*/
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", init);
+
+async function init() {
 
     registerEvent();
 
     await loadData();
 
-});
+}
 
 /*====================================================
     REGISTER EVENT
@@ -54,13 +60,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function registerEvent() {
 
+    // Search
     const txtSearch = document.getElementById("searchSPM");
 
     if (txtSearch) {
 
         txtSearch.addEventListener("keyup", function () {
 
-            keyword = this.value.toLowerCase();
+            keyword = this.value.trim().toLowerCase();
 
             renderDashboard();
 
@@ -68,10 +75,37 @@ function registerEvent() {
 
     }
 
+    // Tombol Tambah SPM
+    const btnTambah = document.getElementById("btnTambahSPM");
+
+    if (btnTambah) {
+
+        btnTambah.addEventListener("click", bukaModalSPM);
+
+    }
+
+    // Tombol Simpan SPM
+    const btnSimpan = document.getElementById("btnSimpanSPM");
+
+    if (btnSimpan) {
+
+        btnSimpan.addEventListener("click", simpanSPM);
+
+    }
+
+    // Tombol Upload PDF
+    const btnUpload = document.getElementById("btnUpload");
+
+    if (btnUpload) {
+
+        btnUpload.addEventListener("click", prosesUploadPDF);
+
+    }
+
 }
 
 /*====================================================
-    LOAD DATA DARI GOOGLE APPS SCRIPT
+    LOAD DATA
 ====================================================*/
 
 async function loadData() {
@@ -100,8 +134,6 @@ async function loadData() {
 
         dataSPM = result.data || [];
 
-        console.log("Jumlah SPM :", dataSPM.length);
-
         updateStatistic();
 
         renderDashboard();
@@ -117,6 +149,7 @@ async function loadData() {
     }
 
 }
+
 /*====================================================
     REFRESH DATA
 ====================================================*/
@@ -126,8 +159,9 @@ async function refreshData() {
     await loadData();
 
 }
+
 /*====================================================
-    SIMPAN DATA KE GOOGLE APPS SCRIPT
+    SIMPAN DATA
 ====================================================*/
 
 async function saveData() {
@@ -138,6 +172,12 @@ async function saveData() {
 
             method: "POST",
 
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
             body: JSON.stringify(dataSPM)
 
         });
@@ -146,24 +186,37 @@ async function saveData() {
 
         console.log(result);
 
+        if (!result.success) {
+
+            alert("Gagal menyimpan data.");
+
+            return false;
+
+        }
+
+        return true;
+
     }
 
     catch (error) {
 
         console.error(error);
 
-        alert("Gagal menyimpan data.");
+        alert("Tidak dapat menyimpan data.");
+
+        return false;
 
     }
 
 }
+
 /*====================================================
     FORMAT RUPIAH
 ====================================================*/
 
-function rupiah(nilai) {
+function rupiah(nilai = 0) {
 
-    return Number(nilai || 0).toLocaleString("id-ID", {
+    return Number(nilai).toLocaleString("id-ID", {
 
         style: "currency",
 
@@ -172,56 +225,14 @@ function rupiah(nilai) {
     });
 
 }
+
 /*====================================================
-    UPDATE STATISTIK DASHBOARD
+    BADGE STATUS
 ====================================================*/
 
-function updateStatistic() {
+function badgeStatus(status = "") {
 
-    let totalSPM = dataSPM.length;
-
-    let totalMenunggu = 0;
-    let totalRevisi = 0;
-    let totalSelesai = 0;
-
-    dataSPM.forEach(spm => {
-
-        const status = (spm.status || "").toLowerCase();
-
-        if (status === "menunggu" || status === "menunggu verifikasi") {
-
-            totalMenunggu++;
-
-        } else if (status === "revisi") {
-
-            totalRevisi++;
-
-        } else if (status === "selesai") {
-
-            totalSelesai++;
-
-        }
-
-    });
-
-    const elSPM = document.getElementById("totalSPM");
-    const elMenunggu = document.getElementById("totalMenunggu");
-    const elRevisi = document.getElementById("totalRevisi");
-    const elSelesai = document.getElementById("totalSelesai");
-
-    if (elSPM) elSPM.innerText = totalSPM;
-    if (elMenunggu) elMenunggu.innerText = totalMenunggu;
-    if (elRevisi) elRevisi.innerText = totalRevisi;
-    if (elSelesai) elSelesai.innerText = totalSelesai;
-
-}
-/*====================================================
-    WARNA STATUS
-====================================================*/
-
-function badgeStatus(status) {
-
-    switch ((status || "").toLowerCase()) {
+    switch (status.toLowerCase()) {
 
         case "selesai":
             return "success";
@@ -230,11 +241,14 @@ function badgeStatus(status) {
             return "warning";
 
         case "menunggu":
+
         case "menunggu verifikasi":
             return "info";
 
         case "belum":
+
         case "belum upload":
+
         case "belum menyerahkan":
             return "danger";
 
@@ -244,38 +258,55 @@ function badgeStatus(status) {
     }
 
 }
+
 /*====================================================
-    HITUNG JUMLAH DRPP
+    JUMLAH DRPP
 ====================================================*/
 
 function jumlahDRPP(spm) {
 
-    if (!spm.drpp) return 0;
-
-    return spm.drpp.length;
+    return spm?.drpp?.length || 0;
 
 }
+
 /*====================================================
-    HITUNG JUMLAH SPBY
+    JUMLAH SPBY
 ====================================================*/
 
 function jumlahSPBY(spm) {
 
-    if (!spm.drpp) return 0;
+    if (!spm?.drpp) return 0;
 
     let total = 0;
 
     spm.drpp.forEach(drpp => {
 
-        if (drpp.spby) {
-
-            total += drpp.spby.length;
-
-        }
+        total += drpp?.spby?.length || 0;
 
     });
 
     return total;
+
+}
+
+/*====================================================
+    PROSES UPLOAD PDF
+====================================================*/
+
+async function prosesUploadPDF() {
+
+    const file = document.getElementById("filePDF")?.files[0];
+
+    if (!file) {
+
+        alert("Pilih file PDF.");
+
+        return;
+
+    }
+
+    // Upload Google Drive
+    alert("Tahap berikutnya file akan dikirim ke Google Drive.");
 
 }
 /*====================================================
@@ -290,7 +321,6 @@ function renderDashboard() {
 
     tbody.innerHTML = "";
 
-    // Jika tidak ada data
     if (dataSPM.length === 0) {
 
         tbody.innerHTML = `
@@ -302,27 +332,73 @@ function renderDashboard() {
         `;
 
         return;
+    }
+
+    let hasil = dataSPM.filter(item => {
+
+        if (keyword !== "") {
+
+            if (!item.nomor.toLowerCase().includes(keyword)) {
+                return false;
+            }
+
+        }
+
+        if (filterStatus !== "") {
+
+            if ((item.status || "").toLowerCase() !== filterStatus.toLowerCase()) {
+                return false;
+            }
+
+        }
+
+        if (filterTahun !== "") {
+
+            if (!item.tanggal?.startsWith(filterTahun)) {
+                return false;
+            }
+
+        }
+
+        if (filterBulan !== "") {
+
+            const bulan = item.tanggal?.split("-")[1];
+
+            if (bulan !== filterBulan) {
+                return false;
+            }
+
+        }
+
+        return true;
+
+    });
+
+    if (hasil.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" class="text-center text-muted">
+                    Data tidak ditemukan
+                </td>
+            </tr>
+        `;
+
+        return;
 
     }
 
-    // Filter Search
-    let hasil = dataSPM.filter(item => {
+    hasil.forEach((spm, index) => {
 
-        if (keyword === "") return true;
-
-        return (
-            item.nomor.toLowerCase().includes(keyword)
+        tbody.insertAdjacentHTML(
+            "beforeend",
+            renderSPM(spm, index)
         );
 
     });
 
-    hasil.forEach((spm, index) => {
-
-        tbody.innerHTML += renderSPM(spm, index);
-
-    });
-
 }
+
 /*====================================================
     RENDER SPM
 ====================================================*/
@@ -333,121 +409,121 @@ function renderSPM(spm, index) {
 
 <tr>
 
-<td>
+    <td>
 
-<button
-class="btn btn-outline-primary btn-sm"
-onclick="toggleSPM(${index})">
+        <button
+            class="btn btn-outline-primary btn-sm"
+            onclick="toggleSPM(${index})">
 
-<i class="fa-solid fa-eye"></i>
+            <i class="fa-solid fa-eye"></i>
 
-</button>
+        </button>
 
-</td>
+    </td>
 
-<td>${index + 1}</td>
+    <td>${index + 1}</td>
 
-<td>
+    <td>
 
-<strong>${spm.nomor}</strong>
+        <strong>${spm.nomor}</strong>
 
-</td>
+    </td>
 
-<td>
+    <td>
 
-${rupiah(spm.total || 0)}
+        ${rupiah(spm.total)}
 
-</td>
+    </td>
 
-<td>
+    <td>
 
-${jumlahDRPP(spm)}
+        ${jumlahDRPP(spm)}
 
-</td>
+    </td>
 
-<td>
+    <td>
 
-${jumlahSPBY(spm)}
+        ${jumlahSPBY(spm)}
 
-</td>
+    </td>
 
-<td>
+    <td>
 
-<span class="badge bg-${badgeStatus(spm.status)}">
+        <span class="badge bg-${badgeStatus(spm.status)}">
 
-${spm.status}
+            ${spm.status}
 
-</span>
+        </span>
 
-</td>
+    </td>
 
-<td>
+    <td>
 
-<button
-class="btn btn-primary btn-sm">
+        <button class="btn btn-primary btn-sm">
 
-<i class="fa fa-upload"></i>
+            <i class="fa fa-upload"></i>
 
-</button>
+        </button>
 
-</td>
+    </td>
 
-<td>
+    <td>
 
-<button
-class="btn btn-info btn-sm">
+        <button class="btn btn-info btn-sm">
 
-<i class="fa fa-file-pdf"></i>
+            <i class="fa fa-file-pdf"></i>
 
-</button>
+        </button>
 
-</td>
+    </td>
 
-<td>
+    <td>
 
-<button
-class="btn btn-success btn-sm">
+        <button class="btn btn-success btn-sm">
 
-<i class="fa fa-download"></i>
+            <i class="fa fa-download"></i>
 
-</button>
+        </button>
 
-</td>
+    </td>
 
 </tr>
 
-<tr id="detail-${index}" style="display:none;">
+<tr
+    id="detail-${index}"
+    style="display:none;">
 
-<td colspan="10">
+    <td colspan="10">
 
-<div id="isi-detail-${index}"></div>
+        <div id="isi-detail-${index}"></div>
 
-</td>
+    </td>
 
 </tr>
 
 `;
 
 }
+
 /*====================================================
     TOGGLE DETAIL SPM
 ====================================================*/
 
 function toggleSPM(index) {
 
-    const baris = document.getElementById("detail-" + index);
+    const row = document.getElementById(`detail-${index}`);
 
-    const isi = document.getElementById("isi-detail-" + index);
+    const isi = document.getElementById(`isi-detail-${index}`);
 
-    if (baris.style.display === "none") {
+    if (row.style.display === "none") {
 
-        baris.style.display = "";
+        row.style.display = "";
 
         isi.innerHTML = renderDRPP(index);
 
     } else {
 
-        baris.style.display = "none";
+        row.style.display = "none";
 
     }
 
@@ -464,14 +540,10 @@ function renderDRPP(index) {
     if (!spm.drpp || spm.drpp.length === 0) {
 
         return `
-
-<div class="alert alert-warning mb-0">
-
-Belum ada data DRPP
-
-</div>
-
-`;
+            <div class="alert alert-warning mb-0">
+                Belum ada data DRPP
+            </div>
+        `;
 
     }
 
@@ -518,6 +590,7 @@ Belum ada data DRPP
     return html;
 
 }
+
 /*====================================================
     BARIS DRPP
 ====================================================*/
@@ -548,7 +621,7 @@ onclick="toggleDRPP(${indexSPM},${indexDRPP})">
 
 <td>
 
-${rupiah(drpp.total || 0)}
+${rupiah(drpp.total)}
 
 </td>
 
@@ -564,8 +637,7 @@ ${drpp.status}
 
 <td>
 
-<button
-class="btn btn-primary btn-sm">
+<button class="btn btn-primary btn-sm">
 
 <i class="fa-solid fa-plus"></i>
 
@@ -583,9 +655,7 @@ style="display:none;">
 
 <td colspan="5">
 
-<div id="isi-drpp-${indexSPM}-${indexDRPP}">
-
-</div>
+<div id="isi-drpp-${indexSPM}-${indexDRPP}"></div>
 
 </td>
 
@@ -594,43 +664,38 @@ style="display:none;">
 `;
 
 }
+
 /*====================================================
     TOGGLE DRPP
 ====================================================*/
 
-function toggleDRPP(indexSPM,indexDRPP){
+function toggleDRPP(indexSPM, indexDRPP) {
 
     const row = document.getElementById(
-
-        "detail-drpp-"+indexSPM+"-"+indexDRPP
-
+        `detail-drpp-${indexSPM}-${indexDRPP}`
     );
 
     const isi = document.getElementById(
-
-        "isi-drpp-"+indexSPM+"-"+indexDRPP
-
+        `isi-drpp-${indexSPM}-${indexDRPP}`
     );
 
-    if(row.style.display=="none"){
+    if (row.style.display === "none") {
 
-        row.style.display="";
+        row.style.display = "";
 
         isi.innerHTML = renderSPBY(
-
             indexSPM,
-
             indexDRPP
-
         );
 
-    }else{
+    } else {
 
-        row.style.display="none";
+        row.style.display = "none";
 
     }
 
 }
+
 /*====================================================
     RENDER SPBY
 ====================================================*/
@@ -651,53 +716,59 @@ function renderSPBY(indexSPM, indexDRPP) {
 
     let html = `
 
-    <table class="table table-striped table-hover table-sm">
+<table class="table table-striped table-hover table-sm">
 
-        <thead class="table-success">
+    <thead class="table-success">
 
-            <tr>
+        <tr>
 
-                <th>No</th>
+            <th>No</th>
 
-                <th>Nomor SPBy</th>
+            <th>Nomor SPBy</th>
 
-                <th>Kwitansi</th>
+            <th>Kwitansi</th>
 
-                <th>Surat Tugas</th>
+            <th>Surat Tugas</th>
 
-                <th>Status</th>
+            <th>Status</th>
 
-                <th>Upload</th>
+            <th>Upload</th>
 
-                <th>View</th>
+            <th>View</th>
 
-                <th>Download</th>
+            <th>Download</th>
 
-            </tr>
+        </tr>
 
-        </thead>
+    </thead>
 
-        <tbody>
+    <tbody>
 
-    `;
+`;
 
-    drpp.spby.forEach((spby, index) => {
+    drpp.spby.forEach((spby, indexSPBY) => {
 
-        html += renderBarisSPBY(indexSPM, indexDRPP, index, spby);
+        html += renderBarisSPBY(
+            indexSPM,
+            indexDRPP,
+            indexSPBY,
+            spby
+        );
 
     });
 
     html += `
 
-        </tbody>
+    </tbody>
 
-    </table>
+</table>
 
-    `;
+`;
 
     return html;
 
 }
+
 /*====================================================
     BARIS SPBY
 ====================================================*/
@@ -706,88 +777,107 @@ function renderBarisSPBY(indexSPM, indexDRPP, indexSPBY, spby) {
 
     return `
 
-    <tr>
+<tr>
 
-        <td>${indexSPBY + 1}</td>
+    <td>${indexSPBY + 1}</td>
 
-        <td>
+    <td>
 
-            <strong>${spby.nomor || "-"}</strong>
+        <strong>${spby.nomor || "-"}</strong>
 
-        </td>
+    </td>
 
-        <td>
+    <td>
 
-            ${spby.kwitansi || "-"}
+        ${spby.kwitansi || "-"}
 
-        </td>
+    </td>
 
-        <td>
+    <td>
 
-            ${spby.surat_tugas || "-"}
+        ${spby.surat_tugas || "-"}
 
-        </td>
+    </td>
 
-        <td>
+    <td>
 
-            <span class="badge bg-${badgeStatus(spby.status)}">
+        <span class="badge bg-${badgeStatus(spby.status)}">
 
-                ${spby.status || "Belum"}
+            ${spby.status || "Belum"}
 
-            </span>
+        </span>
 
-        </td>
+    </td>
 
-        <td>
+    <td>
 
-            <button
-                class="btn btn-primary btn-sm"
-                onclick="uploadSPBY(${indexSPM},${indexDRPP},${indexSPBY})">
+        <button
+            class="btn btn-primary btn-sm"
+            onclick="uploadSPBY(${indexSPM},${indexDRPP},${indexSPBY})">
 
-                <i class="fa-solid fa-upload"></i>
+            <i class="fa-solid fa-upload"></i>
 
-            </button>
+        </button>
 
-        </td>
+    </td>
 
-        <td>
+    <td>
 
-            <button
-                class="btn btn-info btn-sm"
-                onclick="viewSPBY(${indexSPM},${indexDRPP},${indexSPBY})">
+        <button
+            class="btn btn-info btn-sm"
+            onclick="viewSPBY(${indexSPM},${indexDRPP},${indexSPBY})">
 
-                <i class="fa-solid fa-file-pdf"></i>
+            <i class="fa-solid fa-file-pdf"></i>
 
-            </button>
+        </button>
 
-        </td>
+    </td>
 
-        <td>
+    <td>
 
-            <button
-                class="btn btn-success btn-sm"
-                onclick="downloadSPBY(${indexSPM},${indexDRPP},${indexSPBY})">
+        <button
+            class="btn btn-success btn-sm"
+            onclick="downloadSPBY(${indexSPM},${indexDRPP},${indexSPBY})">
 
-                <i class="fa-solid fa-download"></i>
+            <i class="fa-solid fa-download"></i>
 
-            </button>
+        </button>
 
-        </td>
+    </td>
 
-    </tr>
+</tr>
 
-    `;
+`;
 
 }
+
 /*====================================================
-    UPLOAD PDF
+    MODAL UPLOAD
 ====================================================*/
+
+let currentUpload = {
+
+    spm: null,
+    drpp: null,
+    spby: null
+
+};
 
 function uploadSPBY(indexSPM, indexDRPP, indexSPBY) {
 
-    console.log("Upload :", indexSPM, indexDRPP, indexSPBY);
+    currentUpload = {
 
-    alert("Fitur Upload PDF akan dihubungkan ke Google Drive.");
+        spm: indexSPM,
+        drpp: indexDRPP,
+        spby: indexSPBY
+
+    };
+
+    const modal = new bootstrap.Modal(
+        document.getElementById("modalUpload")
+    );
+
+    modal.show();
 
 }
 
@@ -797,9 +887,20 @@ function uploadSPBY(indexSPM, indexDRPP, indexSPBY) {
 
 function viewSPBY(indexSPM, indexDRPP, indexSPBY) {
 
-    console.log("View :", indexSPM, indexDRPP, indexSPBY);
+    const spby =
+        dataSPM[indexSPM]
+            .drpp[indexDRPP]
+            .spby[indexSPBY];
 
-    alert("Preview PDF.");
+    if (!spby.file) {
+
+        alert("PDF belum diupload.");
+
+        return;
+
+    }
+
+    window.open(spby.file, "_blank");
 
 }
 
@@ -809,11 +910,32 @@ function viewSPBY(indexSPM, indexDRPP, indexSPBY) {
 
 function downloadSPBY(indexSPM, indexDRPP, indexSPBY) {
 
-    console.log("Download :", indexSPM, indexDRPP, indexSPBY);
+    const spby =
+        dataSPM[indexSPM]
+            .drpp[indexDRPP]
+            .spby[indexSPBY];
 
-    alert("Download PDF.");
+    if (!spby.file) {
+
+        alert("PDF belum tersedia.");
+
+        return;
+
+    }
+
+    const a = document.createElement("a");
+
+    a.href = spby.file;
+    a.download = "";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
 
 }
+
 /*====================================================
     MODAL TAMBAH SPM
 ====================================================*/
@@ -840,188 +962,87 @@ function bukaDetailSPM(index) {
 
     detail.innerHTML = `
 
-        <div class="row">
+<div class="row">
 
-            <div class="col-md-6">
+    <div class="col-md-6">
 
-                <table class="table table-bordered">
+        <table class="table table-bordered">
 
-                    <tr>
+            <tr>
 
-                        <th width="180">Nomor SPM</th>
+                <th width="180">Nomor SPM</th>
 
-                        <td>${spm.nomor}</td>
+                <td>${spm.nomor}</td>
 
-                    </tr>
+            </tr>
 
-                    <tr>
+            <tr>
 
-                        <th>Total</th>
+                <th>Total</th>
 
-                        <td>${rupiah(spm.total || 0)}</td>
+                <td>${rupiah(spm.total)}</td>
 
-                    </tr>
+            </tr>
 
-                    <tr>
+            <tr>
 
-                        <th>Status</th>
+                <th>Status</th>
 
-                        <td>
+                <td>
 
-                            <span class="badge bg-${badgeStatus(spm.status)}">
+                    <span class="badge bg-${badgeStatus(spm.status)}">
 
-                                ${spm.status}
+                        ${spm.status}
 
-                            </span>
+                    </span>
 
-                        </td>
+                </td>
 
-                    </tr>
+            </tr>
 
-                    <tr>
+            <tr>
 
-                        <th>Jumlah DRPP</th>
+                <th>Jumlah DRPP</th>
 
-                        <td>${jumlahDRPP(spm)}</td>
+                <td>${jumlahDRPP(spm)}</td>
 
-                    </tr>
+            </tr>
 
-                </table>
+        </table>
 
-            </div>
+    </div>
 
-        </div>
+</div>
 
-    `;
+`;
 
     const modal = new bootstrap.Modal(
-
         document.getElementById("modalDetailSPM")
-
     );
 
     modal.show();
 
 }
-/*====================================================
-    MODAL UPLOAD
-====================================================*/
-
-let currentUpload = {
-
-    spm: null,
-
-    drpp: null,
-
-    spby: null
-
-};
-
-function uploadSPBY(indexSPM,indexDRPP,indexSPBY){
-
-    currentUpload = {
-
-        spm:indexSPM,
-
-        drpp:indexDRPP,
-
-        spby:indexSPBY
-
-    };
-
-    const modal = new bootstrap.Modal(
-
-        document.getElementById("modalUpload")
-
-    );
-
-    modal.show();
-
-}
-/*====================================================
-    TOMBOL VIEW PDF
-====================================================*/
-
-function viewSPBY(indexSPM,indexDRPP,indexSPBY){
-
-    const spby =
-
-    dataSPM[indexSPM]
-
-    .drpp[indexDRPP]
-
-    .spby[indexSPBY];
-
-    if(!spby.file){
-
-        alert("PDF belum diupload.");
-
-        return;
-
-    }
-
-    window.open(
-
-        spby.file,
-
-        "_blank"
-
-    );
-
 
 /*====================================================
-    DOWNLOAD PDF
-====================================================*/
-
-function downloadSPBY(indexSPM,indexDRPP,indexSPBY){
-
-    const spby =
-
-    dataSPM[indexSPM]
-
-    .drpp[indexDRPP]
-
-    .spby[indexSPBY];
-
-    if(!spby.file){
-
-        alert("PDF belum tersedia.");
-
-        return;
-
-    }
-
-    const a = document.createElement("a");
-
-    a.href = spby.file;
-
-    a.download = "";
-
-    a.click();
-
-}
-    /*====================================================
     TOMBOL TAMBAH SPM
 ====================================================*/
 
 const btnTambah = document.getElementById("btnTambahSPM");
 
-if(btnTambah){
+if (btnTambah) {
 
-    btnTambah.addEventListener("click",()=>{
-
-        bukaModalSPM();
-
-    });
+    btnTambah.addEventListener("click", bukaModalSPM);
 
 }
-    /*====================================================
+
+/*====================================================
     SIMPAN DATA SPM
 ====================================================*/
 
 async function simpanSPM() {
 
-    const nomor = document.getElementById("nomorSPM").value;
+    const nomor = document.getElementById("nomorSPM").value.trim();
     const tanggal = document.getElementById("tanggalSPM").value;
     const total = document.getElementById("totalSPMInput").value;
     const status = document.getElementById("statusSPM").value;
@@ -1054,12 +1075,21 @@ async function simpanSPM() {
 
     await loadData();
 
-    bootstrap.Modal.getInstance(
+    const modal = bootstrap.Modal.getInstance(
+
         document.getElementById("modalSPM")
-    ).hide();
+
+    );
+
+    if (modal) {
+
+        modal.hide();
+
+    }
 
 }
-    /*====================================================
+
+/*====================================================
     EVENT SIMPAN
 ====================================================*/
 
@@ -1067,14 +1097,11 @@ const btnSimpan = document.getElementById("btnSimpanSPM");
 
 if (btnSimpan) {
 
-    btnSimpan.addEventListener("click", () => {
-
-        simpanSPM();
-
-    });
+    btnSimpan.addEventListener("click", simpanSPM);
 
 }
-    /*====================================================
+
+/*====================================================
     EVENT UPLOAD PDF
 ====================================================*/
 
@@ -1094,63 +1121,992 @@ if (btnUpload) {
 
         }
 
+        // Tahap berikutnya upload ke Google Drive
         alert("Tahap berikutnya file akan dikirim ke Google Drive.");
 
     });
 
 }
-    /*====================================================
+
+/*====================================================
     FILTER STATUS
 ====================================================*/
 
-function filterByStatus(status){
+function filterByStatus(status) {
 
     filterStatus = status;
 
     renderDashboard();
 
 }
-    /*====================================================
+
+/*====================================================
     FILTER TAHUN
 ====================================================*/
 
-function filterByTahun(tahun){
+function filterByTahun(tahun) {
 
     filterTahun = tahun;
 
     renderDashboard();
 
 }
-    /*====================================================
+
+/*====================================================
     FILTER BULAN
 ====================================================*/
 
-function filterByBulan(bulan){
+function filterByBulan(bulan) {
 
     filterBulan = bulan;
 
     renderDashboard();
 
 }
-    /*====================================================
+
+/*====================================================
+    REFRESH DATA
+====================================================*/
+
+async function refreshData() {
+
+    await loadData();
+
+}
+
+/*====================================================
     LOGOUT
 ====================================================*/
 
-function logout(){
+function logout() {
 
-    if(confirm("Logout?")){
+    if (confirm("Logout?")) {
 
-        location.href="login.html";
+        location.href = "login.html";
 
     }
 
 }
-    /*====================================================
+
+/*====================================================
     AUTO REFRESH
 ====================================================*/
 
-setInterval(()=>{
+setInterval(() => {
 
     loadData();
 
-},60000);
+}, 60000);
+
+/*====================================================
+    HELPER FUNCTION
+====================================================*/
+
+/**
+ * Mengambil data SPBY berdasarkan index.
+ */
+function getSPBY(indexSPM, indexDRPP, indexSPBY) {
+
+    return dataSPM[indexSPM]
+        ?.drpp[indexDRPP]
+        ?.spby[indexSPBY] || null;
+
+}
+
+/**
+ * Mengambil data DRPP berdasarkan index.
+ */
+function getDRPP(indexSPM, indexDRPP) {
+
+    return dataSPM[indexSPM]
+        ?.drpp[indexDRPP] || null;
+
+}
+
+/**
+ * Mengambil data SPM berdasarkan index.
+ */
+function getSPM(indexSPM) {
+
+    return dataSPM[indexSPM] || null;
+
+}
+
+/**
+ * Reload dashboard.
+ */
+function reloadDashboard() {
+
+    updateStatistic();
+
+    renderDashboard();
+
+}
+
+/**
+ * Reset Form Tambah SPM.
+ */
+function resetFormSPM() {
+
+    document.getElementById("nomorSPM").value = "";
+    document.getElementById("tanggalSPM").value = "";
+    document.getElementById("totalSPMInput").value = "";
+    document.getElementById("statusSPM").selectedIndex = 0;
+
+}
+
+/**
+ * Tutup Modal Bootstrap.
+ */
+function closeModal(id) {
+
+    const modal = bootstrap.Modal.getInstance(
+        document.getElementById(id)
+    );
+
+    if (modal) {
+
+        modal.hide();
+
+    }
+
+}
+/*====================================================
+    BAGIAN 6
+    HELPER & VALIDATION
+====================================================*/
+
+/**
+ * Menampilkan Loading
+ */
+function showLoading() {
+
+    const loader = document.getElementById("loading");
+
+    if (loader) {
+
+        loader.style.display = "block";
+
+    }
+
+}
+
+/**
+ * Menyembunyikan Loading
+ */
+function hideLoading() {
+
+    const loader = document.getElementById("loading");
+
+    if (loader) {
+
+        loader.style.display = "none";
+
+    }
+
+}
+
+/**
+ * Alert Success
+ */
+function showSuccess(message) {
+
+    alert(message);
+
+}
+
+/**
+ * Alert Error
+ */
+function showError(message) {
+
+    alert(message);
+
+}
+
+/**
+ * Validasi Nomor SPM
+ */
+function validasiSPM(nomor) {
+
+    if (!nomor) {
+
+        showError("Nomor SPM belum diisi.");
+
+        return false;
+
+    }
+
+    const ada = dataSPM.some(item => item.nomor === nomor);
+
+    if (ada) {
+
+        showError("Nomor SPM sudah ada.");
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+/**
+ * Reload Dashboard
+ */
+function reloadDashboard() {
+
+    updateStatistic();
+
+    renderDashboard();
+
+}
+
+/**
+ * Reset Filter
+ */
+function resetFilter() {
+
+    keyword = "";
+    filterStatus = "";
+    filterTahun = "";
+    filterBulan = "";
+
+    const txt = document.getElementById("searchSPM");
+
+    if (txt) {
+
+        txt.value = "";
+
+    }
+
+    reloadDashboard();
+
+}
+
+/**
+ * Format Number
+ */
+function angka(nilai) {
+
+    return Number(nilai || 0);
+
+}
+
+/**
+ * Format Persentase
+ */
+function persen(nilai, total) {
+
+    if (total === 0) return "0%";
+
+    return ((nilai / total) * 100).toFixed(1) + "%";
+
+}
+/*====================================================
+    MODAL UPLOAD
+====================================================*/
+
+let currentUpload = {
+    spm: null,
+    drpp: null,
+    spby: null
+};
+
+function uploadSPBY(indexSPM, indexDRPP, indexSPBY) {
+
+    currentUpload = {
+        spm: indexSPM,
+        drpp: indexDRPP,
+        spby: indexSPBY
+    };
+
+    const modal = new bootstrap.Modal(
+        document.getElementById("modalUpload")
+    );
+
+    modal.show();
+}
+
+/*====================================================
+    VIEW PDF
+====================================================*/
+
+function viewSPBY(indexSPM, indexDRPP, indexSPBY) {
+
+    const spby =
+        dataSPM[indexSPM]
+        .drpp[indexDRPP]
+        .spby[indexSPBY];
+
+    if (!spby.file) {
+
+        alert("PDF belum diupload.");
+        return;
+
+    }
+
+    window.open(spby.file, "_blank");
+
+}
+
+/*====================================================
+    DOWNLOAD PDF
+====================================================*/
+
+function downloadSPBY(indexSPM, indexDRPP, indexSPBY) {
+
+    const spby =
+        dataSPM[indexSPM]
+        .drpp[indexDRPP]
+        .spby[indexSPBY];
+
+    if (!spby.file) {
+
+        alert("PDF belum tersedia.");
+        return;
+
+    }
+
+    const a = document.createElement("a");
+
+    a.href = spby.file;
+    a.download = "";
+    a.click();
+
+}
+
+/*====================================================
+    SIMPAN DATA SPM
+====================================================*/
+
+async function simpanSPM() {
+
+    const nomor = document.getElementById("nomorSPM").value.trim();
+    const tanggal = document.getElementById("tanggalSPM").value;
+    const total = document.getElementById("totalSPMInput").value;
+    const status = document.getElementById("statusSPM").value;
+
+    if (nomor === "") {
+
+        alert("Nomor SPM harus diisi.");
+        return;
+
+    }
+
+    dataSPM.push({
+
+        id: Date.now(),
+        nomor,
+        tanggal,
+        total,
+        status,
+        drpp: []
+
+    });
+
+    await saveData();
+    await loadData();
+
+    bootstrap.Modal
+        .getInstance(document.getElementById("modalSPM"))
+        .hide();
+
+}
+
+/*====================================================
+    REGISTER BUTTON
+====================================================*/
+
+const btnTambah = document.getElementById("btnTambahSPM");
+
+if (btnTambah) {
+
+    btnTambah.addEventListener("click", bukaModalSPM);
+
+}
+
+const btnSimpan = document.getElementById("btnSimpanSPM");
+
+if (btnSimpan) {
+
+    btnSimpan.addEventListener("click", simpanSPM);
+
+}
+
+const btnUpload = document.getElementById("btnUpload");
+
+if (btnUpload) {
+
+    btnUpload.addEventListener("click", async () => {
+
+        const file =
+            document.getElementById("filePDF").files[0];
+
+        if (!file) {
+
+            alert("Pilih file PDF.");
+            return;
+
+        }
+
+        alert("Tahap berikutnya file akan dikirim ke Google Drive.");
+
+    });
+
+}
+
+/*====================================================
+    FILTER
+====================================================*/
+
+function filterByStatus(status) {
+
+    filterStatus = status;
+    renderDashboard();
+
+}
+
+function filterByTahun(tahun) {
+
+    filterTahun = tahun;
+    renderDashboard();
+
+}
+
+function filterByBulan(bulan) {
+
+    filterBulan = bulan;
+    renderDashboard();
+
+}
+
+/*====================================================
+    LOGOUT
+====================================================*/
+
+function logout() {
+
+    if (confirm("Logout?")) {
+
+        location.href = "login.html";
+
+    }
+
+}
+
+/*====================================================
+    AUTO REFRESH
+====================================================*/
+
+setInterval(() => {
+
+    loadData();
+
+}, 60000);
+
+/*====================================================
+    BAGIAN 8
+    HELPER & UTILITIES
+====================================================*/
+
+/*====================================================
+    CARI SPM BERDASARKAN ID
+====================================================*/
+
+function getSPMById(id) {
+
+    return dataSPM.find(item => item.id == id);
+
+}
+
+/*====================================================
+    CARI DRPP
+====================================================*/
+
+function getDRPP(indexSPM, indexDRPP) {
+
+    if (!dataSPM[indexSPM]) return null;
+
+    return dataSPM[indexSPM].drpp[indexDRPP];
+
+}
+
+/*====================================================
+    CARI SPBY
+====================================================*/
+
+function getSPBY(indexSPM, indexDRPP, indexSPBY) {
+
+   /*====================================================
+    BAGIAN 9
+    HELPER & VALIDASI DATA
+====================================================*/
+
+/*====================================================
+    CEK DATA SPM
+====================================================*/
+
+function validasiSPM(spm) {
+
+    if (!spm) return false;
+
+    if (!spm.nomor) return false;
+
+    if (!spm.status) return false;
+
+    if (!Array.isArray(spm.drpp)) {
+
+        spm.drpp = [];
+
+    }
+
+    return true;
+
+}
+
+/*====================================================
+    NORMALISASI DATA
+====================================================*/
+
+function normalisasiData() {
+
+    dataSPM.forEach(spm => {
+
+        if (!spm.drpp) {
+
+            spm.drpp = [];
+
+        }
+
+        spm.drpp.forEach(drpp => {
+
+            if (!drpp.spby) {
+
+                drpp.spby = [];
+
+            }
+
+        });
+
+    });
+
+}
+
+/*====================================================
+    HITUNG TOTAL NOMINAL DRPP
+====================================================*/
+
+function totalNominalDRPP(spm) {
+
+    if (!spm.drpp) return 0;
+
+    return spm.drpp.reduce((total, drpp) => {
+
+        return total + Number(drpp.total || 0);
+
+    }, 0);
+
+}
+
+/*====================================================
+    HITUNG TOTAL NOMINAL SPBY
+====================================================*/
+
+function totalNominalSPBY(drpp) {
+
+    if (!drpp.spby) return 0;
+
+    return drpp.spby.reduce((total, spby) => {
+
+        return total + Number(spby.total || 0);
+
+    }, 0);
+
+}
+
+/*====================================================
+    FORMAT TANGGAL INDONESIA
+====================================================*/
+
+function formatTanggal(tanggal) {
+
+    if (!tanggal) return "-";
+
+    return new Date(tanggal).toLocaleDateString("id-ID", {
+
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+
+    });
+
+}
+
+/*====================================================
+    CEK FILE PDF
+====================================================*/
+
+function isPDF(file) {
+
+    if (!file) return false;
+
+    return file.type === "application/pdf";
+
+}
+
+/*====================================================
+    CEK UKURAN FILE
+====================================================*/
+
+function ukuranFile(file) {
+
+    if (!file) return "";
+
+    return (file.size / 1024 / 1024).toFixed(2) + " MB";
+
+}
+
+/*====================================================
+    RESET FORM MODAL SPM
+====================================================*/
+
+function resetFormSPM() {
+
+    document.getElementById("nomorSPM").value = "";
+    document.getElementById("tanggalSPM").value = "";
+    document.getElementById("totalSPMInput").value = "";
+    document.getElementById("statusSPM").selectedIndex = 0;
+
+}
+
+/*====================================================
+    RESET FORM UPLOAD
+====================================================*/
+
+function resetUpload() {
+
+    document.getElementById("filePDF").value = "";
+
+    currentUpload = {
+
+        spm: null,
+        drpp: null,
+        spby: null
+
+    };
+
+}
+    /*====================================================
+    BAGIAN 10
+    UPLOAD PDF KE GOOGLE APPS SCRIPT
+====================================================*/
+
+/*====================================================
+    KONVERSI FILE KE BASE64
+====================================================*/
+
+function fileToBase64(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const reader = new FileReader();
+
+        reader.onload = e => {
+
+            resolve(e.target.result);
+
+        };
+
+        reader.onerror = reject;
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+/*====================================================
+    UPLOAD PDF
+====================================================*/
+
+async function prosesUploadPDF() {
+
+    const file = document.getElementById("filePDF").files[0];
+
+    if (!file) {
+
+        alert("Pilih file PDF.");
+        return;
+
+    }
+
+    if (file.type !== "application/pdf") {
+
+        alert("File harus berformat PDF.");
+        return;
+
+    }
+
+    try {
+
+        const base64 = await fileToBase64(file);
+
+        const payload = {
+
+            action: "uploadPDF",
+
+            spm: currentUpload.spm,
+            drpp: currentUpload.drpp,
+            spby: currentUpload.spby,
+
+            fileName: file.name,
+            mimeType: file.type,
+            data: base64
+
+        };
+
+        const response = await fetch(API_URL, {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify(payload)
+
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+
+            alert(result.message || "Upload gagal.");
+            return;
+
+        }
+
+        const spby =
+            dataSPM[currentUpload.spm]
+            .drpp[currentUpload.drpp]
+            .spby[currentUpload.spby];
+
+        spby.file = result.url || "";
+
+        await saveData();
+
+        bootstrap.Modal
+            .getInstance(document.getElementById("modalUpload"))
+            .hide();
+
+        alert("Upload berhasil.");
+
+        renderDashboard();
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        alert("Terjadi kesalahan saat upload.");
+
+    }
+
+}
+
+/*====================================================
+    EVENT BUTTON UPLOAD
+====================================================*/
+
+const btnUploadPDF = document.getElementById("btnUpload");
+
+if (btnUploadPDF) {
+
+    btnUploadPDF.addEventListener("click", prosesUploadPDF);
+
+}
+    /*====================================================
+    BAGIAN 11
+    GOOGLE APPS SCRIPT
+    UPLOAD PDF KE GOOGLE DRIVE
+====================================================*/
+
+const FOLDER_ID = "GANTI_DENGAN_FOLDER_ID";
+
+/*====================================================
+    POST
+====================================================*/
+
+function doPost(e) {
+
+    try {
+
+        const data = JSON.parse(e.postData.contents);
+
+        if (data.action === "uploadPDF") {
+
+            return uploadPDF(data);
+
+        }
+
+        return ContentService
+            .createTextOutput(JSON.stringify({
+
+                success: false,
+                message: "Action tidak dikenali."
+
+            }))
+            .setMimeType(ContentService.MimeType.JSON);
+
+    }
+
+    catch (err) {
+
+        return ContentService
+            .createTextOutput(JSON.stringify({
+
+                success: false,
+                message: err.toString()
+
+            }))
+            .setMimeType(ContentService.MimeType.JSON);
+
+    }
+
+}
+
+/*====================================================
+    UPLOAD PDF
+====================================================*/
+
+function uploadPDF(data) {
+
+    const folder =
+        DriveApp.getFolderById(FOLDER_ID);
+
+    const bytes = Utilities.base64Decode(
+
+        data.data.split(",")[1]
+
+    );
+
+    const blob = Utilities.newBlob(
+
+        bytes,
+        data.mimeType,
+        data.fileName
+
+    );
+
+    const file = folder.createFile(blob);
+
+    file.setSharing(
+
+        DriveApp.Access.ANYONE_WITH_LINK,
+        DriveApp.Permission.VIEW
+
+    );
+
+    return ContentService
+        .createTextOutput(JSON.stringify({
+
+            success: true,
+
+            id: file.getId(),
+
+            name: file.getName(),
+
+            url: file.getUrl(),
+
+            download:
+                "https://drive.google.com/uc?export=download&id=" +
+                file.getId()
+
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+
+}
+    /*====================================================
+    INITIALIZATION
+====================================================*/
+
+function initializeDashboard() {
+
+    registerEvent();
+
+    updateStatistic();
+
+    renderDashboard();
+
+}
+
+/*====================================================
+    APPLICATION START
+====================================================*/
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    try {
+
+        initializeDashboard();
+
+        await loadData();
+
+    } catch (error) {
+
+        console.error("Gagal memulai aplikasi:", error);
+
+        alert("Dashboard gagal dimuat.");
+
+    }
+
+});
+
+/*====================================================
+    GLOBAL EVENT
+====================================================*/
+
+window.addEventListener("focus", () => {
+
+    refreshData();
+
+});
+
+window.addEventListener("online", () => {
+
+    console.log("Koneksi internet aktif.");
+
+    refreshData();
+
+});
+
+window.addEventListener("offline", () => {
+
+    console.warn("Koneksi internet terputus.");
+
+});
+
+/*====================================================
+    AUTO REFRESH
+====================================================*/
+
+setInterval(async () => {
+
+    try {
+
+        await refreshData();
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}, 60000);
+
+/*====================================================
+    END OF FILE
+====================================================*/
